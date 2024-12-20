@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import de.tum.cit.fop.maze.objects.Player;
+
+import java.util.Objects;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -14,10 +18,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class GameScreen implements Screen {
 
     private final MazeRunnerGame game;
+    private final SpriteBatch spriteBatch;
     private final OrthographicCamera camera;
     private final BitmapFont font;
 
-    private float sinusInput = 0f;
+    float stateTime;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -26,11 +31,11 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
-
+        this.spriteBatch = game.getSpriteBatch();
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-        camera.zoom = 0.75f;
+        camera.zoom = 0.25f;
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
@@ -45,33 +50,65 @@ public class GameScreen implements Screen {
             game.goToMenu();
         }
 
+
+        Player player = game.player;
+        // the following method takes the player and rotates him according to the input.
+        // has been quite the bother to implement to be honest. Scary!
+        input(player);
+        Animation<TextureRegion> playerDirectionAnimation;
+        if(Objects.equals(player.currentDirection, "UP")){
+            playerDirectionAnimation = player.characterUpAnimation;
+            player.y += 1;
+        } else if(Objects.equals(player.currentDirection, "DOWN")){
+            playerDirectionAnimation = player.characterDownAnimation;
+            player.y -= 1;
+        } else if(Objects.equals(player.currentDirection, "LEFT")){
+            playerDirectionAnimation = player.characterLeftAnimation;
+            player.x -= 1;
+        } else {
+            playerDirectionAnimation = player.characterRightAnimation;
+            player.x += 1;
+        }
+        logic();
+        draw(playerDirectionAnimation);
+    }
+
+    public void input(Player player) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.goToMenu();
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            player.currentDirection = "UP";
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            player.currentDirection = "DOWN";
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            player.currentDirection = "LEFT";
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+            player.currentDirection = "RIGHT";
+        }
+    }
+    public void logic(){
+
+    }
+    // this method receives the direction of the player and rotates the player in the screen accordingly
+    public void draw(Animation<TextureRegion> playerDirectionAnimation){
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
+        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 
-        camera.update(); // Update the camera
-
-        // Move text in a circular path to have an example of a moving object
-        sinusInput += delta;
-        float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
-        float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
+        SpriteBatch gameSpriteBatch = game.getSpriteBatch();
 
         // Set up and begin drawing with the sprite batch
-        game.getSpriteBatch().setProjectionMatrix(camera.combined);
+        gameSpriteBatch.setProjectionMatrix(camera.combined);
 
-        game.getSpriteBatch().begin(); // Important to call this before drawing anything
+        Player player = game.player;
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        stateTime += deltaTime;
+        TextureRegion currentFrame = playerDirectionAnimation.getKeyFrame(stateTime, true);
 
-        // Render the text
-        font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
+        gameSpriteBatch.begin(); // Important to call this before drawing anything
 
-        // Draw the character next to the text :) / We can reuse sinusInput here
-        game.getSpriteBatch().draw(
-                game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
-                textX - 96,
-                textY - 64,
-                64,
-                128
-        );
 
-        game.getSpriteBatch().end(); // Important to call this after drawing everything
+        this.spriteBatch.draw(currentFrame, player.x, player.y); // change the direction
+        gameSpriteBatch.end(); // Important to call this after drawing everything
     }
 
     @Override

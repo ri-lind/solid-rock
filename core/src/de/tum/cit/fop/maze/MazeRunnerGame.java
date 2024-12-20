@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import de.tum.cit.fop.maze.objects.Player;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
 /**
@@ -27,7 +29,11 @@ public class MazeRunnerGame extends Game {
     private Skin skin;
 
     // Character animation downwards
-    private Animation<TextureRegion> characterDownAnimation;
+
+    Player player;
+
+    FitViewport viewport;
+
 
     /**
      * Constructor for MazeRunnerGame.
@@ -36,6 +42,8 @@ public class MazeRunnerGame extends Game {
      */
     public MazeRunnerGame(NativeFileChooser fileChooser) {
         super();
+        player = new Player();
+        viewport = new FitViewport(8, 5);
     }
 
     /**
@@ -45,14 +53,15 @@ public class MazeRunnerGame extends Game {
     public void create() {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
+
+        player = new Player();
         this.loadCharacterAnimation(); // Load character animation
 
         // Play some background music
         // Background sound
         Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
         backgroundMusic.setLooping(true);
-        backgroundMusic.play();
-
+        //backgroundMusic.play();
         goToMenu(); // Navigate to the menu screen
     }
 
@@ -87,16 +96,27 @@ public class MazeRunnerGame extends Game {
         int frameWidth = 16;
         int frameHeight = 32;
         int animationFrames = 4;
+        int directionCount = 4;
+        // two-dimensional array to save all the array with different direction frames
+        Array<Array<TextureRegion>> walkFramesArray = new Array<>(Array.class);
 
-        // libGDX internal Array instead of ArrayList because of performance
-        Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
-
+        // (up, down, left, right) is loaded into the game
         // Add all frames to the animation
-        for (int col = 0; col < animationFrames; col++) {
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
+        for (int row = 0; row < directionCount; row++){
+            // we instantiate the current direction array
+            walkFramesArray.add(new Array<>(TextureRegion.class));
+            for (int col = 0; col < animationFrames; col++) {
+                // we add the current animation to the direction
+                walkFramesArray.get(row).add(new TextureRegion(walkSheet, col * frameWidth, row * frameHeight, frameWidth, frameHeight));
+            }
         }
 
-        characterDownAnimation = new Animation<>(0.1f, walkFrames);
+
+        player.characterDownAnimation = new Animation<>(0.1f, walkFramesArray.get(0));
+        player.characterRightAnimation = new Animation<>(0.1f, walkFramesArray.get(1));
+        player.characterUpAnimation = new Animation<>(0.1f, walkFramesArray.get(2));
+        player.characterLeftAnimation = new Animation<>(0.1f, walkFramesArray.get(3));
+
     }
 
     /**
@@ -113,10 +133,6 @@ public class MazeRunnerGame extends Game {
     // Getter methods
     public Skin getSkin() {
         return skin;
-    }
-
-    public Animation<TextureRegion> getCharacterDownAnimation() {
-        return characterDownAnimation;
     }
 
     public SpriteBatch getSpriteBatch() {
