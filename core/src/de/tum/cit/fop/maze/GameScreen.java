@@ -21,6 +21,7 @@ public class GameScreen implements Screen {
     private final SpriteBatch spriteBatch;
     private final OrthographicCamera camera;
     private final BitmapFont font;
+    private FitViewport viewport;
 
     float stateTime;
 
@@ -37,6 +38,9 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false);
         camera.zoom = 0.25f;
 
+        // create viewport to set world boundaries and not let character move more than it.
+        viewport = new FitViewport(8, 5, camera);
+
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
     }
@@ -50,27 +54,11 @@ public class GameScreen implements Screen {
             game.goToMenu();
         }
 
-
         Player player = game.player;
-        // the following method takes the player and rotates him according to the input.
-        // has been quite the bother to implement to be honest. Scary!
-        input(player);
-        Animation<TextureRegion> playerDirectionAnimation;
-        if(Objects.equals(player.currentDirection, "UP")){
-            playerDirectionAnimation = player.characterUpAnimation;
-            player.y += 1;
-        } else if(Objects.equals(player.currentDirection, "DOWN")){
-            playerDirectionAnimation = player.characterDownAnimation;
-            player.y -= 1;
-        } else if(Objects.equals(player.currentDirection, "LEFT")){
-            playerDirectionAnimation = player.characterLeftAnimation;
-            player.x -= 1;
-        } else {
-            playerDirectionAnimation = player.characterRightAnimation;
-            player.x += 1;
-        }
-        logic();
-        draw(playerDirectionAnimation);
+        // method that takes input and moves character in the right direction.
+        input(player); // sets current direction to what the user presses
+
+        draw(); // contains the drawing logic
     }
 
     public void input(Player player) {
@@ -90,25 +78,30 @@ public class GameScreen implements Screen {
 
     }
     // this method receives the direction of the player and rotates the player in the screen accordingly
-    public void draw(Animation<TextureRegion> playerDirectionAnimation){
+    public void draw(){
+        Player player = game.player;
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-
-        SpriteBatch gameSpriteBatch = game.getSpriteBatch();
-
+        // check for the coordinates of the player, so that they are not bigger than the worldview.
         // Set up and begin drawing with the sprite batch
-        gameSpriteBatch.setProjectionMatrix(camera.combined);
-
-        Player player = game.player;
+        spriteBatch.setProjectionMatrix(camera.combined);
         float deltaTime = Gdx.graphics.getDeltaTime();
+
+        // I have to have the moving logic here as well.
+
+        if (player.currentDirection.contains("UP")){
+
+        }
+
+        var worldHeight = viewport.getWorldHeight();
+        var worldWidth = viewport.getWorldWidth();
+
         stateTime += deltaTime;
-        TextureRegion currentFrame = playerDirectionAnimation.getKeyFrame(stateTime, true);
-
-        gameSpriteBatch.begin(); // Important to call this before drawing anything
-
+        TextureRegion currentFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
+        spriteBatch.begin(); // Important to call this before drawing anything
 
         this.spriteBatch.draw(currentFrame, player.x, player.y); // change the direction
-        gameSpriteBatch.end(); // Important to call this after drawing everything
+        spriteBatch.end(); // Important to call this after drawing everything
     }
 
     @Override

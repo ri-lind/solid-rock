@@ -93,6 +93,9 @@ public class MazeRunnerGame extends Game {
     private void loadCharacterAnimation() {
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
 
+        // we set the empty direction arrays of the player class to variable names, for instantiating.
+
+
         int frameWidth = 16;
         int frameHeight = 32;
         int animationFrames = 4;
@@ -112,10 +115,10 @@ public class MazeRunnerGame extends Game {
         }
 
 
-        player.characterDownAnimation = new Animation<>(0.1f, walkFramesArray.get(0));
-        player.characterRightAnimation = new Animation<>(0.1f, walkFramesArray.get(1));
-        player.characterUpAnimation = new Animation<>(0.1f, walkFramesArray.get(2));
-        player.characterLeftAnimation = new Animation<>(0.1f, walkFramesArray.get(3));
+        player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(0)));
+        player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(1)));
+        player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(2)));
+        player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(3)));
 
     }
 
