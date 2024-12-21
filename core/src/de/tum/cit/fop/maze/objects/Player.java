@@ -1,7 +1,6 @@
 package de.tum.cit.fop.maze.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
@@ -11,36 +10,52 @@ public class Player {
     // down, right, up, left.
     public Array<Animation<TextureRegion>> directionAnimations = new Array<>(4);
 
-    // these down here are to be deleted
+    // the index of the animation in the array above. Where the player is currently facing.
     private int indexOfCurrentDirection;
 
-    public Sprite sprite;
+    // can be only left, right, down, up or empty string
     public String currentDirection = "";
 
     public int x;
     public int y;
 
+
     public Player(){
-        sprite = new Sprite();
         x = 0;
         y = 0;
     }
-
-    private int getIndexOfCurrentDirection() {
-
-        if (Objects.equals(currentDirection, "DOWN"))
-            return 0;
-        if (Objects.equals(currentDirection, "RIGHT"))
-            return 1;
-        if (Objects.equals(currentDirection, "UP"))
-            return 2;
-        if (Objects.equals(currentDirection, "LEFT"))
-            return 3;
-
-        return indexOfCurrentDirection;
+    public Player(int x, int y, int indexOfCurrentDirection){
+        this.x = x;
+        this.y = y;
     }
+
 
     public Animation<TextureRegion> getCurrentAnimation(){
         return directionAnimations.get(getIndexOfCurrentDirection());
     }
+
+    public void calculateNextMove(){
+        if (getIndexOfCurrentDirection() == 0){ // down
+            y -=1;
+        } else if(getIndexOfCurrentDirection() == 1) { // right
+            x+=1;
+        } else if ( getIndexOfCurrentDirection() == 2) {// up
+            y+=1;
+        } else if (getIndexOfCurrentDirection() == 3) {// left
+            x-=1;
+        } else return;
+    }
+
+    public int getIndexOfCurrentDirection(){
+        if (currentDirection.contains("UP"))
+                return 2;
+        else if ( currentDirection.contains("DOWN"))
+            return 0;
+        else if (currentDirection.contains("RIGHT"))
+            return 1;
+        else if (currentDirection.contains("LEFT"))
+            return 3;
+        else return 0; // let's see if we can return right
+    }
+
 }

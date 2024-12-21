@@ -55,12 +55,13 @@ public class GameScreen implements Screen {
         }
 
         Player player = game.player;
-        // method that takes input and moves character in the right direction.
+        // method that takes input and aligns player direction.
         input(player); // sets current direction to what the user presses
 
-        draw(); // contains the drawing logic
+        draw(); // makes the magic happen
     }
 
+    // this function takes the input from user and updates the player object with the desired direction.
     public void input(Player player) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.goToMenu();
@@ -87,20 +88,20 @@ public class GameScreen implements Screen {
         spriteBatch.setProjectionMatrix(camera.combined);
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        // I have to have the moving logic here as well.
+        // I create a player with the same x and y, for world boundary calculation purposes.
 
-        if (player.currentDirection.contains("UP")){
+        player.calculateNextMove();
 
-        }
 
-        var worldHeight = viewport.getWorldHeight();
-        var worldWidth = viewport.getWorldWidth();
+
+        // get the player's coordinates if we moves
 
         stateTime += deltaTime;
         TextureRegion currentFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
+
         spriteBatch.begin(); // Important to call this before drawing anything
 
-        this.spriteBatch.draw(currentFrame, player.x, player.y); // change the direction
+        this.spriteBatch.draw(currentFrame, player.x, player.y); // change the direction and move player
         spriteBatch.end(); // Important to call this after drawing everything
     }
 
