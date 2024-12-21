@@ -90,18 +90,28 @@ public class GameScreen implements Screen {
 
         // I create a player with the same x and y, for world boundary calculation purposes.
 
+        Player temporaryPlayer = new Player(player.x, player.y, player.currentDirection);
+        temporaryPlayer.calculateNextMove(); // we move the temp player in the direction we would like to go.
         player.calculateNextMove();
-
-
-
-        // get the player's coordinates if we moves
+        // the world width and height
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
 
         stateTime += deltaTime;
         TextureRegion currentFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
 
         spriteBatch.begin(); // Important to call this before drawing anything
 
-        this.spriteBatch.draw(currentFrame, player.x, player.y); // change the direction and move player
+        /*
+        if(temporaryPlayer.x + currentFrame.getRegionWidth() <= worldWidth  & temporaryPlayer.x >= 0){
+            if (temporaryPlayer.y + currentFrame.getRegionHeight() <= worldHeight & temporaryPlayer.y >=0){
+                this.spriteBatch.draw(currentFrame, temporaryPlayer.x, temporaryPlayer.y);
+            }
+        }else {
+            this.spriteBatch.draw(currentFrame, player.x, player.y); // change the direction and move player
+
+        }*/
+        this.spriteBatch.draw(currentFrame, player.x, player.y);
         spriteBatch.end(); // Important to call this after drawing everything
     }
 

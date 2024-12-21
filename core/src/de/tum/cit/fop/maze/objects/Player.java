@@ -11,22 +11,24 @@ public class Player {
     public Array<Animation<TextureRegion>> directionAnimations = new Array<>(4);
 
     // the index of the animation in the array above. Where the player is currently facing.
-    private int indexOfCurrentDirection;
-
     // can be only left, right, down, up or empty string
     public String currentDirection = "";
 
     public int x;
     public int y;
 
+    public int width = 2;
+    public int height = 2;
+
 
     public Player(){
         x = 0;
         y = 0;
     }
-    public Player(int x, int y, int indexOfCurrentDirection){
+    public Player(int x, int y, String currentDirection){
         this.x = x;
         this.y = y;
+        this.currentDirection = currentDirection;
     }
 
 
