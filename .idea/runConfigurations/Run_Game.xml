@@ -1,6 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run Game" type="Application" factoryName="Application">
+  <configuration default="false" name="Run Game" type="Application" factoryName="Application" activateToolWindowBeforeRun="false" show_console_on_std_out="true">
+    <option name="ALTERNATIVE_JRE_PATH" value="17" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="de.tum.cit.fop.maze.DesktopLauncher" />
+    <selectedOptions>
+      <option name="environmentVariables" visible="false" />
+    </selectedOptions>
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="de.tum.cit.ase.maze.*" />

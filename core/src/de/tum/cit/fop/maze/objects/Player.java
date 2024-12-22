@@ -4,22 +4,16 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.Objects;
-
 public class Player {
     // down, right, up, left.
     public Array<Animation<TextureRegion>> directionAnimations = new Array<>(4);
-
-    // the index of the animation in the array above. Where the player is currently facing.
-    // can be only left, right, down, up or empty string
+    // should be only left, right, down, up or empty string
     public String currentDirection = "";
-
+    // position
     public int x;
     public int y;
 
-    public int width = 2;
-    public int height = 2;
-
+    private final float SPEED = 1f;
 
     public Player(){
         x = 0;
@@ -36,16 +30,17 @@ public class Player {
         return directionAnimations.get(getIndexOfCurrentDirection());
     }
 
+    // for usage in the input dimension
     public void calculateNextMove(){
-        if (getIndexOfCurrentDirection() == 0){ // down
-            y -=1;
-        } else if(getIndexOfCurrentDirection() == 1) { // right
-            x+=1;
-        } else if ( getIndexOfCurrentDirection() == 2) {// up
-            y+=1;
-        } else if (getIndexOfCurrentDirection() == 3) {// left
-            x-=1;
-        } else return;
+        if (currentDirection.toLowerCase().contains("down")){ // down
+            y-= SPEED;
+        } else if(currentDirection.toLowerCase().contains("right")) { // right
+            x+=SPEED;
+        } else if ( currentDirection.toLowerCase().contains("up")) {// up
+            y+=SPEED;
+        } else if (currentDirection.toLowerCase().contains("left")) {// left
+            x-=SPEED;
+        } else return; // no update, if the key pressed is not good.
     }
 
     public int getIndexOfCurrentDirection(){
@@ -57,7 +52,7 @@ public class Player {
             return 1;
         else if (currentDirection.contains("LEFT"))
             return 3;
-        else return 0; // let's see if we can return right
+        else return 1; // let's see if we can return right
     }
 
 }

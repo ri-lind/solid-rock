@@ -5,11 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.Player;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
@@ -28,12 +28,12 @@ public class MazeRunnerGame extends Game {
     // UI Skin
     private Skin skin;
 
-    // Character animation downwards
-
     Player player;
 
-    FitViewport viewport;
-
+    Texture testBackground;
+    // 0 - normal Tile, 1 - borderTile
+    Array<Sprite> tiles;
+    // define dimensions of world and viewport, since they have to be the same
 
     /**
      * Constructor for MazeRunnerGame.
@@ -42,9 +42,7 @@ public class MazeRunnerGame extends Game {
      */
     public MazeRunnerGame(NativeFileChooser fileChooser) {
         super();
-        player = new Player();
-        viewport = new FitViewport(8, 5);
-    }
+   }
 
     /**
      * Called when the game is created. Initializes the SpriteBatch and Skin.
@@ -52,16 +50,18 @@ public class MazeRunnerGame extends Game {
     @Override
     public void create() {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
-        skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
+        skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin, what is this for?
 
+        this.testBackground = new Texture(Gdx.files.internal("test_background.png"));
+
+        // normal and border tiles
+        this.tiles = new Array<>(2);
+        this.loadBackgroundTile();
+
+        // load character unto the game
         player = new Player();
         this.loadCharacterAnimation(); // Load character animation
 
-        // Play some background music
-        // Background sound
-        Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
-        backgroundMusic.setLooping(true);
-        //backgroundMusic.play();
         goToMenu(); // Navigate to the menu screen
     }
 
@@ -94,8 +94,7 @@ public class MazeRunnerGame extends Game {
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
 
         // we set the empty direction arrays of the player class to variable names, for instantiating.
-
-
+        // define player width, height and everything else
         int frameWidth = 16;
         int frameHeight = 32;
         int animationFrames = 4;
@@ -103,8 +102,7 @@ public class MazeRunnerGame extends Game {
         // two-dimensional array to save all the array with different direction frames
         Array<Array<TextureRegion>> walkFramesArray = new Array<>(Array.class);
 
-        // (up, down, left, right) is loaded into the game
-        // Add all frames to the animation
+        // Method to get the movement animations from the sprite.
         for (int row = 0; row < directionCount; row++){
             // we instantiate the current direction array
             walkFramesArray.add(new Array<>(TextureRegion.class));
@@ -113,13 +111,37 @@ public class MazeRunnerGame extends Game {
                 walkFramesArray.get(row).add(new TextureRegion(walkSheet, col * frameWidth, row * frameHeight, frameWidth, frameHeight));
             }
         }
-
-
+        // the movements arrays for the various directions are added to the player
         player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(0)));
         player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(1)));
         player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(2)));
         player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(3)));
 
+    }
+
+    // not used, until the camera viewport problems are sorted out.
+    private void loadBackgroundTile(){
+        // frame width and height: Are they correct?
+        int frameWidth = 16;
+        int frameHeight = 16;
+        Texture tileSheet = new Texture(Gdx.files.internal("basictiles.png"));
+        loadNormalBackgroundTile(tileSheet, frameWidth, frameHeight);
+        loadBackgroundBorderTile(tileSheet, frameWidth, frameHeight);
+    }
+
+    private void loadNormalBackgroundTile(Texture tileSheet, int frameWidth, int frameHeight){
+        // I believe this fetches the wooden tile, third row first column
+        TextureRegion tile = new TextureRegion(tileSheet, frameWidth * 1, frameHeight * 1, frameWidth, frameHeight);
+        // conversion to sprite
+        Sprite tileSprite = new Sprite(tile);
+        tiles.add(tileSprite);
+    }
+
+    private void loadBackgroundBorderTile(Texture tileSheet, int frameWidth, int frameHeight){
+        // logic for border
+        TextureRegion borderTile = new TextureRegion(tileSheet, 4 * frameWidth, 0, frameWidth, frameHeight);
+        Sprite borderTileSprite = new Sprite(borderTile);
+        tiles.add(borderTileSprite);
     }
 
     /**
@@ -134,6 +156,7 @@ public class MazeRunnerGame extends Game {
     }
 
     // Getter methods
+
     public Skin getSkin() {
         return skin;
     }
