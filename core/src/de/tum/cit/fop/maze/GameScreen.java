@@ -76,23 +76,48 @@ public class GameScreen implements Screen {
 
     // this function takes the input from user and updates the player object with the desired direction.
     public void input(Player player) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.goToMenu();
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             player.currentDirection = "UP";
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             player.currentDirection = "DOWN";
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             player.currentDirection = "LEFT";
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             player.currentDirection = "RIGHT";
+        } else {
+            if("down".contains(player.currentDirection.toLowerCase())){
+                player.currentDirection = "down-standing";
+            }else if("up".contains(player.currentDirection.toLowerCase())){
+                player.currentDirection = "up-standing";
+            } else if("left".contains(player.currentDirection.toLowerCase())){
+                player.currentDirection = "left-standing";
+            } else if("right".contains(player.currentDirection.toLowerCase())){
+                player.currentDirection = "right-standing";
+            }
         }
-        game.player.calculateNextMove(); // move the player along the current direction
+
+        // logic to check if player is going out of bounds.
+        Player temporaryPlayer = new Player(game.player.x, game.player.y, game.player.currentDirection);
+        temporaryPlayer.calculateNextMove();
+
+        // key frame foes not matter, I believe...
+        if (temporaryPlayer.x + player.width * OBJECT_SCALE >= fitViewPort.getWorldWidth() ||
+            temporaryPlayer.x < 0){
+
+        } else if (temporaryPlayer.y + player.height >= fitViewPort.getWorldHeight() ||
+                temporaryPlayer.y < 0 ) {
+        }else {
+            game.player.calculateNextMove(); // move the player along the current direction
+
+        }
+
 
         // move player into required direction here.
     }
     public void logic(){
-
     }
     // this method receives the direction of the player and rotates the player in the screen accordingly
     public void draw(){

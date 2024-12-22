@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.objects.Player;
+import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
 /**
@@ -56,12 +57,12 @@ public class MazeRunnerGame extends Game {
 
         // normal and border tiles
         this.tiles = new Array<>(2);
-        this.loadBackgroundTile();
+        LoaderHelper.loadBackgroundTile(tiles);
 
         // load character unto the game
         player = new Player();
-        this.loadCharacterAnimation(); // Load character animation
-
+        LoaderHelper.loadCharacterDirectionAnimation(player); // Load character animation
+        player.currentDirection = "RIGHT";
         goToMenu(); // Navigate to the menu screen
     }
 
@@ -87,62 +88,6 @@ public class MazeRunnerGame extends Game {
         }
     }
 
-    /**
-     * Loads the character animation from the character.png file.
-     */
-    private void loadCharacterAnimation() {
-        Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
-
-        // we set the empty direction arrays of the player class to variable names, for instantiating.
-        // define player width, height and everything else
-        int frameWidth = 16;
-        int frameHeight = 32;
-        int animationFrames = 4;
-        int directionCount = 4;
-        // two-dimensional array to save all the array with different direction frames
-        Array<Array<TextureRegion>> walkFramesArray = new Array<>(Array.class);
-
-        // Method to get the movement animations from the sprite.
-        for (int row = 0; row < directionCount; row++){
-            // we instantiate the current direction array
-            walkFramesArray.add(new Array<>(TextureRegion.class));
-            for (int col = 0; col < animationFrames; col++) {
-                // we add the current animation to the direction
-                walkFramesArray.get(row).add(new TextureRegion(walkSheet, col * frameWidth, row * frameHeight, frameWidth, frameHeight));
-            }
-        }
-        // the movements arrays for the various directions are added to the player
-        player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(0)));
-        player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(1)));
-        player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(2)));
-        player.directionAnimations.add(new Animation<>(0.1f, walkFramesArray.get(3)));
-
-    }
-
-    // not used, until the camera viewport problems are sorted out.
-    private void loadBackgroundTile(){
-        // frame width and height: Are they correct?
-        int frameWidth = 16;
-        int frameHeight = 16;
-        Texture tileSheet = new Texture(Gdx.files.internal("basictiles.png"));
-        loadNormalBackgroundTile(tileSheet, frameWidth, frameHeight);
-        loadBackgroundBorderTile(tileSheet, frameWidth, frameHeight);
-    }
-
-    private void loadNormalBackgroundTile(Texture tileSheet, int frameWidth, int frameHeight){
-        // I believe this fetches the wooden tile, third row first column
-        TextureRegion tile = new TextureRegion(tileSheet, frameWidth * 1, frameHeight * 1, frameWidth, frameHeight);
-        // conversion to sprite
-        Sprite tileSprite = new Sprite(tile);
-        tiles.add(tileSprite);
-    }
-
-    private void loadBackgroundBorderTile(Texture tileSheet, int frameWidth, int frameHeight){
-        // logic for border
-        TextureRegion borderTile = new TextureRegion(tileSheet, 4 * frameWidth, 0, frameWidth, frameHeight);
-        Sprite borderTileSprite = new Sprite(borderTile);
-        tiles.add(borderTileSprite);
-    }
 
     /**
      * Cleans up resources when the game is disposed.
