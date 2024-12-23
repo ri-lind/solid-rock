@@ -36,15 +36,15 @@ public class LoaderHelper {
             }
         }
         // the movements arrays for the various directions are added to the player
-        player.directionAnimations.put("down", new Animation<>(0.1f, walkFramesArray.get(0)));
-        player.directionAnimations.put("right", new Animation<>(0.1f, walkFramesArray.get(1)));
-        player.directionAnimations.put("up", new Animation<>(0.1f, walkFramesArray.get(2)));
-        player.directionAnimations.put("left", new Animation<>(0.1f, walkFramesArray.get(3)));
+        player.animations.put("down", new Animation<>(0.1f, walkFramesArray.get(0)));
+        player.animations.put("right", new Animation<>(0.1f, walkFramesArray.get(1)));
+        player.animations.put("up", new Animation<>(0.1f, walkFramesArray.get(2)));
+        player.animations.put("left", new Animation<>(0.1f, walkFramesArray.get(3)));
 
-        player.directionAnimations.put("down-standing", new Animation<>(0.1f, walkFramesArray.get(0).get(0)));
-        player.directionAnimations.put("right-standing", new Animation<>(0.1f, walkFramesArray.get(1).get(0)));
-        player.directionAnimations.put("up-standing", new Animation<>(0.1f, walkFramesArray.get(2).get(0)));
-        player.directionAnimations.put("left-standing", new Animation<>(0.1f, walkFramesArray.get(3).get(0)));
+        player.animations.put("down-standing", new Animation<>(0.1f, walkFramesArray.get(0).get(0)));
+        player.animations.put("right-standing", new Animation<>(0.1f, walkFramesArray.get(1).get(0)));
+        player.animations.put("up-standing", new Animation<>(0.1f, walkFramesArray.get(2).get(0)));
+        player.animations.put("left-standing", new Animation<>(0.1f, walkFramesArray.get(3).get(0)));
 
 
         player.height = walkFramesArray.get(0).get(0).getRegionHeight();
@@ -56,28 +56,26 @@ public class LoaderHelper {
         Texture attackSheet = new Texture(Gdx.files.internal("character.png"));
 
         // attack sprite size is just different, what the fuck?
-        int frameWidth = 32;
+        int frameWidth = 16;
         int frameHeight = 32;
-        int animationFrames = 4;
+        int frameEnd = 104;
         int directions = 4;
 
         Array<Array<TextureRegion>> attackFramesArray = new Array<>(Array.class);
 
+        // attack double the width of normal movement sprites.
         for (int row = 0; row < directions; row++){
             attackFramesArray.add(new Array<>(TextureRegion.class));
-            for (int col = 0; col < animationFrames; col++){
-                attackFramesArray.get(row).add(new TextureRegion(attackSheet, (col+ 4) * frameWidth,
+            for (int frame = 8; frame < frameEnd; frame +=  32){
+                attackFramesArray.get(row).add(new TextureRegion(attackSheet, frame,
                         (row +4) * frameHeight, frameWidth, frameHeight));
             }
         }
 
-        //player.attackAnimations.put("", );
-        /*
-        player.attackAnimations.add(new Animation<>(0.1f, attackFramesArray.get(0)));
-        player.attackAnimations.add(new Animation<>(0.1f, attackFramesArray.get(1)));
-        player.attackAnimations.add(new Animation<>(0.1f, attackFramesArray.get(2)));
-        player.attackAnimations.add(new Animation<>(0.1f, attackFramesArray.get(3)));
-        */
+        player.animations.put("down-attacking", new Animation<>(0.1f, attackFramesArray.get(0)));
+        player.animations.put("up-attacking", new Animation<>(0.1f, attackFramesArray.get(1)));
+        player.animations.put("right-attacking", new Animation<>(0.1f, attackFramesArray.get(2)));
+        player.animations.put("left-attacking", new Animation<>(0.1f, attackFramesArray.get(3)));
     }
 
 

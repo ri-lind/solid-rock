@@ -61,7 +61,8 @@ public class MazeRunnerGame extends Game {
 
         // load character unto the game
         player = new Player();
-        LoaderHelper.loadCharacterDirectionAnimation(player); // Load character animation
+        LoaderHelper.loadCharacterDirectionAnimation(player); // Load character movement and standing animation
+        LoaderHelper.loadCharacterAttackAnimations(player); // load the attack animations of the character
         player.currentDirection = "RIGHT";
         goToMenu(); // Navigate to the menu screen
     }
