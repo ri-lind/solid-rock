@@ -5,7 +5,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-
+/**
+ * Represents a player, in the sense that it contains the animations, coordinates and has some manipulation
+ * logic in it. The focal center is the currentDirection attribute, which is heavily manipulated by this
+ * class and the method InputHandler.input().
+ */
 public class Player {
     // down, right, up, left.
     public Dictionary<String, Animation<TextureRegion>> animations;

@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.objects.Player;
 
+/**
+ * Helps load resources into the objects. Especially useful for instantiating player animations and tiles.
+ */
 public class LoaderHelper {
 
 

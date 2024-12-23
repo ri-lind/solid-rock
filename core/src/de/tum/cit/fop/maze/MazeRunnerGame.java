@@ -3,6 +3,7 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -29,13 +30,6 @@ public class MazeRunnerGame extends Game {
     // UI Skin
     private Skin skin;
 
-    Player player;
-
-    Texture testBackground;
-    // 0 - normal Tile, 1 - borderTile
-    Array<Sprite> tiles;
-    // define dimensions of world and viewport, since they have to be the same
-
     /**
      * Constructor for MazeRunnerGame.
      *
@@ -52,18 +46,6 @@ public class MazeRunnerGame extends Game {
     public void create() {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin, what is this for?
-
-        this.testBackground = new Texture(Gdx.files.internal("test_background.png"));
-
-        // normal and border tiles
-        this.tiles = new Array<>(2);
-        LoaderHelper.loadBackgroundTile(tiles);
-
-        // load character unto the game
-        player = new Player();
-        LoaderHelper.loadCharacterDirectionAnimation(player); // Load character movement and standing animation
-        LoaderHelper.loadCharacterAttackAnimations(player); // load the attack animations of the character
-        player.currentDirection = "RIGHT";
         goToMenu(); // Navigate to the menu screen
     }
 

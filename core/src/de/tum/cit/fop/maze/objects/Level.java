@@ -6,7 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
-
+/**
+ * Does not actually represent a level currently, simply contains methods to draw the borders and the inner tiles.
+ *
+ * Ideally, in the future, this actually represents a level, with the various objects, contained in it.
+ */
 public class Level {
 
 
