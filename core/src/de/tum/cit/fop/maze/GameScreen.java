@@ -6,12 +6,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
+import de.tum.cit.fop.maze.utilities.MapHandler;
+
+import java.util.List;
+import java.util.Map;
 
 import static de.tum.cit.fop.maze.utilities.InputHandler.input;
 
@@ -40,7 +45,7 @@ public class GameScreen implements Screen {
     Sprite normalTile;
     Sprite rowBorderTile;
     Sprite columnBorderTile;
-
+    MapHandler mapReader;
 
     Texture testBackground;
     // 0 - normal Tile, 1 - borderTile
@@ -78,6 +83,15 @@ public class GameScreen implements Screen {
         LoaderHelper.loadCharacterDirectionAnimation(player); // Load character movement and standing animation
         LoaderHelper.loadCharacterAttackAnimations(player); // load the attack animations of the character
         player.currentDirection = "RIGHT";
+
+
+        String levelString = MapHandler.readMapFromFile("maps/level-1.properties");
+
+        Map<Integer, List<Vector2>> map = MapHandler.convertToMap(levelString);
+
+        levelString = MapHandler.convertMapToString(map);
+
+        System.out.println(levelString);
     }
 
     // Screen interface methods with necessary functionality
