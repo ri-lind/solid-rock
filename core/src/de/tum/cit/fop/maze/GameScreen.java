@@ -10,11 +10,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import de.tum.cit.fop.maze.objects.GameObject;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.MapHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -86,7 +88,8 @@ public class GameScreen implements Screen {
 
 
         String levelString = MapHandler.readMapFromFile("maps/level-1.properties");
-        Map<Integer, List<Vector2>> map = MapHandler.convertToMap(levelString);
+        Map<Integer, List<GameObject>> map = MapHandler.convertToMap(levelString);
+        List<Sprite> walls = new ArrayList<>();
         levelString = MapHandler.convertMapToString(map);
         System.out.println(levelString);
     }

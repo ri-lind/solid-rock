@@ -11,9 +11,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public abstract class GameObject {
 
-    Sprite sprite;
-    String spriteSheetFile;
-
+    public Sprite sprite;
     /*
     coordinates they take from the file
     textures they take from the pngs
@@ -44,10 +42,10 @@ public abstract class GameObject {
         // fetch the wall texture
 
         // the 6th tile in the first row
-        TextureRegion wallTextureRegion = new TextureRegion(tileSheet,
+        TextureRegion textureRegion = new TextureRegion(tileSheet,
                 spriteSheetColumn * objectWidth, spriteSheetRow * objectHeight, // gives out coordinates in spriteSheet
                 objectWidth, objectHeight);
-        this.sprite = new Sprite(wallTextureRegion);
+        this.sprite = new Sprite(textureRegion);
     }
 
 

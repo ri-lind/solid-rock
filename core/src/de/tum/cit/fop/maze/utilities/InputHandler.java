@@ -14,7 +14,6 @@ import de.tum.cit.fop.maze.MazeRunnerGame;
  */
 public class InputHandler {
 
-
     public static void input(MazeRunnerGame game, Player player,
                              FitViewport fitViewport, int OBJECT_SCALE) {
 
@@ -83,6 +82,7 @@ public class InputHandler {
 
         // logic to check if player is going out of bounds.
         Player temporaryPlayer = new Player(player.x, player.y, player.currentDirection);
+        LoaderHelper.loadCharacterDirectionAnimation(temporaryPlayer);
         temporaryPlayer.calculateNextMove();
 
         // key frame foes not matter, I believe...
@@ -91,11 +91,12 @@ public class InputHandler {
 
         } else if (temporaryPlayer.y + player.height >= fitViewport.getWorldHeight() ||
                 temporaryPlayer.y < 0 ) {
-        }else {
-            player.calculateNextMove(); // move the player along the current direction
         }
 
+        else {
 
+            player.calculateNextMove(); // move the player along the current direction
+        }
         // move player into required direction here.
     }
 

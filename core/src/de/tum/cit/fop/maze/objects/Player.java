@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -19,6 +20,7 @@ public class Player {
     // position
     public float x;
     public float y;
+    public Sprite sprite;
 
     private float SPEED = 1f;
 
@@ -28,25 +30,26 @@ public class Player {
 
     public int attackFramesCounter = 0;
 
+    // we load the sprite in the loaderhelper
     public Player(){
         x = 0;
         y = 0;
-        this.animations = new Hashtable<String, Animation<TextureRegion>>();
+        this.animations = new Hashtable<>();
     }
     public Player(float x, float y, String currentDirection){
         this.x = x;
         this.y = y;
+        this.animations = new Hashtable<>();
         this.currentDirection = currentDirection;
     }
 
 
-    // for usage in the input dimension
+    // think about the objects the player cannot overlap with
     public void calculateNextMove(){
         if (currentDirection.toLowerCase().contains("running")){
             SPEED = 2f; // running is double the speed
         }
-        if ("down".contains(currentDirection.toLowerCase()) ||
-                currentDirection.toLowerCase().contains("down-running")){ // down
+        if ("down".contains(currentDirection.toLowerCase()) || currentDirection.toLowerCase().contains("down-running")){
             y-=SPEED;
         } else if("right".contains(currentDirection.toLowerCase()) ||
                 currentDirection.toLowerCase().contains("right-running")) { // right
@@ -58,6 +61,9 @@ public class Player {
                 currentDirection.toLowerCase().contains("left-running")) {// left
             x-=SPEED;
         }
+        //update sprite coordinates
+        sprite.setX(x);
+        sprite.setY(y);
          SPEED = 1f; // reset speed after movement
     }
 

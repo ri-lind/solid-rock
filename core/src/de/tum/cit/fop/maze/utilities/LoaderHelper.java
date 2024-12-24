@@ -53,6 +53,9 @@ public class LoaderHelper {
         player.height = walkFramesArray.get(0).get(0).getRegionHeight();
         player.width = walkFramesArray.get(0).get(0).getRegionWidth();
 
+        // instantiate the player sprite here as well.
+        player.sprite = new Sprite(walkFramesArray.get(0).get(0));
+
     }
 
     public static void loadCharacterAttackAnimations(Player player){
