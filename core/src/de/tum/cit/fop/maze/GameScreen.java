@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.GameObject;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
+import de.tum.cit.fop.maze.objects.Wall;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.MapHandler;
 
@@ -47,9 +48,9 @@ public class GameScreen implements Screen {
     Sprite normalTile;
     Sprite rowBorderTile;
     Sprite columnBorderTile;
-    MapHandler mapReader;
-
     Texture testBackground;
+
+    Map<Integer, List<GameObject>> gameObjects;
     // 0 - normal Tile, 1 - borderTile
     // define dimensions of world and viewport, since they have to be the same
 
@@ -89,7 +90,7 @@ public class GameScreen implements Screen {
 
         String levelString = MapHandler.readMapFromFile("maps/level-1.properties");
         Map<Integer, List<GameObject>> map = MapHandler.convertToMap(levelString);
-        List<Sprite> walls = new ArrayList<>();
+        this.gameObjects  = map;
         levelString = MapHandler.convertMapToString(map);
         System.out.println(levelString);
     }
@@ -126,6 +127,10 @@ public class GameScreen implements Screen {
         Level.drawNormalTiles(spriteBatch, normalTile, camera);
         // drawing the current player frame
         spriteBatch.draw(currentFrame, player.x, player.y, currentFrame.getRegionWidth() * OBJECT_SCALE, currentFrame.getRegionHeight() * OBJECT_SCALE);
+
+        Wall wall = new Wall(400, 256);
+        wall.sprite.draw(spriteBatch);
+
         //draw the background
         spriteBatch.end(); // Important to call this after drawing everything
     }

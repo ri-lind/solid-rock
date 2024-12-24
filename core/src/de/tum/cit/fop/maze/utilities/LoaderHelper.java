@@ -16,6 +16,7 @@ public class LoaderHelper {
 
     /**
      * Loads the character animation from the character.png file.
+     * Initializes player.sprite as well
      */
     public static void loadCharacterDirectionAnimation(Player player) {
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
