@@ -4,6 +4,10 @@ package de.tum.cit.fop.maze.objects;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -13,6 +17,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class Level {
 
+    // thinking of storing the objects of the map here.
+    Map<Integer, List<Vector2>> objectCoordinates;
 
     public static void drawBorderTiles(SpriteBatch spriteBatch, Sprite rowBorderTile,
                                        Sprite columnBorderTile, OrthographicCamera camera){

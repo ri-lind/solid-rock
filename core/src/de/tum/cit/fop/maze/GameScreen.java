@@ -86,11 +86,8 @@ public class GameScreen implements Screen {
 
 
         String levelString = MapHandler.readMapFromFile("maps/level-1.properties");
-
         Map<Integer, List<Vector2>> map = MapHandler.convertToMap(levelString);
-
         levelString = MapHandler.convertMapToString(map);
-
         System.out.println(levelString);
     }
 
