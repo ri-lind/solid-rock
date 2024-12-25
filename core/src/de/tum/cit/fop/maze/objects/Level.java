@@ -127,7 +127,10 @@ public class Level {
                 (objectType, gameObjects) -> {
                     gameObjects.forEach(
                             gameObject -> {
-                                if (player.sprite.getBoundingRectangle().overlaps(gameObject.sprite.getBoundingRectangle())){
+                                if (gameObject.collides(player)){
+                                    System.out.println("Player coordinates" + player.sprite.getX() + ", " + player.sprite.getY());
+                                    System.out.println("Player width and height" + player.sprite.getRegionWidth() + ", " + player.sprite.getRegionHeight());
+                                    System.out.println("Player origin x and y" + player.sprite.getOriginX() + ", " + player.sprite.getOriginY());
                                     collides.set(true);
                                 }
                             }

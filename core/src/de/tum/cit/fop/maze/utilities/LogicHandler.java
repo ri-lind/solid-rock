@@ -4,6 +4,7 @@ package de.tum.cit.fop.maze.utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import de.tum.cit.fop.maze.objects.GameObject;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.MazeRunnerGame;
@@ -82,25 +83,29 @@ public class LogicHandler {
         }
 
         // logic to check if player is going out of bounds.
-        Player temporaryPlayer = new Player(player.x, player.y, player.currentDirection);
-        LoaderHelper.loadCharacterDirectionAnimation(temporaryPlayer);
+        Player temporaryPlayer = new Player(player);
         temporaryPlayer.calculateNextMove();
 
-        // key frame foes not matter, I believe...
-        if (temporaryPlayer.x + player.width * OBJECT_SCALE >= fitViewport.getWorldWidth() ||
-                temporaryPlayer.x < 0){
+        // key frame does not matter, I believe...
+        if (temporaryPlayer.sprite.getX() + player.sprite.getRegionWidth() * OBJECT_SCALE >= fitViewport.getWorldWidth() ||
+                temporaryPlayer.sprite.getX() < 0){
 
-        } else if (temporaryPlayer.y + player.height >= fitViewport.getWorldHeight() ||
-                temporaryPlayer.y < 0 ) {
+        } else if (temporaryPlayer.sprite.getY() + player.sprite.getRegionHeight() >= fitViewport.getWorldHeight() ||
+                temporaryPlayer.sprite.getY() < 0 ) {
         }
 
         else {
-
+            //check collision with any of the objects of the game.
             if(!level.collides(temporaryPlayer))
                 player.calculateNextMove(); // move the player along the current direction
+            else
+                System.out.println("Caught ya");
         }
         // move player into required direction here.
     }
+
+
+    //
 
     
 }

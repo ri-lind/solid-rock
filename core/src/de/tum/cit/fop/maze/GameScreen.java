@@ -71,21 +71,9 @@ public class GameScreen implements Screen {
 
         // load character unto the game
         player = new Player();
-        LoaderHelper.loadCharacterDirectionAnimation(player); // Load character movement and standing animation
-        LoaderHelper.loadCharacterAttackAnimations(player); // load the attack animations of the character
-        player.currentDirection = "RIGHT";
+
 
         this.level = new Level("maps/level-1.properties", player);
-        /*
-        level1.gameObjects.forEach(
-                (key, value) -> {
-                    value.forEach(
-                            gameObject -> {System.out.println(gameObject.sprite.getX() + " " + gameObject.sprite.getY());}
-                    );
-                }
-        );
-        */
-
     }
 
     // Screen interface methods with necessary functionality
@@ -111,6 +99,8 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         spriteBatch.setProjectionMatrix(fitViewPort.getCamera().combined);
+
+
         TextureRegion currentFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
 
 
@@ -121,12 +111,9 @@ public class GameScreen implements Screen {
         level.drawGameObjects(spriteBatch);
 
         // drawing the current player frame
-        spriteBatch.draw(currentFrame, player.x, player.y, currentFrame.getRegionWidth() * OBJECT_SCALE, currentFrame.getRegionHeight() * OBJECT_SCALE);
+        spriteBatch.draw(currentFrame, player.sprite.getX(), player.sprite.getY(), currentFrame.getRegionWidth() * OBJECT_SCALE, currentFrame.getRegionHeight() * OBJECT_SCALE);
 
-        Wall wall = new Wall(WORLD_WIDTH/2f, WORLD_HEIGHT/2f);
-        wall.sprite.draw(spriteBatch);
 
-        //draw the background
         spriteBatch.end(); // Important to call this after drawing everything
     }
 
@@ -154,6 +141,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        spriteBatch.dispose();
     }
 
     // Additional methods and logic can be added as needed for the game screen

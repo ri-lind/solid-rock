@@ -62,11 +62,17 @@ public abstract class GameObject {
             // not defined gameobject, we replace the textures with the exit texture.
             gameObject = new Exit(x, y);
         }
-        // scale the
-        //gameObject.sprite.setSize(gameObject.sprite.getRegionWidth() * objectScale, gameObject.sprite.getRegionHeight() * objectScale);
-        System.out.println(gameObject.sprite.getBoundingRectangle().getX());
-        gameObject.sprite.setScale(gameObject.sprite.getScaleX() * objectScale);
+
+        gameObject.sprite.setScale(objectScale); // add or remove the scaling.
         return gameObject;
+    }
+
+    public boolean collides(Player player){
+
+
+        if (this.sprite.getX() < player.sprite.getX() + player.sprite.getRegionWidth() && this.sprite.getX() > player.sprite.getX())
+            return this.sprite.getY() < player.sprite.getY() + player.sprite.getRegionHeight() && this.sprite.getY() > player.sprite.getY();
+        return false;
     }
 
 }

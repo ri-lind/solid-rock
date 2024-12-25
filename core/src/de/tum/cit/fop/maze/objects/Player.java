@@ -3,6 +3,8 @@ package de.tum.cit.fop.maze.objects;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import de.tum.cit.fop.maze.utilities.LoaderHelper;
+
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -17,37 +19,38 @@ public class Player {
 
     // the animations dictionary and calculate next move methods depend on this field
     public String currentDirection = "";
-    // position
-    public float x;
-    public float y;
+
     public Sprite sprite;
 
     private float SPEED = 1f;
-
-    // used for calculating world boundaries of player
-    public int width;
-    public int height;
 
     public int attackFramesCounter = 0;
 
     // we load the sprite in the loaderhelper
     public Player(){
-        x = 112;
-        y = 300;
+
         this.animations = new Hashtable<>();
+        LoaderHelper.loadCharacterDirectionAnimation(this); // Load character movement and standing animation
+        LoaderHelper.loadCharacterAttackAnimations(this); // load the attack animations of the character
+        this.currentDirection = "RIGHT";
+        this.sprite.setX(100);
+        this.sprite.setY(50);
+
     }
 
     /**
-     * Constructor used for boundary checking in the logic handler class.
-     * @param x
-     * @param y
-     * @param currentDirection
+     *
+     * @param otherPlayer
      */
-    public Player(float x, float y, String currentDirection){
-        this.x = x;
-        this.y = y;
+    public Player(Player otherPlayer){
         this.animations = new Hashtable<>();
-        this.currentDirection = currentDirection;
+        this.currentDirection = otherPlayer.currentDirection;
+        // not really needed
+        this.SPEED = otherPlayer.SPEED;
+        this.attackFramesCounter = otherPlayer.attackFramesCounter;
+        // needed
+        LoaderHelper.loadCharacterDirectionAnimation(this);
+        this.sprite.setBounds(otherPlayer.sprite.getX(), otherPlayer.sprite.getY(), otherPlayer.sprite.getRegionWidth(), otherPlayer.sprite.getRegionHeight());
     }
 
 
@@ -58,20 +61,17 @@ public class Player {
             SPEED = 2f; // running is double the speed
         }
         if ("down".contains(currentDirection.toLowerCase()) || currentDirection.toLowerCase().contains("down-running")){
-            y-=SPEED;
+            this.sprite.translateY(-SPEED);
         } else if("right".contains(currentDirection.toLowerCase()) ||
                 currentDirection.toLowerCase().contains("right-running")) { // right
-            x+=SPEED;
+            this.sprite.translateX(SPEED);
         } else if ("up".contains(currentDirection.toLowerCase()) ||
                 currentDirection.toLowerCase().contains("up-running")) {// up
-            y+=SPEED;
+            this.sprite.translateY(SPEED);
         } else if ("left".contains(currentDirection.toLowerCase()) ||
                 currentDirection.toLowerCase().contains("left-running")) {// left
-            x-=SPEED;
+            this.sprite.translateX(-SPEED);
         }
-        //update sprite coordinates
-        sprite.setX(x);
-        sprite.setY(y);
          SPEED = 1f; // reset speed after movement
     }
 

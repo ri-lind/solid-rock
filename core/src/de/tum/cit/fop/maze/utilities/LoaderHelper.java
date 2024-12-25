@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.objects.Player;
 
 /**
- * Helps load resources into the objects. Especially useful for instantiating player animations and tiles.
+ * Loads player animations and border and inner tiles.
  */
 public class LoaderHelper {
 
@@ -50,12 +50,11 @@ public class LoaderHelper {
         player.animations.put("up-standing", new Animation<>(0.1f, walkFramesArray.get(2).get(0)));
         player.animations.put("left-standing", new Animation<>(0.1f, walkFramesArray.get(3).get(0)));
 
+        TextureRegion playerFirstAnimation = walkFramesArray.get(0).get(0);
 
-        player.height = walkFramesArray.get(0).get(0).getRegionHeight();
-        player.width = walkFramesArray.get(0).get(0).getRegionWidth();
 
         // instantiate the player sprite here as well.
-        player.sprite = new Sprite(walkFramesArray.get(0).get(0));
+        player.sprite = new Sprite(playerFirstAnimation);
 
     }
 
