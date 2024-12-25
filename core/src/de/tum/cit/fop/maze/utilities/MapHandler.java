@@ -3,8 +3,6 @@ package de.tum.cit.fop.maze.utilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.tum.cit.fop.maze.objects.EntryPoint;
 import de.tum.cit.fop.maze.objects.Exit;
@@ -14,6 +12,7 @@ import de.tum.cit.fop.maze.objects.Wall;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Contains methods to read and manipulate the map from the java properties file.
@@ -21,22 +20,27 @@ import java.util.*;
  */
 public class MapHandler {
 
+    static final int WORLD_WIDTH = 800;
+    static final int WORLD_HEIGHT = 512;
+    static final int OBJECT_SCALE = 2;
     /**
-     * Reads the map from the given file path and returns the content.
-     * @param mapFilePath
-     * @return the content of the map file in string format
+     *
+     * @param fileName
+     * @return
+     * @throws GdxRuntimeException
      */
-    public static String readMapFromFile (String mapFilePath) throws GdxRuntimeException {
-        FileHandle mapFile = Gdx.files.internal(mapFilePath);
+    public static String readMapFromFile (String fileName) throws GdxRuntimeException {
+        FileHandle mapFile = Gdx.files.internal(fileName);
         return mapFile.readString(); // returns the content of the file
     }
 
     /**
-     * Takes in map string and returns a map.
+     * Convert the coordinates and object types into a java map object.
      * @param mapContent
      * @return
      */
     public static Map<Integer, List<GameObject>> convertToMap(String mapContent){
+
         Map<Integer, List<GameObject>> mapMap = new HashMap<>();
          Properties properties = new Properties();
          try{
@@ -57,10 +61,8 @@ public class MapHandler {
             float x = Float.parseFloat(coordinates[0]);
             float y = Float.parseFloat(coordinates[1]);
 
-
-
             // objecttype, coordinates.
-            GameObject gameObject = convertToGameObject(objectType, x, y);
+            GameObject gameObject = GameObject.convertToGameObject(objectType, x, y, OBJECT_SCALE);
 
             if (mapMap.containsKey(objectType)){
                 mapMap.get(objectType).add(gameObject);
@@ -72,6 +74,53 @@ public class MapHandler {
 
         });
         return mapMap;
+    }
+
+    /**
+     * Scales the coordinates to the world width and height.
+     * @param map
+     * @return
+     */
+    public static Map<Integer, List<GameObject>> scaleToWorld(Map<Integer, List<GameObject>> map){
+        //get the maximum x and y from the coordinates
+        AtomicReference<Float> maxX = new AtomicReference<>((float) 0);
+        AtomicReference<Float> maxY = new AtomicReference<>((float) 0);
+
+        map.forEach(
+                (objectType, listofObjects) -> {
+                    listofObjects.forEach(
+                            gameObject -> {
+                                float x = gameObject.sprite.getX();
+                                float y = gameObject.sprite.getY();
+
+                                if(x >= maxX.get())
+                                    maxX.set(x);
+                                if(y >= maxY.get())
+                                    maxY.set(y);
+                            }
+                    );
+                }
+        );
+
+        // calculate the scaling factor
+        float width_scaling_factor = WORLD_WIDTH/maxX.get();
+        float height_scaling_factor = WORLD_HEIGHT/maxY.get();
+
+        System.out.println(maxX.get() + " " + maxY.get());
+        //System.out.println(width_scaling_factor + " " + height_scaling_factor);
+
+        // apply the scaling to the coordinates
+        map.forEach(
+                (objectType, gameObjects) -> {
+                    gameObjects.forEach(
+                            (gameObject) -> {
+                                gameObject.sprite.setX(gameObject.sprite.getX() * width_scaling_factor);
+                                gameObject.sprite.setY(gameObject.sprite.getY() * height_scaling_factor);
+                            }
+                    );
+                }
+        );
+        return map;
     }
 
     /**
@@ -106,20 +155,5 @@ public class MapHandler {
         4     | Enemy (dynamic obstacle)
         5     | Key
          */
-        public static GameObject convertToGameObject(int objectType, float x, float y){
-            GameObject gameObject;
-            if (objectType == 0){
-                gameObject = new Wall(x, y);
-            } else if (objectType == 1) {
-                gameObject = new EntryPoint(x, y);
-            } else if(objectType == 2) {
-                gameObject = new Exit(x,y);
-            } else{
-                // not defined gameobject. let's just create a wall tile in the middle of the map
-                // worldwidth/2 dhe worldHeight/2
-                gameObject = new Wall(400, 256);
-            }
 
-            return gameObject;
-    }
 };

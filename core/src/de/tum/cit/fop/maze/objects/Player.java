@@ -32,10 +32,17 @@ public class Player {
 
     // we load the sprite in the loaderhelper
     public Player(){
-        x = 0;
-        y = 0;
+        x = 112;
+        y = 300;
         this.animations = new Hashtable<>();
     }
+
+    /**
+     * Constructor used for boundary checking in the logic handler class.
+     * @param x
+     * @param y
+     * @param currentDirection
+     */
     public Player(float x, float y, String currentDirection){
         this.x = x;
         this.y = y;
@@ -46,6 +53,7 @@ public class Player {
 
     // think about the objects the player cannot overlap with
     public void calculateNextMove(){
+
         if (currentDirection.toLowerCase().contains("running")){
             SPEED = 2f; // running is double the speed
         }

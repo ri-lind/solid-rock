@@ -4,6 +4,7 @@ package de.tum.cit.fop.maze.utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.MazeRunnerGame;
 
@@ -12,10 +13,10 @@ import de.tum.cit.fop.maze.MazeRunnerGame;
  *
  * Logic is currently very fragile.
  */
-public class InputHandler {
+public class LogicHandler {
 
     public static void input(MazeRunnerGame game, Player player,
-                             FitViewport fitViewport, int OBJECT_SCALE) {
+                             FitViewport fitViewport, int OBJECT_SCALE, Level level) {
 
         // code to keep track of attack animation
         if(player.currentDirection.toLowerCase().contains("attacking")){
@@ -95,7 +96,8 @@ public class InputHandler {
 
         else {
 
-            player.calculateNextMove(); // move the player along the current direction
+            if(!level.collides(temporaryPlayer))
+                player.calculateNextMove(); // move the player along the current direction
         }
         // move player into required direction here.
     }

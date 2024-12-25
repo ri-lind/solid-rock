@@ -4,10 +4,12 @@ package de.tum.cit.fop.maze.objects;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.fop.maze.utilities.LogicHandler;
+import de.tum.cit.fop.maze.utilities.MapHandler;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -17,9 +19,27 @@ import java.util.Map;
  */
 public class Level {
 
-    // thinking of storing the objects of the map here.
-    Map<Integer, List<Vector2>> objectCoordinates;
+    public Map<Integer, List<GameObject>> gameObjects;
+    private Player player;
 
+    public Level(String fileName, Player player){
+        String mapContent = MapHandler.readMapFromFile(fileName);
+        Map<Integer, List<GameObject>> unscaledMap = MapHandler.convertToMap(mapContent);
+
+        // it is scaled in the constructor
+        this.gameObjects = MapHandler.scaleToWorld(unscaledMap);
+
+        this.player = player;
+
+    }
+
+    /**
+     * Draws the border tiles of the map. Is not bound to specific levels, so the method is static.
+     * @param spriteBatch
+     * @param rowBorderTile
+     * @param columnBorderTile
+     * @param camera
+     */
     public static void drawBorderTiles(SpriteBatch spriteBatch, Sprite rowBorderTile,
                                        Sprite columnBorderTile, OrthographicCamera camera){
         // logic needed to draw the border tiles at the border lines of the camera
@@ -57,6 +77,12 @@ public class Level {
         }
     }
 
+    /**
+     * The method is not bound to levels, so it is static. Draws the inner tiles of the map.
+     * @param spriteBatch
+     * @param normalTile
+     * @param camera
+     */
     public static void drawNormalTiles(SpriteBatch spriteBatch, Sprite normalTile,
                                        OrthographicCamera camera){
         // the sprite starts at 0,0
@@ -77,4 +103,37 @@ public class Level {
 
     }
 
+    /**
+     * Draw the game objects of the level unto the screen
+     * @param spriteBatch
+     */
+    public void drawGameObjects(SpriteBatch spriteBatch){
+        //futuristic expression, cause I am a boss.
+        gameObjects.forEach(
+                (objectType, listOfObjects) -> {
+                    listOfObjects.forEach(
+                            object -> {
+                                object.sprite.draw(spriteBatch);
+                            }
+                    );
+                }
+        );
+    }
+
+    public boolean collides(Player player){
+        AtomicBoolean collides = new AtomicBoolean(false);
+
+        this.gameObjects.forEach(
+                (objectType, gameObjects) -> {
+                    gameObjects.forEach(
+                            gameObject -> {
+                                if (player.sprite.getBoundingRectangle().overlaps(gameObject.sprite.getBoundingRectangle())){
+                                    collides.set(true);
+                                }
+                            }
+                    );
+                }
+        );
+        return collides.get();
+    }
 }

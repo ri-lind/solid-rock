@@ -4,24 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import de.tum.cit.fop.maze.objects.GameObject;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.objects.Wall;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
-import de.tum.cit.fop.maze.utilities.MapHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static de.tum.cit.fop.maze.utilities.InputHandler.input;
+import static de.tum.cit.fop.maze.utilities.LogicHandler.input;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -34,27 +26,23 @@ public class GameScreen implements Screen {
 
     private final int WORLD_WIDTH = 800;
     private final int WORLD_HEIGHT = 512;
+    private final int OBJECT_SCALE = 2;
+
 
     private final OrthographicCamera camera;
     private final BitmapFont font;
-
     private FitViewport fitViewPort;
-
     float stateTime;
 
     Player player;
-
     Array<Sprite> tiles;
     Sprite normalTile;
     Sprite rowBorderTile;
     Sprite columnBorderTile;
-    Texture testBackground;
 
-    Map<Integer, List<GameObject>> gameObjects;
-    // 0 - normal Tile, 1 - borderTile
-    // define dimensions of world and viewport, since they have to be the same
+    Level level;
 
-    private final int OBJECT_SCALE = 2;
+
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -87,12 +75,17 @@ public class GameScreen implements Screen {
         LoaderHelper.loadCharacterAttackAnimations(player); // load the attack animations of the character
         player.currentDirection = "RIGHT";
 
+        this.level = new Level("maps/level-1.properties", player);
+        /*
+        level1.gameObjects.forEach(
+                (key, value) -> {
+                    value.forEach(
+                            gameObject -> {System.out.println(gameObject.sprite.getX() + " " + gameObject.sprite.getY());}
+                    );
+                }
+        );
+        */
 
-        String levelString = MapHandler.readMapFromFile("maps/level-1.properties");
-        Map<Integer, List<GameObject>> map = MapHandler.convertToMap(levelString);
-        this.gameObjects  = map;
-        levelString = MapHandler.convertMapToString(map);
-        System.out.println(levelString);
     }
 
     // Screen interface methods with necessary functionality
@@ -103,7 +96,7 @@ public class GameScreen implements Screen {
             game.goToMenu();
         }
         // handling user input logic
-        input(game, player, fitViewPort, OBJECT_SCALE); // sets current direction to what the user presses
+        input(game, player, fitViewPort, OBJECT_SCALE, level); // sets current direction to what the user presses
 
         // drawing unto the screen
         draw();
@@ -125,10 +118,12 @@ public class GameScreen implements Screen {
         // drawing border and normal tiles
         Level.drawBorderTiles(spriteBatch, rowBorderTile, columnBorderTile, camera);
         Level.drawNormalTiles(spriteBatch, normalTile, camera);
+        level.drawGameObjects(spriteBatch);
+
         // drawing the current player frame
         spriteBatch.draw(currentFrame, player.x, player.y, currentFrame.getRegionWidth() * OBJECT_SCALE, currentFrame.getRegionHeight() * OBJECT_SCALE);
 
-        Wall wall = new Wall(400, 256);
+        Wall wall = new Wall(WORLD_WIDTH/2f, WORLD_HEIGHT/2f);
         wall.sprite.draw(spriteBatch);
 
         //draw the background
