@@ -84,7 +84,7 @@ public class GameScreen implements Screen {
             game.goToMenu();
         }
         // handling user input logic
-        input(game, player, fitViewPort, OBJECT_SCALE, level); // sets current direction to what the user presses
+        input(game, player, fitViewPort, OBJECT_SCALE, level, delta); // sets current direction to what the user presses
 
         // drawing unto the screen
         draw();

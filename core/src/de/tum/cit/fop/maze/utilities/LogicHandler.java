@@ -17,7 +17,7 @@ import de.tum.cit.fop.maze.MazeRunnerGame;
 public class LogicHandler {
 
     public static void input(MazeRunnerGame game, Player player,
-                             FitViewport fitViewport, int OBJECT_SCALE, Level level) {
+                             FitViewport fitViewport, int OBJECT_SCALE, Level level, float delta) {
 
         // code to keep track of attack animation
         if(player.currentDirection.toLowerCase().contains("attacking")){
@@ -89,6 +89,7 @@ public class LogicHandler {
         // key frame does not matter, I believe...
         if (temporaryPlayer.sprite.getX() + player.sprite.getRegionWidth() * OBJECT_SCALE >= fitViewport.getWorldWidth() ||
                 temporaryPlayer.sprite.getX() < 0){
+            System.out.println();
 
         } else if (temporaryPlayer.sprite.getY() + player.sprite.getRegionHeight() >= fitViewport.getWorldHeight() ||
                 temporaryPlayer.sprite.getY() < 0 ) {

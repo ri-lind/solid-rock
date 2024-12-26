@@ -69,7 +69,6 @@ public abstract class GameObject {
 
     public boolean collides(Player player){
 
-
         if (this.sprite.getX() < player.sprite.getX() + player.sprite.getRegionWidth() && this.sprite.getX() > player.sprite.getX())
             return this.sprite.getY() < player.sprite.getY() + player.sprite.getRegionHeight() && this.sprite.getY() > player.sprite.getY();
         return false;

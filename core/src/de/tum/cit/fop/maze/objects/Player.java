@@ -26,7 +26,6 @@ public class Player {
 
     public int attackFramesCounter = 0;
 
-    // we load the sprite in the loaderhelper
     public Player(){
 
         this.animations = new Hashtable<>();
@@ -35,6 +34,7 @@ public class Player {
         this.currentDirection = "RIGHT";
         this.sprite.setX(100);
         this.sprite.setY(50);
+        this.sprite.setSize(32, 32);
 
     }
 
@@ -58,7 +58,7 @@ public class Player {
     public void calculateNextMove(){
 
         if (currentDirection.toLowerCase().contains("running")){
-            SPEED = 2f; // running is double the speed
+            SPEED = 2 * SPEED; // running is double the speed
         }
         if ("down".contains(currentDirection.toLowerCase()) || currentDirection.toLowerCase().contains("down-running")){
             this.sprite.translateY(-SPEED);
