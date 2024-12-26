@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.Arrays;
 
 /**
  * Superclass to wall, entry, exit, trap and enemy.
@@ -67,10 +70,28 @@ public abstract class GameObject {
         return gameObject;
     }
 
-    public boolean collides(Player player){
+    private Rectangle readjustForCollision(Rectangle rectangle, float width, float height, float yUpwardsShift) {
+        Rectangle resizedRectangle = new Rectangle(rectangle);
+        resizedRectangle.setWidth(width);
+        resizedRectangle.setHeight(height);
+        resizedRectangle.setY(resizedRectangle.y + yUpwardsShift);
 
-        if (this.sprite.getX() < player.sprite.getX() + player.sprite.getRegionWidth() && this.sprite.getX() > player.sprite.getX())
-            return this.sprite.getY() < player.sprite.getY() + player.sprite.getRegionHeight() && this.sprite.getY() > player.sprite.getY();
+        return resizedRectangle;
+    }
+
+    /**
+     * returns true if there is a collision with the player.
+     * @param player
+     * @return
+     */
+    public boolean collide(Player player){
+        // the numbers chose for
+        Rectangle collisionBox = readjustForCollision(this.sprite.getBoundingRectangle(), 16, 12, 12);
+
+        if (collisionBox.overlaps(player.sprite.getBoundingRectangle())){
+            System.out.println("Collision detected at: " + Arrays.toString(player.sprite.getVertices()));
+            return true;
+        }
         return false;
     }
 

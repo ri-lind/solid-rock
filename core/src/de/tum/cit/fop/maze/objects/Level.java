@@ -4,8 +4,6 @@ package de.tum.cit.fop.maze.objects;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import de.tum.cit.fop.maze.utilities.LogicHandler;
 import de.tum.cit.fop.maze.utilities.MapHandler;
 
 import java.util.List;
@@ -128,19 +126,9 @@ public class Level {
                 (objectType, gameObjects) -> {
                     gameObjects.forEach(
                             gameObject -> {
-                                // trial and error to adjust the hitboxes.
-                                // definitely check again later; when the other parts of the game are done
-                                Rectangle collisionBox = new Rectangle(gameObject.sprite.getBoundingRectangle());
-                                collisionBox.setWidth(16);
-                                collisionBox.setHeight(12);
-                                collisionBox.setY(collisionBox.y + 12);
-
-                                if (player.sprite.getBoundingRectangle().overlaps(collisionBox)){
-                                    System.out.println("Player coordinates" + player.sprite.getX() + ", " + player.sprite.getY());
-                                    System.out.println("Player width and height" + player.sprite.getRegionWidth() + ", " + player.sprite.getRegionHeight());
-                                    System.out.println("Player origin x and y" + player.sprite.getOriginX() + ", " + player.sprite.getOriginY());
+                                // shortening to a one-liner does not work.
+                                if (gameObject.collide(player))
                                     collides.set(true);
-                                }
                             }
                     );
                 }
