@@ -70,11 +70,16 @@ public abstract class GameObject {
         return gameObject;
     }
 
-    private Rectangle readjustForCollision(Rectangle rectangle, float width, float height, float yUpwardsShift) {
+    /**
+     * resizing and upwards shift based on trial and error observed on screen.
+     * @param rectangle
+     * @return
+     */
+    private Rectangle readjustForCollision(Rectangle rectangle) {
         Rectangle resizedRectangle = new Rectangle(rectangle);
-        resizedRectangle.setWidth(width);
-        resizedRectangle.setHeight(height);
-        resizedRectangle.setY(resizedRectangle.y + yUpwardsShift);
+        resizedRectangle.setWidth(16);
+        resizedRectangle.setHeight(12);
+        resizedRectangle.setY(resizedRectangle.y + 12);
 
         return resizedRectangle;
     }
@@ -86,7 +91,7 @@ public abstract class GameObject {
      */
     public boolean collide(Player player){
         // the numbers chose for
-        Rectangle collisionBox = readjustForCollision(this.sprite.getBoundingRectangle(), 16, 12, 12);
+        Rectangle collisionBox = readjustForCollision(this.sprite.getBoundingRectangle());
 
         if (collisionBox.overlaps(player.sprite.getBoundingRectangle())){
             System.out.println("Collision detected at: " + Arrays.toString(player.sprite.getVertices()));

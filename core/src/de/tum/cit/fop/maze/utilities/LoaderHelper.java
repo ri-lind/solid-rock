@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import de.tum.cit.fop.maze.objects.Enemy;
 import de.tum.cit.fop.maze.objects.Player;
 
 /**
@@ -110,5 +111,31 @@ public class LoaderHelper {
         TextureRegion borderTile = new TextureRegion(tileSheet, 4 * frameWidth, 0, frameWidth, frameHeight);
         Sprite borderTileSprite = new Sprite(borderTile);
         tiles.add(borderTileSprite);
+    }
+
+    public static void loadEnemyDirectionAnimations(Enemy enemy){
+
+        Texture texture = new Texture(Gdx.files.internal(Enemy.spriteSheetFilePath));
+
+        int frameWidth = 16;
+        int frameHeight = 16;
+        int animationFrames = 3;
+        int directionCount = 4;
+
+        Array<Array<Sprite>> walkFramesArray = new Array<>(Array.class);
+
+        for (int row = 0; row < directionCount; row++){
+            walkFramesArray.add(new Array<>(Sprite.class));
+            for (int column = 9; column < 9 +animationFrames; column++){
+                TextureRegion region = new TextureRegion(texture, column * frameWidth, row * frameHeight, frameWidth, frameHeight);
+                Sprite sprite = new Sprite(region);
+                walkFramesArray.get(row).add(sprite);
+            }
+        }
+
+        enemy.animationMap.put("down", new Animation<>(0.1f, walkFramesArray.get(0)));
+        enemy.animationMap.put("left", new Animation<>(0.1f, walkFramesArray.get(1)));
+        enemy.animationMap.put("right", new Animation<>(0.1f, walkFramesArray.get(2)));
+        enemy.animationMap.put("up", new Animation<>(0.1f, walkFramesArray.get(3)));
     }
 }

@@ -127,8 +127,13 @@ public class Level {
                     gameObjects.forEach(
                             gameObject -> {
                                 // shortening to a one-liner does not work.
-                                if (gameObject.collide(player))
+                                if (gameObject.collide(player)){
                                     collides.set(true);
+
+                                    if(gameObject.getClass() == Obstacle.class){
+                                        collides.set(false);
+                                    }
+                                }
                             }
                     );
                 }

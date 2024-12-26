@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import de.tum.cit.fop.maze.objects.Enemy;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.objects.Wall;
@@ -100,9 +101,11 @@ public class GameScreen implements Screen {
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         spriteBatch.setProjectionMatrix(fitViewPort.getCamera().combined);
 
+        Enemy enemy = new Enemy(100, 240);
 
-        TextureRegion currentFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
 
+        TextureRegion currentPlayerFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
+        TextureRegion currentEnemyFrame = enemy.animationMap.get("up").getKeyFrame(stateTime, true);
 
         spriteBatch.begin();
         // drawing border and normal tiles
@@ -111,8 +114,10 @@ public class GameScreen implements Screen {
         level.drawGameObjects(spriteBatch);
 
         // drawing the current player frame
-        spriteBatch.draw(currentFrame, player.sprite.getX(), player.sprite.getY(), currentFrame.getRegionWidth() * OBJECT_SCALE, currentFrame.getRegionHeight() * OBJECT_SCALE);
+        spriteBatch.draw(currentPlayerFrame, player.sprite.getX(), player.sprite.getY(), currentPlayerFrame.getRegionWidth() * OBJECT_SCALE, currentPlayerFrame.getRegionHeight() * OBJECT_SCALE);
 
+        // drawing the current enemy frame, facing downwards?
+        spriteBatch.draw(currentEnemyFrame, enemy.sprite.getX(), enemy.sprite.getY(), currentEnemyFrame.getRegionWidth() * 4, currentEnemyFrame.getRegionHeight() * 2);
 
         spriteBatch.end(); // Important to call this after drawing everything
     }

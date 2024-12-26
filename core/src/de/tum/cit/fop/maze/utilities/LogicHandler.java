@@ -98,6 +98,7 @@ public class LogicHandler {
         else {
             //check collision with any of the objects of the game.
             if(!level.collides(temporaryPlayer)){
+
                 player.calculateNextMove(); // move the player along the current direction
 
             }
