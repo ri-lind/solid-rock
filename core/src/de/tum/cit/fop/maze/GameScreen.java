@@ -99,8 +99,7 @@ public class GameScreen implements Screen {
         );
 
         level.drawGameObjects(spriteBatch);
-        GameObject trap = new Trap(100, 250);
-        trap.sprite.draw(spriteBatch);
+
         // drawing the current player frame
         spriteBatch.draw(currentPlayerFrame, player.sprite.getX(), player.sprite.getY(), currentPlayerFrame.getRegionWidth() * OBJECT_SCALE, currentPlayerFrame.getRegionHeight() * OBJECT_SCALE);
 

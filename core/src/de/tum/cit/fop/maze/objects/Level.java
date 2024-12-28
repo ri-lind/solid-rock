@@ -132,9 +132,6 @@ public class Level {
                 (objectType, listOfObjects) -> {
                     listOfObjects.forEach(
                             object -> {
-                                if(object.getClass() == Trap.class){
-                                    System.out.println("Debugger placeholder");
-                                }
                                 object.sprite.draw(spriteBatch);
                             }
                     );

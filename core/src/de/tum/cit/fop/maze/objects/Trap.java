@@ -12,7 +12,7 @@ public class Trap extends Obstacle{
 
     public Animation<Sprite> animations;
 
-    static final int spriteSheetColumn = 13;
+    static final int spriteSheetColumn = 0;
     static final int spriteSheetRow = 0;
     static final int objectWidth = 32;
     static final int objectHeight = 64;
