@@ -151,6 +151,7 @@ public class MapHandler {
         3     | Trap (static obstacle)
         4     | Enemy (dynamic obstacle)
         5     | Key
+        6     | Border Tile
          */
 
 };

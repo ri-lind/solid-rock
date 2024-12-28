@@ -38,12 +38,14 @@ public class Level {
         this.gameObjects = MapHandler.scaleToWorld(unscaledMap, camera);
 
 
+
         this.normalTileType = LoaderHelper.loadNormalBackgroundTile();
         this.rowBorderTileType = LoaderHelper.loadBackgroundBorderTile();
         this.columnBorderTileType = new Sprite(rowBorderTileType);
         this.columnBorderTileType.rotate90(true);
         this.tiles = new ArrayList<>();
-        loadBorderTiles(camera);
+
+        this.gameObjects.put(6, loadBorderTiles(camera));
         loadInnerTiles(camera);
 
 
@@ -54,10 +56,12 @@ public class Level {
      * The list contains sprites. The list is later used to draw the level.
      * @param camera
      */
-    public void loadBorderTiles(OrthographicCamera camera){
+    public List<GameObject> loadBorderTiles(OrthographicCamera camera){
         // used for drawing sprites only until bounds.
         float maxHeight = camera.viewportHeight;
         float maxWidth = camera.viewportWidth;
+
+        List<GameObject> gameObjectList = new ArrayList<>();
 
         // draw rows
         for (int i = 0; i <= maxWidth/rowBorderTileType.getWidth(); i++) {
@@ -71,11 +75,14 @@ public class Level {
             Sprite upperBorderSprite = new Sprite(rowBorderTileType);
             upperBorderSprite.setY(maxHeight - rowBorderTileType.getHeight());
 
-            // add the sprites to the tiles list.
 
             this.tiles.add(lowerBorderSprite);
             this.tiles.add(upperBorderSprite);
 
+            GameObject low = new BorderWall(lowerBorderSprite.getX(), lowerBorderSprite.getY());
+            GameObject high = new BorderWall(upperBorderSprite.getX(), upperBorderSprite.getY());
+            gameObjectList.add(low);
+            gameObjectList.add(high);
         }
 
         //load columns
@@ -93,7 +100,15 @@ public class Level {
 
             this.tiles.add(leftBorderSprite);
             this.tiles.add(rightBorderSprite);
+
+            GameObject left = new BorderWall(leftBorderSprite.getX(), leftBorderSprite.getY());
+            GameObject right = new BorderWall(rightBorderSprite.getX(), rightBorderSprite.getY());
+            gameObjectList.add(left);
+            gameObjectList.add(right);
         }
+
+
+        return gameObjectList;
     }
 
     /**
@@ -147,10 +162,6 @@ public class Level {
                             gameObject -> {
                                 // shortening to a one-liner does not work.
                                 if (gameObject.collide(player)){ // this line sets the trap to triggered
-                                    if(gameObject.getClass() == Trap.class){
-                                        Trap trap = (Trap) gameObject;
-                                        System.out.println(trap.triggered);
-                                    }
                                     collides.set(true);
                                 }
                             }

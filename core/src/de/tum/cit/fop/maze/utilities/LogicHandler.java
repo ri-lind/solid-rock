@@ -87,21 +87,12 @@ public class LogicHandler {
         temporaryPlayer.calculateNextMove();
 
         // key frame does not matter, I believe...
-        if (temporaryPlayer.sprite.getX() + player.sprite.getRegionWidth() >= fitViewport.getWorldWidth() ||
-                temporaryPlayer.sprite.getX() < 0){
-            System.out.println();
 
-        } else if (temporaryPlayer.sprite.getY() + player.sprite.getRegionHeight() >= fitViewport.getWorldHeight() ||
-                temporaryPlayer.sprite.getY() < 0 ) {
-        }
-
-        else {
             //check collision with any of the objects of the game.
-            if(!level.collides(temporaryPlayer)){
-
-                player.calculateNextMove(); // move the player along the current direction
-            }
+        if(!level.collides(temporaryPlayer)){
+            player.calculateNextMove(); // move the player along the current direction//
         }
+
         // move player into required direction here.
     }
 
