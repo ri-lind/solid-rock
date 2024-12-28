@@ -82,7 +82,9 @@ public class GameScreen implements Screen {
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         spriteBatch.setProjectionMatrix(fitViewPort.getCamera().combined);
 
-        TextureRegion currentPlayerFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
+        Sprite currentPlayerFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
+        currentPlayerFrame.setPosition(player.sprite.getX(), player.sprite.getY());
+
 
         spriteBatch.begin();
 
@@ -96,8 +98,8 @@ public class GameScreen implements Screen {
         level.drawGameObjects(spriteBatch);
 
         // drawing the current player frame
-        spriteBatch.draw(currentPlayerFrame, player.sprite.getX(), player.sprite.getY(), currentPlayerFrame.getRegionWidth(), currentPlayerFrame.getRegionHeight());
-
+        //spriteBatch.draw(currentPlayerFrame, player.sprite.getX(), player.sprite.getY(), currentPlayerFrame.getRegionWidth(), currentPlayerFrame.getRegionHeight());
+        currentPlayerFrame.draw(spriteBatch);
         Trap trap = new Trap(100, 100);
         var t = trap.animations.getKeyFrame(stateTime, false);
         t.draw(spriteBatch);

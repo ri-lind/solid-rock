@@ -1,5 +1,6 @@
 package de.tum.cit.fop.maze.objects;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Wall extends Obstacle{
@@ -19,8 +20,6 @@ public class Wall extends Obstacle{
         this(new Vector2(x, y), Wall.spriteSheetColumn, Wall.spriteSheetRow, Wall.objectWidth, Wall.objectHeight, spriteSheetFilePath);
     }
 
-    @Override
-    public void draw(float stateTime) {
+    // for trap specifically
 
-    }
 }

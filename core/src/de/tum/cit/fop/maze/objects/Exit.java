@@ -1,5 +1,6 @@
 package de.tum.cit.fop.maze.objects;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Exit extends GameObject {
@@ -20,8 +21,4 @@ public class Exit extends GameObject {
         this(new Vector2(x, y), Exit.spriteSheetColumn, Exit.spriteSheetRow, Exit.objectWidth, Exit.objectHeight, spriteSheetFilePath);
     }
 
-    @Override
-    public void draw(float stateTime) {
-
-    }
 }

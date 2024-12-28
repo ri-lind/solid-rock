@@ -1,5 +1,6 @@
 package de.tum.cit.fop.maze.objects;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Obstacle extends GameObject{

@@ -1,5 +1,6 @@
 package de.tum.cit.fop.maze.objects;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class EntryPoint extends GameObject{
@@ -19,8 +20,4 @@ public class EntryPoint extends GameObject{
         this(new Vector2(x, y), EntryPoint.spriteSheetColumn, EntryPoint.spriteSheetRow, EntryPoint.objectWidth, EntryPoint.objectHeight, spriteSheetFilePath);
     }
 
-    @Override
-    public void draw(float stateTime) {
-
-    }
 }

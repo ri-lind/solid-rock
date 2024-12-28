@@ -3,6 +3,7 @@ package de.tum.cit.fop.maze.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -21,10 +22,6 @@ public class Key extends GameObject implements Collectable{
         super(coordinates, spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
     }
 
-    @Override
-    public void draw(float stateTime) {
-
-    }
 
     public Key(float x, float y) {
         this(new Vector2(x, y), spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);

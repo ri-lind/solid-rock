@@ -95,8 +95,6 @@ public class LoaderHelper {
         player.animations.put("left-attacking", new Animation<>(0.1f, attackFramesArray.get(3)));
     }
 
-
-
     public static Sprite loadNormalBackgroundTile( ){
         int frameWidth = 16;
         int frameHeight = 16;
@@ -143,14 +141,6 @@ public class LoaderHelper {
         enemy.animationMap.put("up", new Animation<>(0.1f, walkFramesArray.get(3)));
     }
 
-
-    /**
-     * Adds 16 x 16 bomb explosion animations to trap.
-     * @param trap
-     * @param frameWidth
-     * @param frameHeight
-     * @param spriteSheetFilePath
-     */
     public static void loadTrapAnimations(Trap trap, int frameWidth, int frameHeight, String spriteSheetFilePath, float x, float y) {
 
 

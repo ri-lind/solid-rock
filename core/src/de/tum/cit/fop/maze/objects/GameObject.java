@@ -3,6 +3,7 @@ package de.tum.cit.fop.maze.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -28,7 +29,9 @@ public abstract class GameObject {
         loadSprite(coordinates, spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
     }
 
-    public abstract void draw(float stateTime);
+    public void draw(SpriteBatch spriteBatch) {
+        this.sprite.draw(spriteBatch);
+    };
 
     /**
      * Contains logic to load the texture from the sprite sheet file.

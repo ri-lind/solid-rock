@@ -2,6 +2,7 @@ package de.tum.cit.fop.maze.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
@@ -27,13 +28,11 @@ public class Enemy extends Obstacle{
         LoaderHelper.loadEnemyDirectionAnimations(this);
     }
 
-    @Override
-    public void draw(float stateTime) {
-
-    }
-
     public Enemy(float x, float y){
         this(new Vector2(x, y), spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
     }
+
+
+    //we'll add the override method here as well. Logic a tad bit more complicated.
 
 }

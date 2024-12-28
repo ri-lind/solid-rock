@@ -129,12 +129,11 @@ public class Level {
      * @param spriteBatch
      */
     public void drawGameObjects(SpriteBatch spriteBatch){
-        //futuristic expression, cause I am a boss.
         gameObjects.forEach(
                 (objectType, listOfObjects) -> {
                     listOfObjects.forEach(
                             object -> {
-                                object.sprite.draw(spriteBatch);
+                                object.draw(spriteBatch);
                             }
                     );
                 }
@@ -149,7 +148,11 @@ public class Level {
                     gameObjects.forEach(
                             gameObject -> {
                                 // shortening to a one-liner does not work.
-                                if (gameObject.collide(player)){
+                                if (gameObject.collide(player)){ // this line sets the trap to triggered
+                                    if(gameObject.getClass() == Trap.class){
+                                        Trap trap = (Trap) gameObject;
+                                        System.out.println(trap.triggered);
+                                    }
                                     collides.set(true);
                                 }
                             }
