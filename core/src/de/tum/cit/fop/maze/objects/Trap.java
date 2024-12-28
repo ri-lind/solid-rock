@@ -19,7 +19,7 @@ public class Trap extends Obstacle{
     static final int spriteSheetRow = 0;
     static final int objectWidth = 32;
     static final int objectHeight = 64;
-    static final String spriteSheetFilePath = "BombExploding.png";
+    static final String spriteSheetFilePath = "bomb_blue.png";
 
     public boolean triggered;
     private float stateTime;
@@ -60,7 +60,6 @@ public class Trap extends Obstacle{
     public void draw(SpriteBatch spriteBatch) {
         Sprite sprite;
         if(triggered){
-            System.out.println("We here");
             this.stateTime += Gdx.graphics.getDeltaTime();
             sprite = this.animations.getKeyFrame(stateTime, false);
             sprite.setPosition(this.sprite.getX(), this.sprite.getY());

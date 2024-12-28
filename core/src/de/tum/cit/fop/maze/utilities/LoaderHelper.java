@@ -26,7 +26,7 @@ public class LoaderHelper {
      * Initializes player.sprite as well
      */
     public static void loadCharacterDirectionAnimation(Player player) {
-        Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
+        Texture walkSheet = new Texture(Gdx.files.internal("character_white.png"));
 
         // we set the empty direction arrays of the player class to variable names, for instantiating.
         // define player width, height and everything else
@@ -43,7 +43,7 @@ public class LoaderHelper {
             walkFramesArray.add(new Array<>(TextureRegion.class));
             for (int col = 0; col < animationFrames; col++) {
                 // we add the current animation to the direction
-                TextureRegion textureRegion = new TextureRegion(walkSheet, col * frameWidth, row * frameHeight, frameWidth, frameHeight);
+                TextureRegion textureRegion = new TextureRegion(walkSheet, col * frameWidth + 2, row * frameHeight+5, frameWidth-3, frameHeight-9);
                 Sprite sprite = new Sprite(textureRegion);
                 walkFramesArray.get(row).add(sprite);
             }
@@ -68,7 +68,7 @@ public class LoaderHelper {
     }
 
     public static void loadCharacterAttackAnimations(Player player){
-        Texture attackSheet = new Texture(Gdx.files.internal("character.png"));
+        Texture attackSheet = new Texture(Gdx.files.internal("character_white.png"));
 
         // attack sprite size is just different, what the fuck?
         int frameWidth = 16;

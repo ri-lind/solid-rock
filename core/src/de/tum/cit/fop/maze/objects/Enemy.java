@@ -15,7 +15,7 @@ public class Enemy extends Obstacle{
     static final int spriteSheetRow = 0;
     static final int objectWidth = 16;
     static final int objectHeight = 16;
-    public static final String spriteSheetFilePath = "mobs.png";
+    public static final String spriteSheetFilePath = "mobs_green.png";
 
     // let the sprite be the first animation in the animationMap.
     // this means, we need to move from there to the right and/or downwards to get the remaining animations

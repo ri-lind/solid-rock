@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
 
         this.player = new Player();
 
-        this.level = new Level("maps/level-1.properties", player, camera);
+        this.level = new Level("maps/level-1.properties", camera);
     }
 
     // Screen interface methods with necessary functionality

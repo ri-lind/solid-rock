@@ -65,8 +65,9 @@ public abstract class GameObject {
         // the numbers chose for
         if (this.sprite.getBoundingRectangle().overlaps(player.sprite.getBoundingRectangle())){
             System.out.print(this.getClass() + ", surface: " + this.calculateSurface() + " units square. ");
-            System.out.println("Width: " + this.sprite.getRegionWidth() + " Height: " + this.sprite.getRegionHeight());
+            System.out.println("Region Width: " + this.sprite.getRegionWidth() + " Height: " + this.sprite.getRegionHeight());
             System.out.println("Width: " + this.sprite.getWidth() + " Height: " + this.sprite.getHeight());
+            System.out.println("Collision Width: " + this.sprite.getBoundingRectangle().getWidth() + " Height: " + this.sprite.getBoundingRectangle().getHeight());
 
             return true;
         }

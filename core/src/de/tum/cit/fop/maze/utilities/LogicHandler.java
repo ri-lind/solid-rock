@@ -101,9 +101,6 @@ public class LogicHandler {
 
                 player.calculateNextMove(); // move the player along the current direction
             }
-            else if (level.collides(temporaryPlayer)){
-
-            }
         }
         // move player into required direction here.
     }

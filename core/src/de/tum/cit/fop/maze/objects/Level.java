@@ -30,14 +30,12 @@ public class Level {
     Sprite rowBorderTileType; // check size
     Sprite columnBorderTileType; // check size
 
-    public Level(String fileName, Player player, OrthographicCamera camera){
+    public Level(String fileName, OrthographicCamera camera){
 
         // loads key, enemies, traps, exits, entrances into  the world.
         String mapContent = MapHandler.readMapFromFile(fileName);
         Map<Integer, List<GameObject>> unscaledMap = MapHandler.convertToMap(mapContent);
         this.gameObjects = MapHandler.scaleToWorld(unscaledMap, camera);
-
-        this.player = player;
 
 
         this.normalTileType = LoaderHelper.loadNormalBackgroundTile();

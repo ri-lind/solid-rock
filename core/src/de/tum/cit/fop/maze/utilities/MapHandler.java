@@ -21,9 +21,6 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class MapHandler {
 
-    static final int WORLD_WIDTH = 800;
-    static final int WORLD_HEIGHT = 512;
-
     /**
      *
      * @param fileName
