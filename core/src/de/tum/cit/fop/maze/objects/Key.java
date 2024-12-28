@@ -21,6 +21,11 @@ public class Key extends GameObject implements Collectable{
         super(coordinates, spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
     }
 
+    @Override
+    public void draw(float stateTime) {
+
+    }
+
     public Key(float x, float y) {
         this(new Vector2(x, y), spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
     }

@@ -2,9 +2,9 @@ package de.tum.cit.fop.maze.objects;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Wall extends GameObject{
+public class Wall extends Obstacle{
 
-    //
+
     static final int spriteSheetColumn = 5;
     static final int spriteSheetRow = 0;
     static final int objectWidth = 16;
@@ -19,4 +19,8 @@ public class Wall extends GameObject{
         this(new Vector2(x, y), Wall.spriteSheetColumn, Wall.spriteSheetRow, Wall.objectWidth, Wall.objectHeight, spriteSheetFilePath);
     }
 
+    @Override
+    public void draw(float stateTime) {
+
+    }
 }

@@ -27,6 +27,11 @@ public class Enemy extends Obstacle{
         LoaderHelper.loadEnemyDirectionAnimations(this);
     }
 
+    @Override
+    public void draw(float stateTime) {
+
+    }
+
     public Enemy(float x, float y){
         this(new Vector2(x, y), spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
     }

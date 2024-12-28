@@ -3,6 +3,7 @@ package de.tum.cit.fop.maze.utilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.tum.cit.fop.maze.objects.EntryPoint;
 import de.tum.cit.fop.maze.objects.Exit;
@@ -22,7 +23,7 @@ public class MapHandler {
 
     static final int WORLD_WIDTH = 800;
     static final int WORLD_HEIGHT = 512;
-    static final int OBJECT_SCALE = 2;
+
     /**
      *
      * @param fileName
@@ -61,8 +62,8 @@ public class MapHandler {
             float x = Float.parseFloat(coordinates[0]);
             float y = Float.parseFloat(coordinates[1]);
 
-            // objecttype, coordinates.
-            GameObject gameObject = GameObject.convertToGameObject(objectType, x, y, OBJECT_SCALE);
+            // gameObjects are loaded into the level
+            GameObject gameObject = GameObject.convertToGameObject(objectType, x, y);
 
             if (mapMap.containsKey(objectType)){
                 mapMap.get(objectType).add(gameObject);
@@ -81,11 +82,11 @@ public class MapHandler {
      * @param map
      * @return
      */
-    public static Map<Integer, List<GameObject>> scaleToWorld(Map<Integer, List<GameObject>> map){
+    public static Map<Integer, List<GameObject>> scaleToWorld(Map<Integer, List<GameObject>> map,
+                                                              OrthographicCamera camera){
         //get the maximum x and y from the coordinates
         AtomicReference<Float> maxX = new AtomicReference<>((float) 0);
         AtomicReference<Float> maxY = new AtomicReference<>((float) 0);
-
         map.forEach(
                 (objectType, listofObjects) -> {
                     listofObjects.forEach(
@@ -103,11 +104,10 @@ public class MapHandler {
         );
 
         // calculate the scaling factor
-        float width_scaling_factor = WORLD_WIDTH/maxX.get();
-        float height_scaling_factor = WORLD_HEIGHT/maxY.get();
+        float width_scaling_factor = camera.viewportWidth/maxX.get();
+        float height_scaling_factor = camera.viewportHeight/maxY.get();
 
-        System.out.println(maxX.get() + " " + maxY.get());
-        //System.out.println(width_scaling_factor + " " + height_scaling_factor);
+
 
         // apply the scaling to the coordinates
         map.forEach(

@@ -18,4 +18,9 @@ public class EntryPoint extends GameObject{
     public EntryPoint(float x, float y){
         this(new Vector2(x, y), EntryPoint.spriteSheetColumn, EntryPoint.spriteSheetRow, EntryPoint.objectWidth, EntryPoint.objectHeight, spriteSheetFilePath);
     }
+
+    @Override
+    public void draw(float stateTime) {
+
+    }
 }

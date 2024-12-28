@@ -28,8 +28,7 @@ public abstract class GameObject {
         loadSprite(coordinates, spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
     }
 
-    // are coordinates origin or bottom left corner? I guess it is up to me
-
+    public abstract void draw(float stateTime);
 
     /**
      * Contains logic to load the texture from the sprite sheet file.
@@ -51,41 +50,8 @@ public abstract class GameObject {
         sprite.setBounds(coordinates.x, coordinates.y, objectWidth, objectHeight);
     }
 
-    public static GameObject convertToGameObject(int objectType, float x, float y, int objectScale){
-        GameObject gameObject;
-        if (objectType == 0){
-            gameObject = new Wall(x, y);
-        } else if (objectType == 1) {
-            gameObject = new EntryPoint(x, y);
-        } else if(objectType == 2) {
-            gameObject = new Exit(x,y);
-        } else if (objectType == 3) {
-            gameObject = new Trap(x, y);
-        } else if (objectType == 4) {
-            gameObject = new Enemy(x, y);
-        }
-        else{
-            // not defined gameobject, we replace the textures with the exit texture.
-            gameObject = new Enemy(x, y);
-        }
 
-        gameObject.sprite.setScale(objectScale); // add or remove the scaling.
-        return gameObject;
-    }
 
-    /**
-     * resizing and upwards shift based on trial and error observed on screen.
-     * @param rectangle
-     * @return
-     */
-    private Rectangle readjustForCollision(Rectangle rectangle) {
-        Rectangle resizedRectangle = new Rectangle(rectangle);
-        resizedRectangle.setWidth(16);
-        resizedRectangle.setHeight(12);
-        resizedRectangle.setY(resizedRectangle.y + 12);
-
-        return resizedRectangle;
-    }
 
     /**
      * returns true if there is a collision with the player.
@@ -94,13 +60,42 @@ public abstract class GameObject {
      */
     public boolean collide(Player player){
         // the numbers chose for
-        Rectangle collisionBox = readjustForCollision(this.sprite.getBoundingRectangle());
+        if (this.sprite.getBoundingRectangle().overlaps(player.sprite.getBoundingRectangle())){
+            System.out.print(this.getClass() + ", surface: " + this.calculateSurface() + " units square. ");
+            System.out.println("Width: " + this.sprite.getRegionWidth() + " Height: " + this.sprite.getRegionHeight());
+            System.out.println("Width: " + this.sprite.getWidth() + " Height: " + this.sprite.getHeight());
 
-        if (collisionBox.overlaps(player.sprite.getBoundingRectangle())){
-            System.out.println("Collision detected for object type: " + this.getClass());
             return true;
         }
         return false;
     }
 
+
+    public static GameObject convertToGameObject(int objectType, float x, float y){
+        GameObject obstacle;
+        if (objectType == 0){
+            obstacle = new Wall(x, y);
+        } else if (objectType == 1) {
+            obstacle = new EntryPoint(x, y);
+        } else if(objectType == 2) {
+            obstacle = new Exit(x,y);
+        } else if (objectType == 3) {
+            obstacle = new Trap(x, y);
+        } else if (objectType == 4) {
+            obstacle = new Enemy(x, y);
+        }
+        else{
+            // default to enemy spawning
+            obstacle = new Enemy(x, y);
+        }
+
+        //obstacle.sprite.setScale(objectScale); // add or remove the scaling.
+        return obstacle;
+    }
+
+    public float calculateSurface(){
+        Rectangle rectangle = this.sprite.getBoundingRectangle();
+
+        return rectangle.area();
+    }
 }

@@ -54,12 +54,7 @@ public class GameScreen implements Screen {
         // Get the font from the game's skin
         this.font = game.getSkin().getFont("font");
 
-        // normal and border tiles
-
-
-        // load character unto the game
-        player = new Player();
-
+        this.player = new Player();
 
         this.level = new Level("maps/level-1.properties", player, camera);
     }
@@ -72,7 +67,7 @@ public class GameScreen implements Screen {
             game.goToMenu();
         }
         // handling user input logic
-        input(game, player, fitViewPort, OBJECT_SCALE, level, delta); // sets current direction to what the user presses
+        input(game, player, fitViewPort, level, delta); // sets current direction to what the user presses
 
         // drawing unto the screen
         draw();
@@ -101,8 +96,11 @@ public class GameScreen implements Screen {
         level.drawGameObjects(spriteBatch);
 
         // drawing the current player frame
-        spriteBatch.draw(currentPlayerFrame, player.sprite.getX(), player.sprite.getY(), currentPlayerFrame.getRegionWidth() * OBJECT_SCALE, currentPlayerFrame.getRegionHeight() * OBJECT_SCALE);
+        spriteBatch.draw(currentPlayerFrame, player.sprite.getX(), player.sprite.getY(), currentPlayerFrame.getRegionWidth(), currentPlayerFrame.getRegionHeight());
 
+        Trap trap = new Trap(100, 100);
+        var t = trap.animations.getKeyFrame(stateTime, false);
+        t.draw(spriteBatch);
         // drawing the current enemy frame, facing downwards?
         spriteBatch.end(); // Important to call this after drawing everything
     }

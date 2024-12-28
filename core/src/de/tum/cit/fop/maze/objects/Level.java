@@ -26,19 +26,19 @@ public class Level {
 
     public List<Sprite> tiles;
 
-    // the tile tipes in the list and foreak
-    Sprite normalTileType;
-    Sprite rowBorderTileType;
-    Sprite columnBorderTileType;
+    Sprite normalTileType; // check size
+    Sprite rowBorderTileType; // check size
+    Sprite columnBorderTileType; // check size
 
     public Level(String fileName, Player player, OrthographicCamera camera){
+
+        // loads key, enemies, traps, exits, entrances into  the world.
         String mapContent = MapHandler.readMapFromFile(fileName);
         Map<Integer, List<GameObject>> unscaledMap = MapHandler.convertToMap(mapContent);
-
-        // it is scaled in the constructor
-        this.gameObjects = MapHandler.scaleToWorld(unscaledMap);
+        this.gameObjects = MapHandler.scaleToWorld(unscaledMap, camera);
 
         this.player = player;
+
 
         this.normalTileType = LoaderHelper.loadNormalBackgroundTile();
         this.rowBorderTileType = LoaderHelper.loadBackgroundBorderTile();
@@ -47,6 +47,8 @@ public class Level {
         this.tiles = new ArrayList<>();
         loadBorderTiles(camera);
         loadInnerTiles(camera);
+
+
     }
 
     /**
@@ -149,9 +151,6 @@ public class Level {
                                 // shortening to a one-liner does not work.
                                 if (gameObject.collide(player)){
                                     collides.set(true);
-                                    if(gameObject.getClass() == Obstacle.class){
-                                        collides.set(false);
-                                    }
                                 }
                             }
                     );

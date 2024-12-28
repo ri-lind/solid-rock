@@ -15,7 +15,7 @@ import java.util.Hashtable;
  */
 public class Player {
     // down, right, up, left.
-    public Dictionary<String, Animation<TextureRegion>> animations;
+    public Dictionary<String, Animation<Sprite>> animations;
 
     // the animations dictionary and calculate next move methods depend on this field
     public String currentDirection = "";
@@ -75,7 +75,7 @@ public class Player {
          SPEED = 1f; // reset speed after movement
     }
 
-    public Animation<TextureRegion> getCurrentAnimation(){
+    public Animation<Sprite> getCurrentAnimation(){
         return this.animations.get(currentDirection.toLowerCase().replace("-running", ""));
     }
 }
