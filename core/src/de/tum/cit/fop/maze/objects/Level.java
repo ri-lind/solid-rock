@@ -4,8 +4,11 @@ package de.tum.cit.fop.maze.objects;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
+import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.MapHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,7 +24,14 @@ public class Level {
     public Map<Integer, List<GameObject>> gameObjects;
     private Player player;
 
-    public Level(String fileName, Player player){
+    public List<Sprite> tiles;
+
+    // the tile tipes in the list and foreak
+    Sprite normalTileType;
+    Sprite rowBorderTileType;
+    Sprite columnBorderTileType;
+
+    public Level(String fileName, Player player, OrthographicCamera camera){
         String mapContent = MapHandler.readMapFromFile(fileName);
         Map<Integer, List<GameObject>> unscaledMap = MapHandler.convertToMap(mapContent);
 
@@ -30,72 +40,82 @@ public class Level {
 
         this.player = player;
 
+        this.normalTileType = LoaderHelper.loadNormalBackgroundTile();
+        this.rowBorderTileType = LoaderHelper.loadBackgroundBorderTile();
+        this.columnBorderTileType = new Sprite(rowBorderTileType);
+        this.columnBorderTileType.rotate90(true);
+        this.tiles = new ArrayList<>();
+        loadBorderTiles(camera);
+        loadInnerTiles(camera);
     }
 
     /**
-     * Draws the border tiles of the map. Is not bound to specific levels, so the method is static.
-     * @param spriteBatch
-     * @param rowBorderTile
-     * @param columnBorderTile
+     * Method which loads the border sprites of the map into the list of tiles.
+     * The list contains sprites. The list is later used to draw the level.
      * @param camera
      */
-    public static void drawBorderTiles(SpriteBatch spriteBatch, Sprite rowBorderTile,
-                                       Sprite columnBorderTile, OrthographicCamera camera){
-        // logic needed to draw the border tiles at the border lines of the camera
+    public void loadBorderTiles(OrthographicCamera camera){
+        // used for drawing sprites only until bounds.
         float maxHeight = camera.viewportHeight;
         float maxWidth = camera.viewportWidth;
 
         // draw rows
-        for (int i = 0; i <= maxWidth/rowBorderTile.getWidth(); i++) {
-            rowBorderTile.setX(rowBorderTile.getWidth() * i);
+        for (int i = 0; i <= maxWidth/rowBorderTileType.getWidth(); i++) {
+            rowBorderTileType.setX(rowBorderTileType.getWidth() * i);
 
-            // draw tile at first row
-            rowBorderTile.setY(0);
-            rowBorderTile.draw(spriteBatch);
+            // load sprite of first row
+            Sprite lowerBorderSprite = new Sprite(rowBorderTileType);
+            lowerBorderSprite.setY(0);
 
-            // draw tile at last row
-            rowBorderTile.setY(maxHeight-rowBorderTile.getHeight());
-            rowBorderTile.draw(spriteBatch);
+            // load sprite of last row
+            Sprite upperBorderSprite = new Sprite(rowBorderTileType);
+            upperBorderSprite.setY(maxHeight - rowBorderTileType.getHeight());
+
+            // add the sprites to the tiles list.
+
+            this.tiles.add(lowerBorderSprite);
+            this.tiles.add(upperBorderSprite);
+
         }
 
-        //draw columns
-        for (int i = 0; i<= maxHeight/columnBorderTile.getWidth(); i++){
-            columnBorderTile.setY(columnBorderTile.getHeight() * i);
+        //load columns
+        for (int i = 0; i<= maxHeight/columnBorderTileType.getWidth(); i++){
+            columnBorderTileType.setY(columnBorderTileType.getHeight() * i);
 
-            columnBorderTile.rotate(180);
-            // draw tile at first column
-            columnBorderTile.setX(0);
-            columnBorderTile.draw(spriteBatch);
+            // load sprite of first column
+            Sprite leftBorderSprite = new Sprite(columnBorderTileType);
+            leftBorderSprite.rotate(180);
+            leftBorderSprite.setX(0);
 
-            columnBorderTile.rotate(180);
-            // draw tile at last column
-            columnBorderTile.setX(maxWidth - columnBorderTile.getWidth());
-            columnBorderTile.draw(spriteBatch);
+            // load sprite of last column
+            Sprite rightBorderSprite = new Sprite(columnBorderTileType);
+            rightBorderSprite.setX(maxWidth - columnBorderTileType.getWidth());
 
-
+            this.tiles.add(leftBorderSprite);
+            this.tiles.add(rightBorderSprite);
         }
     }
 
     /**
-     * The method is not bound to levels, so it is static. Draws the inner tiles of the map.
-     * @param spriteBatch
-     * @param normalTile
+     * Storing the inner sprites in the tiles list, so that they can be drawn and used for spawning later.
      * @param camera
      */
-    public static void drawNormalTiles(SpriteBatch spriteBatch, Sprite normalTile,
-                                       OrthographicCamera camera){
+    public void loadInnerTiles(OrthographicCamera camera){
         // the sprite starts at 0,0
         // we will start it at sprite.getWidth and getHeight
         // until camera.viewpointWidth - 2 * sprite.getWidth and same for height.
 
         // instead of starting at (0,0) we start at (presumably) (16,16)
 
-        for (int i = 1; i <= camera.viewportWidth/normalTile.getWidth()-2; i++){
-            for (int j =1; j<= camera.viewportHeight/normalTile.getHeight()-2; j++){
-                normalTile.setX(normalTile.getWidth()* i);
-                normalTile.setY(normalTile.getHeight()*j);
+        for (int i = 1; i <= camera.viewportWidth/this.normalTileType.getWidth()-2; i++){
+            for (int j =1; j<= camera.viewportHeight/this.normalTileType.getHeight()-2; j++){
+                // create sprite with coordinate at indices, and add it to list.
+                Sprite temporarySprite = new Sprite(this.normalTileType);
+                temporarySprite.setX(temporarySprite.getWidth()* i);
+                temporarySprite.setY(temporarySprite.getHeight()*j);
 
-                normalTile.draw(spriteBatch);
+                this.tiles.add(temporarySprite);
+
             }
         }
 
@@ -112,6 +132,9 @@ public class Level {
                 (objectType, listOfObjects) -> {
                     listOfObjects.forEach(
                             object -> {
+                                if(object.getClass() == Trap.class){
+                                    System.out.println("Debugger placeholder");
+                                }
                                 object.sprite.draw(spriteBatch);
                             }
                     );
@@ -129,7 +152,6 @@ public class Level {
                                 // shortening to a one-liner does not work.
                                 if (gameObject.collide(player)){
                                     collides.set(true);
-
                                     if(gameObject.getClass() == Obstacle.class){
                                         collides.set(false);
                                     }

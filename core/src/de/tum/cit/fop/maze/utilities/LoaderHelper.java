@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.objects.Enemy;
 import de.tum.cit.fop.maze.objects.Player;
+import de.tum.cit.fop.maze.objects.Trap;
 
 /**
  * Loads player animations and border and inner tiles.
@@ -86,31 +87,25 @@ public class LoaderHelper {
     }
 
 
-    // tile loading classes
 
-    // not used, until the camera viewport problems are sorted out.
-    public static void loadBackgroundTile(Array<Sprite> tiles){
-        // frame width and height: Are they correct?
+    public static Sprite loadNormalBackgroundTile( ){
         int frameWidth = 16;
         int frameHeight = 16;
-        Texture tileSheet = new Texture(Gdx.files.internal("basictiles.png"));
-        loadNormalBackgroundTile(tileSheet, frameWidth, frameHeight, tiles);
-        loadBackgroundBorderTile(tileSheet, frameWidth, frameHeight, tiles);
-    }
-
-    private static void loadNormalBackgroundTile(Texture tileSheet, int frameWidth, int frameHeight, Array<Sprite> tiles){
+        Texture texture = new Texture(Gdx.files.internal("basictiles.png"));
         // I believe this fetches the wooden tile, third row first column
-        TextureRegion tile = new TextureRegion(tileSheet, frameWidth * 1, frameHeight * 1, frameWidth, frameHeight);
+        TextureRegion tile = new TextureRegion(texture, frameWidth * 1, frameHeight * 1, frameWidth, frameHeight);
         // conversion to sprite
-        Sprite tileSprite = new Sprite(tile);
-        tiles.add(tileSprite);
+        return new Sprite(tile);
     }
 
-    private static void loadBackgroundBorderTile(Texture tileSheet, int frameWidth, int frameHeight, Array<Sprite> tiles){
+    public static Sprite loadBackgroundBorderTile(){
+        int frameWidth = 16;
+        int frameHeight = 16;
+        Texture texture = new Texture(Gdx.files.internal("basictiles.png"));
         // logic for border
-        TextureRegion borderTile = new TextureRegion(tileSheet, 4 * frameWidth, 0, frameWidth, frameHeight);
-        Sprite borderTileSprite = new Sprite(borderTile);
-        tiles.add(borderTileSprite);
+        TextureRegion borderTile = new TextureRegion(texture, 4 * frameWidth, 0, frameWidth, frameHeight);
+        return new Sprite(borderTile);
+
     }
 
     public static void loadEnemyDirectionAnimations(Enemy enemy){
@@ -137,5 +132,30 @@ public class LoaderHelper {
         enemy.animationMap.put("left", new Animation<>(0.1f, walkFramesArray.get(1)));
         enemy.animationMap.put("right", new Animation<>(0.1f, walkFramesArray.get(2)));
         enemy.animationMap.put("up", new Animation<>(0.1f, walkFramesArray.get(3)));
+    }
+
+
+    /**
+     * Adds 16 x 16 bomb explosion animations to trap.
+     * @param trap
+     * @param spriteSheetColumn
+     * @param spriteSheetRow
+     * @param frameWidth
+     * @param frameHeight
+     * @param spriteSheetFilePath
+     */
+    public static void loadTrapAnimations(Trap trap, int spriteSheetColumn, int spriteSheetRow,
+                                          int frameWidth, int frameHeight, String spriteSheetFilePath) {
+        Texture texture = new Texture(Gdx.files.internal(spriteSheetFilePath));
+
+        Array<Sprite> trapFrameArray = new Array<>(Sprite.class);
+
+        for (int column = 0; column < spriteSheetColumn; column++){
+            TextureRegion textureRegion = new TextureRegion(texture, column * frameWidth, 0, frameWidth, frameHeight);
+            Sprite sprite = new Sprite(textureRegion);
+            sprite.setSize(16, 16);
+            trapFrameArray.add(sprite);
+        }
+        trap.animations = new Animation<>(0.1f, trapFrameArray);
     }
 }

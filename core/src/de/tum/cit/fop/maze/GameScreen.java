@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import de.tum.cit.fop.maze.objects.Enemy;
-import de.tum.cit.fop.maze.objects.Level;
-import de.tum.cit.fop.maze.objects.Player;
-import de.tum.cit.fop.maze.objects.Wall;
+import de.tum.cit.fop.maze.objects.*;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
 import static de.tum.cit.fop.maze.utilities.LogicHandler.input;
@@ -36,11 +33,6 @@ public class GameScreen implements Screen {
     float stateTime;
 
     Player player;
-    Array<Sprite> tiles;
-    Sprite normalTile;
-    Sprite rowBorderTile;
-    Sprite columnBorderTile;
-
     Level level;
 
 
@@ -63,18 +55,13 @@ public class GameScreen implements Screen {
         this.font = game.getSkin().getFont("font");
 
         // normal and border tiles
-        this.tiles = new Array<>(2);
-        LoaderHelper.loadBackgroundTile(tiles);
-        normalTile = tiles.get(0);
-        rowBorderTile = tiles.get(1);
-        columnBorderTile = new Sprite(rowBorderTile);
-        columnBorderTile.rotate90(true);
+
 
         // load character unto the game
         player = new Player();
 
 
-        this.level = new Level("maps/level-1.properties", player);
+        this.level = new Level("maps/level-1.properties", player, camera);
     }
 
     // Screen interface methods with necessary functionality
@@ -91,34 +78,33 @@ public class GameScreen implements Screen {
         draw();
     }
 
-    // this function takes the input from user and updates the player object with the desired direction.
-
-
-    // this method receives the direction of the player and rotates the player in the screen accordingly
+    /**
+     * Logic for drawing the game screen.
+     */
     public void draw(){
         // setting up the drawing
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         spriteBatch.setProjectionMatrix(fitViewPort.getCamera().combined);
 
-        Enemy enemy = new Enemy(100, 240);
-
-
         TextureRegion currentPlayerFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
-        TextureRegion currentEnemyFrame = enemy.animationMap.get("up").getKeyFrame(stateTime, true);
 
         spriteBatch.begin();
-        // drawing border and normal tiles
-        Level.drawBorderTiles(spriteBatch, rowBorderTile, columnBorderTile, camera);
-        Level.drawNormalTiles(spriteBatch, normalTile, camera);
-        level.drawGameObjects(spriteBatch);
 
+        // drawing border and inner tiles
+        level.tiles.forEach(
+                sprite -> {
+                    sprite.draw(spriteBatch);
+                }
+        );
+
+        level.drawGameObjects(spriteBatch);
+        GameObject trap = new Trap(100, 250);
+        trap.sprite.draw(spriteBatch);
         // drawing the current player frame
         spriteBatch.draw(currentPlayerFrame, player.sprite.getX(), player.sprite.getY(), currentPlayerFrame.getRegionWidth() * OBJECT_SCALE, currentPlayerFrame.getRegionHeight() * OBJECT_SCALE);
 
         // drawing the current enemy frame, facing downwards?
-        spriteBatch.draw(currentEnemyFrame, enemy.sprite.getX(), enemy.sprite.getY(), currentEnemyFrame.getRegionWidth() * 4, currentEnemyFrame.getRegionHeight() * 2);
-
         spriteBatch.end(); // Important to call this after drawing everything
     }
 

@@ -100,10 +100,10 @@ public class LogicHandler {
             if(!level.collides(temporaryPlayer)){
 
                 player.calculateNextMove(); // move the player along the current direction
+            }
+            else if (level.collides(temporaryPlayer)){
 
             }
-            else if (level.collides(temporaryPlayer))
-                System.out.println("Caught ya");
         }
         // move player into required direction here.
     }

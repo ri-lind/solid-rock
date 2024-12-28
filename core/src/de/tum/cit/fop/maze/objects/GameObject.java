@@ -30,8 +30,6 @@ public abstract class GameObject {
 
     // are coordinates origin or bottom left corner? I guess it is up to me
 
-    public void draw(){
-    }
 
     /**
      * Contains logic to load the texture from the sprite sheet file.
@@ -61,9 +59,14 @@ public abstract class GameObject {
             gameObject = new EntryPoint(x, y);
         } else if(objectType == 2) {
             gameObject = new Exit(x,y);
-        } else{
+        } else if (objectType == 3) {
+            gameObject = new Trap(x, y);
+        } else if (objectType == 4) {
+            gameObject = new Enemy(x, y);
+        }
+        else{
             // not defined gameobject, we replace the textures with the exit texture.
-            gameObject = new Exit(x, y);
+            gameObject = new Enemy(x, y);
         }
 
         gameObject.sprite.setScale(objectScale); // add or remove the scaling.
@@ -94,7 +97,7 @@ public abstract class GameObject {
         Rectangle collisionBox = readjustForCollision(this.sprite.getBoundingRectangle());
 
         if (collisionBox.overlaps(player.sprite.getBoundingRectangle())){
-            System.out.println("Collision detected at: " + Arrays.toString(player.sprite.getVertices()));
+            System.out.println("Collision detected for object type: " + this.getClass());
             return true;
         }
         return false;
