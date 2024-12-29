@@ -172,7 +172,6 @@ public class LoaderHelper {
                     explosionAftermath.setX(x);
                     explosionAftermath.setY(y);
                     explosionAftermath.translateY(explosionAftermath.getHeight());
-                    //sprite.setSize(16, 16); // maybe resizing is necessary?
                     trapFrameArray.add(explosionAftermath);
                 }
 

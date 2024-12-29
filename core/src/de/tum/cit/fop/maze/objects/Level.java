@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import de.tum.cit.fop.maze.GameScreen;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.MapHandler;
 
@@ -30,7 +31,9 @@ public class Level {
     Sprite rowBorderTileType; // check size
     Sprite columnBorderTileType; // check size
 
-    public Level(String fileName, OrthographicCamera camera){
+
+
+    public Level(String fileName, OrthographicCamera camera, GameScreen gameScreen){
 
         // loads key, enemies, traps, exits, entrances into  the world.
         String mapContent = MapHandler.readMapFromFile(fileName);
@@ -48,6 +51,7 @@ public class Level {
         this.gameObjects.put(6, loadBorderTiles(camera));
         loadInnerTiles(camera);
 
+        this.player = gameScreen.player;
 
     }
 
@@ -141,12 +145,12 @@ public class Level {
      * Draw the game objects of the level unto the screen
      * @param spriteBatch
      */
-    public void drawGameObjects(SpriteBatch spriteBatch){
+    public void drawGameObjects(SpriteBatch spriteBatch, Player player){
         gameObjects.forEach(
                 (objectType, listOfObjects) -> {
                     listOfObjects.forEach(
                             object -> {
-                                object.draw(spriteBatch);
+                                object.draw(spriteBatch, player);
                             }
                     );
                 }
@@ -170,4 +174,7 @@ public class Level {
         );
         return collides.get();
     }
+
+
+
 }

@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
     private final FitViewport fitViewPort;
     float stateTime;
 
-    Player player;
+    public Player player;
     Level level;
 
 
@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
 
         this.player = new Player();
 
-        this.level = new Level("maps/level-1.properties", camera);
+        this.level = new Level("maps/level-1.properties", camera, this);
     }
 
     // Screen interface methods with necessary functionality
@@ -96,7 +96,7 @@ public class GameScreen implements Screen {
                 }
         );
 
-        level.drawGameObjects(gameSpriteBatch);
+        level.drawGameObjects(gameSpriteBatch, this.player);
         currentPlayerFrame.draw(gameSpriteBatch);
         player.heart.sprite.draw(gameSpriteBatch);
         gameSpriteBatch.end();

@@ -29,7 +29,7 @@ public abstract class GameObject {
         loadSprite(coordinates, spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
     }
 
-    public void draw(SpriteBatch spriteBatch) {
+    public void draw(SpriteBatch spriteBatch, Player player) {
         this.sprite.draw(spriteBatch);
     };
 
@@ -52,8 +52,6 @@ public abstract class GameObject {
         this.sprite.setOrigin(this.sprite.getOriginX() + coordinates.x, this.sprite.getOriginY() + coordinates.y);
         sprite.setBounds(coordinates.x, coordinates.y, objectWidth, objectHeight);
     }
-
-
 
 
     /**

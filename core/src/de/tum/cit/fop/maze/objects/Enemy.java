@@ -33,6 +33,6 @@ public class Enemy extends Obstacle{
     }
 
 
-    //we'll add the override method here as well. Logic a tad bit more complicated.
+    //we'll add the override the draw method here as well maybe. Logic a tad bit more complicated.
 
 }
