@@ -34,8 +34,8 @@ public class Player {
         LoaderHelper.loadCharacterDirectionAnimation(this); // Load character movement and standing animation
         LoaderHelper.loadCharacterAttackAnimations(this); // load the attack animations of the character
         this.currentState = "RIGHT";
-        this.sprite.setX(100);
-        this.sprite.setY(50);
+        this.sprite.setX(600);
+        this.sprite.setY(400);
         this.sprite.setSize(32, 32);
 
         this.heart = new Heart(this);
@@ -60,7 +60,8 @@ public class Player {
 
     // think about the objects the player cannot overlap with
     public void calculateNextMove(boolean truePlayer){
-
+        if(truePlayer)
+            this.exitArrow.pointToNearest();
         if (currentState.toLowerCase().contains("running")){
             SPEED = 2 * SPEED; // running is double the speed
         }

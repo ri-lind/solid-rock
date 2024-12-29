@@ -6,19 +6,23 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import de.tum.cit.fop.maze.objects.Exit;
 import de.tum.cit.fop.maze.objects.Player;
+import de.tum.cit.fop.maze.utilities.MathUtilities;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 public class ExitArrow {
 
 
     Player player;
+    Vector2 currentDirection;
+    List<Exit> exits;
 
     public Sprite sprite;
     public ExitArrow(List<Exit> exits, Player player) {
 
         this.player = player;
+        this.exits = exits;
+        this.currentDirection = new Vector2(1,0);
+
         Texture texture = new Texture(Gdx.files.internal("arrow.png"));
         Sprite sprite = new Sprite(texture);
         sprite.setSize(10, 10);
@@ -28,19 +32,20 @@ public class ExitArrow {
         sprite.translateY(player.sprite.getHeight());
         System.out.println(sprite.getWidth());
         sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-
-        //sprite.setRotation(180);
+        sprite.setRotation(180);
         this.sprite = sprite;
-
-        pointToNearest(exits);
+        pointToNearest();
     }
 
-    private void pointTo(List<Exit> exit){
+    public void pointToNearest(){
 
         // two functions
         // 1. find nearest
         // point to nearest
         //
+        Exit nearestExit = findNearest(this.exits);
+
+        pointTo(nearestExit);
     }
 
     private Exit findNearest(List<Exit> exits) {
@@ -66,10 +71,29 @@ public class ExitArrow {
         this.player.sprite.getBoundingRectangle().getCenter(playerCenter);
 
         Vector2 exitCenter = new Vector2();
-        this.player.sprite.getBoundingRectangle().getCenter(exitCenter);
+        exit.sprite.getBoundingRectangle().getCenter(exitCenter);
 
         return playerCenter.dst(exitCenter);
     }
 
+    private void pointTo(Exit exit){
+        // will need to rotate the sprite based on the exit.
+        // sprite position horizontal
+        Vector2 vectorToExit = calculateDirectionToExit(exit);
+        float angle = MathUtilities.angleBetween(this.currentDirection, vectorToExit);
+
+        this.sprite.setRotation(angle);
+
+    }
+
+    private Vector2 calculateDirectionToExit(Exit exit){
+        Vector2 playerCenter = new Vector2();
+        this.player.sprite.getBoundingRectangle().getCenter(playerCenter);
+
+        Vector2 exitCenter = new Vector2();
+        exit.sprite.getBoundingRectangle().getCenter(exitCenter);
+
+        return playerCenter.sub(exitCenter);
+    }
 
 }

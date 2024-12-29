@@ -150,12 +150,18 @@ public class Level {
      * @param spriteBatch
      */
     public void drawGameObjects(SpriteBatch spriteBatch, Player player){
+        // draw the borders first
+        gameObjects.get(6).forEach(
+                go -> {go.draw(spriteBatch, player);}
+        );
+
         gameObjects.forEach(
                 (objectType, listOfObjects) -> {
                     listOfObjects.forEach(
 
                             object -> {
-                                object.draw(spriteBatch, player);
+                                if(objectType != 6)
+                                    object.draw(spriteBatch, player);
                     }
                     );
                 }

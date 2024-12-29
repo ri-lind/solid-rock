@@ -91,7 +91,7 @@ public abstract class GameObject {
         }
         else{
             // default to enemy spawning
-            obstacle = new Exit(x, y);
+            obstacle = new EntryPoint(x, y);
         }
         return obstacle;
     }
