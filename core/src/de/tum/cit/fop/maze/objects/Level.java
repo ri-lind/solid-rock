@@ -149,12 +149,14 @@ public class Level {
         gameObjects.forEach(
                 (objectType, listOfObjects) -> {
                     listOfObjects.forEach(
+
                             object -> {
                                 object.draw(spriteBatch, player);
-                            }
+                    }
                     );
                 }
         );
+        cleanUpBlownUpTraps();
     }
 
     public boolean collides(Player player){
@@ -175,6 +177,23 @@ public class Level {
         return collides.get();
     }
 
+    public void cleanUpBlownUpTraps(){
 
+        List<Integer> indicesOfTrapsToBeRemoved = new ArrayList<>();
+
+        // get indices of to be removed traps
+       for (int i = 0; i < this.gameObjects.get(3).size(); i++){
+           Trap trap = (Trap) this.gameObjects.get(3).get(i);
+
+           if (trap.shouldBeRemoved)
+               indicesOfTrapsToBeRemoved.add(i);
+       }
+       // remove traps at those indices
+
+       for (int i : indicesOfTrapsToBeRemoved){
+           this.gameObjects.get(3).remove(i);
+       }
+
+    }
 
 }

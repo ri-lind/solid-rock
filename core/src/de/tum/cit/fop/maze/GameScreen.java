@@ -97,6 +97,7 @@ public class GameScreen implements Screen {
         );
 
         level.drawGameObjects(gameSpriteBatch, this.player);
+        // clean up the blown up traps and stuff like that.
         currentPlayerFrame.draw(gameSpriteBatch);
         player.heart.sprite.draw(gameSpriteBatch);
         gameSpriteBatch.end();

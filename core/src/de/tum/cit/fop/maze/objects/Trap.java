@@ -22,9 +22,12 @@ public class Trap extends Obstacle{
     static final int objectHeight = 64;
     static final String spriteSheetFilePath = "bomb_blue.png";
 
-    public boolean triggered;
-    private float stateTime;
     private boolean damageDealt;
+    public boolean triggered;
+    public boolean shouldBeRemoved;
+
+    private float stateTime;
+
 
     public Trap(Vector2 coordinates, int spriteSheetColumn, int spriteSheetRow, String spriteSheetFilePath, int objectWidth, int objectHeight) {
         super(coordinates, spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
@@ -32,6 +35,7 @@ public class Trap extends Obstacle{
         LoaderHelper.loadTrapAnimations(this, objectWidth, objectHeight, spriteSheetFilePath, coordinates.x, coordinates.y);
         this.sprite = this.animations.getKeyFrames()[0]; // override of loadsprite of gameobject
         this.triggered = false;
+        this.shouldBeRemoved = false;
         this.stateTime = 0;
     }
 
@@ -68,9 +72,12 @@ public class Trap extends Obstacle{
             // to check when to deal damage.
             if(!this.animations.isAnimationFinished(stateTime)){
                 int frameIndex = this.animations.getKeyFrameIndex(stateTime);
-                if (frameIndex >=7 && frameIndex <= 9 && !damageDealt) {
+                if (frameIndex == 9 && !this.damageDealt) {
                     explode(player);
-                    damageDealt = true;
+                    this.damageDealt = true;
+                }
+                if(frameIndex == this.animations.getKeyFrames().length-2    ){
+                    this.shouldBeRemoved = true;
                 }
             }
         }else{
