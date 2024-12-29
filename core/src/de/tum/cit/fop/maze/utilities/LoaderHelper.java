@@ -83,7 +83,7 @@ public class LoaderHelper {
             attackFramesArray.add(new Array<>(TextureRegion.class));
             for (int frame = 8; frame < frameEnd; frame +=  32){
                 TextureRegion textureRegion = new TextureRegion(attackSheet, frame,
-                        (row +4) * frameHeight, frameWidth, frameHeight);
+                        (row +4) * frameHeight+5, frameWidth, frameHeight-9);
                 Sprite sprite = new Sprite(textureRegion);
                 attackFramesArray.get(row).add(sprite);
             }

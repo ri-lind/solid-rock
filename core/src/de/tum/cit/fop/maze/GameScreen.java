@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.*;
+import de.tum.cit.fop.maze.objects.hud.Heart;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
 import static de.tum.cit.fop.maze.utilities.LogicHandler.input;
@@ -20,16 +21,15 @@ import static de.tum.cit.fop.maze.utilities.LogicHandler.input;
 public class GameScreen implements Screen {
 
     private final MazeRunnerGame game;
-    private final SpriteBatch spriteBatch;
+    private final SpriteBatch gameSpriteBatch;
+    private final SpriteBatch hudSpriteBatch;
 
     private final int WORLD_WIDTH = 800;
     private final int WORLD_HEIGHT = 512;
-    private final int OBJECT_SCALE = 2;
 
 
-    private final OrthographicCamera camera;
     private final BitmapFont font;
-    private FitViewport fitViewPort;
+    private final FitViewport fitViewPort;
     float stateTime;
 
     Player player;
@@ -43,10 +43,11 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
-        this.spriteBatch = game.getSpriteBatch();
+        this.gameSpriteBatch = game.getSpriteBatch();
+        this.hudSpriteBatch = new SpriteBatch(); // for drawing hearts and exit indicator
 
         // setting up camera and viewport for game screen
-        camera = new OrthographicCamera();
+        OrthographicCamera camera = new OrthographicCamera();
         fitViewPort = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         fitViewPort.apply(true);
         camera.setToOrtho(false, fitViewPort.getWorldWidth(), fitViewPort.getWorldHeight());
@@ -80,31 +81,29 @@ public class GameScreen implements Screen {
         // setting up the drawing
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-        spriteBatch.setProjectionMatrix(fitViewPort.getCamera().combined);
+        gameSpriteBatch.setProjectionMatrix(fitViewPort.getCamera().combined);
 
+        // position player sprite
         Sprite currentPlayerFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
         currentPlayerFrame.setPosition(player.sprite.getX(), player.sprite.getY());
 
 
-        spriteBatch.begin();
-
-        // drawing border and inner tiles
+        // draw the player and the game objects
+        gameSpriteBatch.begin();
         level.tiles.forEach(
-                sprite -> {
-                    sprite.draw(spriteBatch);
+                (sprite) -> {
+                    sprite.draw(gameSpriteBatch);
                 }
         );
 
-        level.drawGameObjects(spriteBatch);
+        level.drawGameObjects(gameSpriteBatch);
+        currentPlayerFrame.draw(gameSpriteBatch);
+        player.heart.sprite.draw(gameSpriteBatch);
+        gameSpriteBatch.end();
 
-        // drawing the current player frame
-        //spriteBatch.draw(currentPlayerFrame, player.sprite.getX(), player.sprite.getY(), currentPlayerFrame.getRegionWidth(), currentPlayerFrame.getRegionHeight());
-        currentPlayerFrame.draw(spriteBatch);
-        Trap trap = new Trap(100, 100);
-        var t = trap.animations.getKeyFrame(stateTime, false);
-        t.draw(spriteBatch);
-        // drawing the current enemy frame, facing downwards?
-        spriteBatch.end(); // Important to call this after drawing everything
+        hudSpriteBatch.begin();
+        hudSpriteBatch.end();
+
     }
 
     @Override
@@ -131,7 +130,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        spriteBatch.dispose();
+        gameSpriteBatch.dispose();
+        hudSpriteBatch.dispose();
     }
 
     // Additional methods and logic can be added as needed for the game screen

@@ -82,15 +82,12 @@ public class LogicHandler {
             }
         }
 
-        // logic to check if player is going out of bounds.
+
         Player temporaryPlayer = new Player(player);
-        temporaryPlayer.calculateNextMove();
+        temporaryPlayer.calculateNextMove(false);
 
-        // key frame does not matter, I believe...
-
-            //check collision with any of the objects of the game.
         if(!level.collides(temporaryPlayer)){
-            player.calculateNextMove(); // move the player along the current direction//
+            player.calculateNextMove(true); // move the player along the current direction//
         }
 
         // move player into required direction here.
