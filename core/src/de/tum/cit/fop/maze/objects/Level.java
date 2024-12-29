@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.GameScreen;
+import de.tum.cit.fop.maze.objects.collectables.Key;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.objects.hud.ExitArrow;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
@@ -33,8 +34,11 @@ public class Level {
     Sprite normalTileType; // check size
     Sprite rowBorderTileType; // check size
     Sprite columnBorderTileType; // check size
-
     public ExitArrow exitArrow;
+
+    public List<Key> keys;
+
+
     public Level(String fileName, OrthographicCamera camera, GameScreen gameScreen){
 
         // loads key, enemies, traps, exits, entrances into  the world.
@@ -46,7 +50,6 @@ public class Level {
         this.columnBorderTileType = new Sprite(rowBorderTileType);
         this.columnBorderTileType.rotate90(true);
         this.tiles = new ArrayList<>();
-
         this.gameObjects.put(6, loadBorderTiles(camera));
         loadInnerTiles(camera);
 
@@ -57,6 +60,9 @@ public class Level {
         this.exitArrow = new ExitArrow(exits, this.player);
         player.exitArrow = this.exitArrow;
 
+        @SuppressWarnings("unchecked")
+        List<Key> keys = (List<Key>) (Object) this.gameObjects.get(5);
+        this.keys = keys;
     }
 
     /**
@@ -168,6 +174,7 @@ public class Level {
         );
         cleanUpBlownUpTraps();
         cleanUpKilledEnemies();
+        cleanUpCollectedKeys();
     }
 
     public boolean collides(Player player){
@@ -218,6 +225,21 @@ public class Level {
        for (int i : indicesOfTrapsToBeRemoved){
            this.gameObjects.get(3).remove(i);
        }
+
+    }
+
+    public void cleanUpCollectedKeys(){
+        List<Integer> indicesOfKeysToBeCollected = new ArrayList<>();
+        for (int i = 0; i < this.gameObjects.get(5).size(); i++){
+            Key key = (Key) this.gameObjects.get(5).get(i);
+
+            if (key.shouldBeRemoved)
+                indicesOfKeysToBeCollected.add(i);
+        }
+        for (int i : indicesOfKeysToBeCollected){
+            this.player.keysInPosession++;
+            this.gameObjects.get(5).remove(i);
+        }
 
     }
 

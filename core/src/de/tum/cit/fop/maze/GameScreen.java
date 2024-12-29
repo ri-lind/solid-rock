@@ -5,9 +5,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.*;
+import de.tum.cit.fop.maze.objects.collectables.Key;
 import de.tum.cit.fop.maze.utilities.LogicHandler;
 
 /**
@@ -18,6 +20,7 @@ public class GameScreen implements Screen {
 
     private final MazeRunnerGame game;
     private final SpriteBatch gameSpriteBatch;
+    private final Skin skin;
 
     private final int WORLD_WIDTH = 800;
     private final int WORLD_HEIGHT = 512;
@@ -39,6 +42,7 @@ public class GameScreen implements Screen {
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
         this.gameSpriteBatch = game.getSpriteBatch();
+        this.skin = game.getSkin();
 
         // setting up camera and viewport for game screen
         OrthographicCamera camera = new OrthographicCamera();
@@ -80,10 +84,9 @@ public class GameScreen implements Screen {
         // position player sprite
         Sprite currentPlayerFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
         currentPlayerFrame.setPosition(player.sprite.getX(), player.sprite.getY());
-
-
         // draw the player and the game objects
         gameSpriteBatch.begin();
+
         level.tiles.forEach(
                 (sprite) -> {
                     sprite.draw(gameSpriteBatch);
@@ -91,12 +94,17 @@ public class GameScreen implements Screen {
         );
 
         level.drawGameObjects(gameSpriteBatch, this.player);
-        // clean up the blown up traps and stuff like that.
+
         currentPlayerFrame.draw(gameSpriteBatch);
 
         player.heart.sprite.draw(gameSpriteBatch);
-
         level.exitArrow.sprite.draw(gameSpriteBatch);
+
+        BitmapFont font = skin.getFont("font");
+
+        font.getData().setScale(0.4f);
+        font.draw(gameSpriteBatch, player.keysInPosession+ "", currentPlayerFrame.getX() + 5, currentPlayerFrame.getY()-10);
+
         gameSpriteBatch.end();
 
 

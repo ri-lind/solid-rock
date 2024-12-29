@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Scaling;
+import de.tum.cit.fop.maze.objects.collectables.Key;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.utilities.ScalingFactor;
 
@@ -17,11 +17,6 @@ import de.tum.cit.fop.maze.utilities.ScalingFactor;
 public abstract class GameObject {
 
     public Sprite sprite;
-    /*
-    coordinates they take from the file
-    textures they take from the pngs
-
-     */
 
     public GameObject(){}
 
@@ -40,17 +35,10 @@ public abstract class GameObject {
     public void loadSprite(Vector2 coordinates, int spriteSheetColumn, int spriteSheetRow, String filePath, int objectWidth, int objectHeight) {
         Texture tileSheet = new Texture(Gdx.files.internal(filePath));
 
-        // fetch the wall texture
-
-        // the 6th tile in the first row
         TextureRegion textureRegion = new TextureRegion(tileSheet,
                 spriteSheetColumn * objectWidth, spriteSheetRow * objectHeight, // gives out coordinates in spriteSheet
                 objectWidth, objectHeight);
-
-        // instead of setting x and y, adjust sprite position.
         this.sprite = new Sprite(textureRegion);
-        // update the origin MANUALLY, this is such bullshit
-        //this.sprite.setOrigin(this.sprite.getOriginX() + coordinates.x, this.sprite.getOriginY() + coordinates.y);
         sprite.setBounds(coordinates.x, coordinates.y, objectWidth, objectHeight);
     }
 
@@ -75,25 +63,27 @@ public abstract class GameObject {
 
 
     public static GameObject convertToGameObject(int objectType, float unscaledX, float unscaledY, ScalingFactor scalingFactor){
-        GameObject obstacle;
+        GameObject object;
         float x = unscaledX * scalingFactor.width;
         float y = unscaledY * scalingFactor.height;
         if (objectType == 0){
-            obstacle = new Wall(x, y);
+            object = new Wall(x, y);
         } else if (objectType == 1) {
-            obstacle = new EntryPoint(x, y);
+            object = new EntryPoint(x, y);
         } else if(objectType == 2) {
-            obstacle = new Exit(x,y);
+            object = new Exit(x,y);
         } else if (objectType == 3) {
-            obstacle = new Trap(x, y);
+            object = new Trap(x, y);
         } else if (objectType == 4) {
-            obstacle = new Enemy(x, y);
+            object = new Enemy(x, y);
+        } else if (objectType == 5){
+            object = new Key(x, y);
         }
         else{
             // default to enemy spawning
-            obstacle = new EntryPoint(x, y);
+            object = new EntryPoint(x, y);
         }
-        return obstacle;
+        return object;
     }
 
     public float calculateSurface(){

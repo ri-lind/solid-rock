@@ -25,6 +25,9 @@ public class Player {
     public Heart heart;
     public ExitArrow exitArrow;
 
+
+    public int keysInPosession;
+
     /**
      * Used for normal visible player.
      */
@@ -39,6 +42,7 @@ public class Player {
         this.sprite.setSize(32, 32);
 
         this.heart = new Heart(this);
+        this.keysInPosession = 0;
     }
 
     /**
