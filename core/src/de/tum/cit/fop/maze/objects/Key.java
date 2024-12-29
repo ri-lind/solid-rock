@@ -15,7 +15,7 @@ public class Key extends GameObject implements Collectable{
     static final int spriteSheetRow = 0;
     static final int objectWidth = 0;
     static final int objectHeight = 0;
-    static final String spriteSheetFilePath = "";
+    static final String spriteSheetFilePath = "key.png";
 
     public Key(Vector2 coordinates, int spriteSheetColumn, int spriteSheetRow,
                     String spriteSheetFilePath, int objectWidth, int objectHeight) {
