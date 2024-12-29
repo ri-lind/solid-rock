@@ -2,6 +2,7 @@ package de.tum.cit.fop.maze.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import de.tum.cit.fop.maze.objects.hud.ExitArrow;
 import de.tum.cit.fop.maze.objects.hud.Heart;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
@@ -22,7 +23,11 @@ public class Player {
     public int attackFramesCounter = 0;
 
     public Heart heart;
+    public ExitArrow exitArrow;
 
+    /**
+     * Used for normal visible player.
+     */
     public Player(){
 
         this.animations = new Hashtable<>();
@@ -37,7 +42,7 @@ public class Player {
     }
 
     /**
-     *
+     * Constructor used for the temporary player.
      * @param otherPlayer
      */
     public Player(Player otherPlayer){
@@ -61,23 +66,32 @@ public class Player {
         }
         if ("down".contains(currentState.toLowerCase()) || currentState.toLowerCase().contains("down-running")){
             this.sprite.translateY(-SPEED);
-            if(truePlayer)
+            if(truePlayer){
                 this.heart.sprite.translateY(-SPEED);
+                this.exitArrow.sprite.translateY(-SPEED);
+            }
         } else if("right".contains(currentState.toLowerCase()) ||
                 currentState.toLowerCase().contains("right-running")) { // right
             this.sprite.translateX(SPEED);
-            if (truePlayer)
+            if (truePlayer){
                 this.heart.sprite.translateX(SPEED);
+                this.exitArrow.sprite.translateX(SPEED);
+            }
         } else if ("up".contains(currentState.toLowerCase()) ||
                 currentState.toLowerCase().contains("up-running")) {// up
             this.sprite.translateY(SPEED);
-            if ( truePlayer)
+            if ( truePlayer) {
                 this.heart.sprite.translateY(SPEED);
+                this.exitArrow.sprite.translateY(SPEED);
+            }
         } else if ("left".contains(currentState.toLowerCase()) ||
                 currentState.toLowerCase().contains("left-running")) {// left
             this.sprite.translateX(-SPEED);
-            if(truePlayer)
+            if(truePlayer){
                 this.heart.sprite.translateX(-SPEED);
+                this.exitArrow.sprite.translateX(-SPEED);
+
+            }
         }
          SPEED = 1f; // reset speed after movement
     }

@@ -7,9 +7,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.GameScreen;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
+import de.tum.cit.fop.maze.objects.hud.ExitArrow;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.MapHandler;
 
+import javax.annotation.processing.SupportedSourceVersion;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +34,12 @@ public class Level {
     Sprite rowBorderTileType; // check size
     Sprite columnBorderTileType; // check size
 
-
-
+    public ExitArrow exitArrow;
     public Level(String fileName, OrthographicCamera camera, GameScreen gameScreen){
 
         // loads key, enemies, traps, exits, entrances into  the world.
         String mapContent = MapHandler.readMapFromFile(fileName);
         this.gameObjects = MapHandler.createGameObjects(mapContent, camera);
-
 
         this.normalTileType = LoaderHelper.loadNormalBackgroundTile();
         this.rowBorderTileType = LoaderHelper.loadBackgroundBorderTile();
@@ -51,6 +51,11 @@ public class Level {
         loadInnerTiles(camera);
 
         this.player = gameScreen.player;
+
+        @SuppressWarnings("unchecked")
+        List<Exit> exits = (List<Exit>) (Object) this.gameObjects.get(2); // fetches all gameobjects of type exit
+        this.exitArrow = new ExitArrow(exits, this.player);
+        player.exitArrow = this.exitArrow;
 
     }
 

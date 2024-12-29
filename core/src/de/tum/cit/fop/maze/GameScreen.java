@@ -18,7 +18,6 @@ public class GameScreen implements Screen {
 
     private final MazeRunnerGame game;
     private final SpriteBatch gameSpriteBatch;
-    private final SpriteBatch hudSpriteBatch;
 
     private final int WORLD_WIDTH = 800;
     private final int WORLD_HEIGHT = 512;
@@ -40,7 +39,6 @@ public class GameScreen implements Screen {
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
         this.gameSpriteBatch = game.getSpriteBatch();
-        this.hudSpriteBatch = new SpriteBatch(); // for drawing hearts and exit indicator
 
         // setting up camera and viewport for game screen
         OrthographicCamera camera = new OrthographicCamera();
@@ -97,10 +95,10 @@ public class GameScreen implements Screen {
         currentPlayerFrame.draw(gameSpriteBatch);
 
         player.heart.sprite.draw(gameSpriteBatch);
+
+        level.exitArrow.sprite.draw(gameSpriteBatch);
         gameSpriteBatch.end();
 
-        hudSpriteBatch.begin();
-        hudSpriteBatch.end();
 
     }
 
@@ -129,7 +127,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         gameSpriteBatch.dispose();
-        hudSpriteBatch.dispose();
     }
 
     // Additional methods and logic can be added as needed for the game screen
