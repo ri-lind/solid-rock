@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.GameScreen;
+import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.MapHandler;
 
@@ -37,9 +38,7 @@ public class Level {
 
         // loads key, enemies, traps, exits, entrances into  the world.
         String mapContent = MapHandler.readMapFromFile(fileName);
-        Map<Integer, List<GameObject>> unscaledMap = MapHandler.convertToMap(mapContent);
-        this.gameObjects = MapHandler.scaleToWorld(unscaledMap, camera);
-
+        this.gameObjects = MapHandler.createGameObjects(mapContent, camera);
 
 
         this.normalTileType = LoaderHelper.loadNormalBackgroundTile();
@@ -157,6 +156,7 @@ public class Level {
                 }
         );
         cleanUpBlownUpTraps();
+        cleanUpKilledEnemies();
     }
 
     public boolean collides(Player player){
@@ -175,6 +175,20 @@ public class Level {
                 }
         );
         return collides.get();
+    }
+
+    public void cleanUpKilledEnemies(){
+        List<Integer> indicesOfEnemiesToBeRemoved = new ArrayList<>();
+        for (int i = 0; i < this.gameObjects.get(4).size(); i++){
+            Enemy enemy = (Enemy) this.gameObjects.get(4).get(i);
+
+            if (enemy.toBeRemoved)
+                indicesOfEnemiesToBeRemoved.add(i);
+        }
+        for (int i : indicesOfEnemiesToBeRemoved){
+            this.gameObjects.get(4).remove(i);
+        }
+
     }
 
     public void cleanUpBlownUpTraps(){

@@ -5,14 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.*;
-import de.tum.cit.fop.maze.objects.hud.Heart;
-import de.tum.cit.fop.maze.utilities.LoaderHelper;
-
-import static de.tum.cit.fop.maze.utilities.LogicHandler.input;
+import de.tum.cit.fop.maze.utilities.LogicHandler;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -68,7 +64,7 @@ public class GameScreen implements Screen {
             game.goToMenu();
         }
         // handling user input logic
-        input(game, player, fitViewPort, level, delta); // sets current direction to what the user presses
+        LogicHandler.input(game, player, fitViewPort, level, delta); // sets current direction to what the user presses
 
         // drawing unto the screen
         draw();
@@ -99,6 +95,7 @@ public class GameScreen implements Screen {
         level.drawGameObjects(gameSpriteBatch, this.player);
         // clean up the blown up traps and stuff like that.
         currentPlayerFrame.draw(gameSpriteBatch);
+
         player.heart.sprite.draw(gameSpriteBatch);
         gameSpriteBatch.end();
 

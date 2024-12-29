@@ -2,7 +2,6 @@ package de.tum.cit.fop.maze.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.tum.cit.fop.maze.objects.hud.Heart;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
@@ -11,13 +10,13 @@ import java.util.Hashtable;
 
 /**
  * Represents a player, in the sense that it contains the animations, coordinates and has some manipulation
- * logic in it. The focal center is the currentDirection attribute, which is heavily manipulated by this
+ * logic in it. The focal center is the currentState attribute, which is heavily manipulated by this
  * class and the method InputHandler.input().
  */
 public class Player {
     public Dictionary<String, Animation<Sprite>> animations;
     // the animations dictionary and calculate next move methods depend on this field
-    public String currentDirection = "";
+    public String currentState = "";
     public Sprite sprite;
     private float SPEED = 1f;
     public int attackFramesCounter = 0;
@@ -29,7 +28,7 @@ public class Player {
         this.animations = new Hashtable<>();
         LoaderHelper.loadCharacterDirectionAnimation(this); // Load character movement and standing animation
         LoaderHelper.loadCharacterAttackAnimations(this); // load the attack animations of the character
-        this.currentDirection = "RIGHT";
+        this.currentState = "RIGHT";
         this.sprite.setX(100);
         this.sprite.setY(50);
         this.sprite.setSize(32, 32);
@@ -43,7 +42,7 @@ public class Player {
      */
     public Player(Player otherPlayer){
         this.animations = new Hashtable<>();
-        this.currentDirection = otherPlayer.currentDirection;
+        this.currentState = otherPlayer.currentState;
         // not really needed
         this.SPEED = otherPlayer.SPEED;
         this.attackFramesCounter = otherPlayer.attackFramesCounter;
@@ -57,25 +56,25 @@ public class Player {
     // think about the objects the player cannot overlap with
     public void calculateNextMove(boolean truePlayer){
 
-        if (currentDirection.toLowerCase().contains("running")){
+        if (currentState.toLowerCase().contains("running")){
             SPEED = 2 * SPEED; // running is double the speed
         }
-        if ("down".contains(currentDirection.toLowerCase()) || currentDirection.toLowerCase().contains("down-running")){
+        if ("down".contains(currentState.toLowerCase()) || currentState.toLowerCase().contains("down-running")){
             this.sprite.translateY(-SPEED);
             if(truePlayer)
                 this.heart.sprite.translateY(-SPEED);
-        } else if("right".contains(currentDirection.toLowerCase()) ||
-                currentDirection.toLowerCase().contains("right-running")) { // right
+        } else if("right".contains(currentState.toLowerCase()) ||
+                currentState.toLowerCase().contains("right-running")) { // right
             this.sprite.translateX(SPEED);
             if (truePlayer)
                 this.heart.sprite.translateX(SPEED);
-        } else if ("up".contains(currentDirection.toLowerCase()) ||
-                currentDirection.toLowerCase().contains("up-running")) {// up
+        } else if ("up".contains(currentState.toLowerCase()) ||
+                currentState.toLowerCase().contains("up-running")) {// up
             this.sprite.translateY(SPEED);
             if ( truePlayer)
                 this.heart.sprite.translateY(SPEED);
-        } else if ("left".contains(currentDirection.toLowerCase()) ||
-                currentDirection.toLowerCase().contains("left-running")) {// left
+        } else if ("left".contains(currentState.toLowerCase()) ||
+                currentState.toLowerCase().contains("left-running")) {// left
             this.sprite.translateX(-SPEED);
             if(truePlayer)
                 this.heart.sprite.translateX(-SPEED);
@@ -84,6 +83,6 @@ public class Player {
     }
 
     public Animation<Sprite> getCurrentAnimation(){
-        return this.animations.get(currentDirection.toLowerCase().replace("-running", ""));
+        return this.animations.get(currentState.toLowerCase().replace("-running", ""));
     }
 }

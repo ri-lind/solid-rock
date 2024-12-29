@@ -7,8 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.Arrays;
+import com.badlogic.gdx.utils.Scaling;
+import de.tum.cit.fop.maze.objects.enemy.Enemy;
+import de.tum.cit.fop.maze.utilities.ScalingFactor;
 
 /**
  * Superclass to wall, entry, exit, trap and enemy.
@@ -49,7 +50,7 @@ public abstract class GameObject {
         // instead of setting x and y, adjust sprite position.
         this.sprite = new Sprite(textureRegion);
         // update the origin MANUALLY, this is such bullshit
-        this.sprite.setOrigin(this.sprite.getOriginX() + coordinates.x, this.sprite.getOriginY() + coordinates.y);
+        //this.sprite.setOrigin(this.sprite.getOriginX() + coordinates.x, this.sprite.getOriginY() + coordinates.y);
         sprite.setBounds(coordinates.x, coordinates.y, objectWidth, objectHeight);
     }
 
@@ -73,8 +74,10 @@ public abstract class GameObject {
     }
 
 
-    public static GameObject convertToGameObject(int objectType, float x, float y){
+    public static GameObject convertToGameObject(int objectType, float unscaledX, float unscaledY, ScalingFactor scalingFactor){
         GameObject obstacle;
+        float x = unscaledX * scalingFactor.width;
+        float y = unscaledY * scalingFactor.height;
         if (objectType == 0){
             obstacle = new Wall(x, y);
         } else if (objectType == 1) {
@@ -88,10 +91,8 @@ public abstract class GameObject {
         }
         else{
             // default to enemy spawning
-            obstacle = new Enemy(x, y);
+            obstacle = new Exit(x, y);
         }
-
-        //obstacle.sprite.setScale(objectScale); // add or remove the scaling.
         return obstacle;
     }
 

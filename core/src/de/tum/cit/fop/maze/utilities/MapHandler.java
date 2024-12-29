@@ -32,6 +32,27 @@ public class MapHandler {
         return mapFile.readString(); // returns the content of the file
     }
 
+
+    public static Map<Integer, List<GameObject>> createGameObjects(String mapContent, OrthographicCamera camera){
+        Map<Integer, List<GameObject>> map = convertToMap(mapContent);
+        ScalingFactor scalingFactor = calculateScalingFactor(map, camera);
+
+        Map<Integer, List<GameObject>> newMap = new HashMap<>();
+        map.forEach(
+                (key, value) ->{
+                    newMap.put(key, new ArrayList<>());
+                    value.forEach(
+                            gameObject ->  {
+                                gameObject = GameObject.convertToGameObject(key, gameObject.sprite.getX(), gameObject.sprite.getY(), scalingFactor);
+                                newMap.get(key).add(gameObject);
+                            }
+                    );
+                }
+        );
+
+        return newMap;
+    }
+
     /**
      * Convert the coordinates and object types into a java map object.
      * @param mapContent
@@ -59,8 +80,8 @@ public class MapHandler {
             float x = Float.parseFloat(coordinates[0]);
             float y = Float.parseFloat(coordinates[1]);
 
-            // gameObjects are loaded into the level
-            GameObject gameObject = GameObject.convertToGameObject(objectType, x, y);
+            // need to apply scaling before drawing, so enemy hitbox is also scaled.
+            GameObject gameObject = GameObject.convertToGameObject(objectType, x, y, new ScalingFactor());
 
             if (mapMap.containsKey(objectType)){
                 mapMap.get(objectType).add(gameObject);
@@ -79,7 +100,7 @@ public class MapHandler {
      * @param map
      * @return
      */
-    public static Map<Integer, List<GameObject>> scaleToWorld(Map<Integer, List<GameObject>> map,
+    public static ScalingFactor calculateScalingFactor(Map<Integer, List<GameObject>> map,
                                                               OrthographicCamera camera){
         //get the maximum x and y from the coordinates
         AtomicReference<Float> maxX = new AtomicReference<>((float) 0);
@@ -104,20 +125,8 @@ public class MapHandler {
         float width_scaling_factor = camera.viewportWidth/maxX.get();
         float height_scaling_factor = camera.viewportHeight/maxY.get();
 
+        return new ScalingFactor(width_scaling_factor, height_scaling_factor);
 
-
-        // apply the scaling to the coordinates
-        map.forEach(
-                (objectType, gameObjects) -> {
-                    gameObjects.forEach(
-                            (gameObject) -> {
-                                gameObject.sprite.setX(gameObject.sprite.getX() * width_scaling_factor);
-                                gameObject.sprite.setY(gameObject.sprite.getY() * height_scaling_factor);
-                            }
-                    );
-                }
-        );
-        return map;
     }
 
     /**

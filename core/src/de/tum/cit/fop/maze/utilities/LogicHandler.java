@@ -4,7 +4,6 @@ package de.tum.cit.fop.maze.utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import de.tum.cit.fop.maze.objects.GameObject;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.MazeRunnerGame;
@@ -20,24 +19,24 @@ public class LogicHandler {
                              FitViewport fitViewport, Level level, float delta) {
 
         // code to keep track of attack animation
-        if(player.currentDirection.toLowerCase().contains("attacking")){
+        if(player.currentState.toLowerCase().contains("attacking")){
             player.attackFramesCounter++;
             if (player.attackFramesCounter > 10){
-                player.currentDirection = player.currentDirection.replace("attacking","standing");
+                player.currentState = player.currentState.replace("attacking","standing");
                 player.attackFramesCounter = 0;
             }
         }
 
         // logic for initiating attack, lasts 10 (frames ?)
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            if (player.currentDirection.toLowerCase().contains("down")){
-                player.currentDirection = "down-attacking";
-            } else if (player.currentDirection.toLowerCase().contains("up")){
-                player.currentDirection = "up-attacking";
-            } else if (player.currentDirection.toLowerCase().contains("left")){
-                player.currentDirection = "left-attacking";
-            } else if (player.currentDirection.toLowerCase().contains("right")){
-                player.currentDirection = "right-attacking";
+            if (player.currentState.toLowerCase().contains("down")){
+                player.currentState = "down-attacking";
+            } else if (player.currentState.toLowerCase().contains("up")){
+                player.currentState = "up-attacking";
+            } else if (player.currentState.toLowerCase().contains("left")){
+                player.currentState = "left-attacking";
+            } else if (player.currentState.toLowerCase().contains("right")){
+                player.currentState = "right-attacking";
             }
             return;
         }
@@ -46,39 +45,39 @@ public class LogicHandler {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.goToMenu();
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player.currentDirection = "up";
+            player.currentState = "up";
             if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
-                player.currentDirection += "-running";
+                player.currentState += "-running";
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            player.currentDirection = "down";
+            player.currentState = "down";
             if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
-                player.currentDirection += "-running";
+                player.currentState += "-running";
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.currentDirection = "left";
+            player.currentState = "left";
             if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
-                player.currentDirection += "-running";
+                player.currentState += "-running";
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.currentDirection = "right";
+            player.currentState = "right";
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
-                player.currentDirection += "-running";
+                player.currentState += "-running";
             }
             //switches from moving to standing if key is not pressed, and not in attack animation
-        } else if (!player.currentDirection.contains("attacking")){
-            if("down".contains(player.currentDirection.toLowerCase()) ||
-                    player.currentDirection.contains("down-running")){
-                player.currentDirection = "down-standing";
-            }else if("up".contains(player.currentDirection.toLowerCase()) ||
-                    player.currentDirection.contains("up-running")){
-                player.currentDirection = "up-standing";
-            } else if("left".contains(player.currentDirection.toLowerCase()) ||
-                    player.currentDirection.contains("left-running")){
-                player.currentDirection = "left-standing";
-            } else if("right".contains(player.currentDirection.toLowerCase()) ||
-                    player.currentDirection.contains("right-running")){
-                player.currentDirection = "right-standing";
+        } else if (!player.currentState.contains("attacking")){
+            if("down".contains(player.currentState.toLowerCase()) ||
+                    player.currentState.contains("down-running")){
+                player.currentState = "down-standing";
+            }else if("up".contains(player.currentState.toLowerCase()) ||
+                    player.currentState.contains("up-running")){
+                player.currentState = "up-standing";
+            } else if("left".contains(player.currentState.toLowerCase()) ||
+                    player.currentState.contains("left-running")){
+                player.currentState = "left-standing";
+            } else if("right".contains(player.currentState.toLowerCase()) ||
+                    player.currentState.contains("right-running")){
+                player.currentState = "right-standing";
             }
         }
 
