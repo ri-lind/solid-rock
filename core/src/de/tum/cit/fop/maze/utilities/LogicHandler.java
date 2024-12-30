@@ -37,9 +37,11 @@ public class LogicHandler {
             if(player.superPower != null && player.superPower.getClass() == RandomKill.class){
                 @SuppressWarnings("unchecked")
                 List<Enemy> enemyList = (List<Enemy>) (Object) level.gameObjects.get(4);
-                int random = (int) (Math.random() * enemyList.size());
-                enemyList.remove(random);
-                player.superPower = null;
+                if( !enemyList.isEmpty()) {
+                    int random = (int) (Math.random() * enemyList.size());
+                    enemyList.remove(random);
+                    player.superPower = null;
+                }
             }
             if (player.currentState.toLowerCase().contains("down")){
                 player.currentState = "down-attacking";
