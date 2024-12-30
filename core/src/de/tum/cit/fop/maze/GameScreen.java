@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.*;
 import de.tum.cit.fop.maze.objects.collectables.Key;
+import de.tum.cit.fop.maze.objects.enemy.Breadcrumb;
 import de.tum.cit.fop.maze.utilities.LogicHandler;
 
 /**
@@ -99,11 +100,17 @@ public class GameScreen implements Screen {
 
         player.heart.sprite.draw(gameSpriteBatch);
         level.exitArrow.sprite.draw(gameSpriteBatch);
-
+        Breadcrumb.allPlayerBreadCrumbs.forEach(breadcrumb ->
+        {
+            if(breadcrumb.sprite != null){
+                breadcrumb.sprite.draw(gameSpriteBatch);
+            }
+            });
+        Breadcrumb.removeOutDatedBreadcrumbs();
         BitmapFont font = skin.getFont("font");
 
         font.getData().setScale(0.4f);
-        font.draw(gameSpriteBatch, player.keysInPosession+ "", currentPlayerFrame.getX() + 5, currentPlayerFrame.getY()-10);
+        font.draw(gameSpriteBatch, player.keysInPosession+ "", currentPlayerFrame.getX() + 5, currentPlayerFrame.getY()-8);
 
         gameSpriteBatch.end();
 

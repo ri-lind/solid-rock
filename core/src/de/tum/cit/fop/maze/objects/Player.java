@@ -2,6 +2,7 @@ package de.tum.cit.fop.maze.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import de.tum.cit.fop.maze.objects.enemy.Breadcrumb;
 import de.tum.cit.fop.maze.objects.hud.ExitArrow;
 import de.tum.cit.fop.maze.objects.hud.Heart;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
@@ -64,8 +65,11 @@ public class Player {
 
     // think about the objects the player cannot overlap with
     public void calculateNextMove(boolean truePlayer){
-        if(truePlayer)
+        if(truePlayer){
             this.exitArrow.pointToNearest();
+            // leave invisible breadcrumb, add this to player and remove outdated ones.
+            new Breadcrumb(this);
+        }
         if (currentState.toLowerCase().contains("running")){
             SPEED = 2 * SPEED; // running is double the speed
         }

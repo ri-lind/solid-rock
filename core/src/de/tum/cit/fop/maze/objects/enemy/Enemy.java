@@ -10,8 +10,6 @@ import de.tum.cit.fop.maze.objects.Obstacle;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +27,7 @@ public class Enemy extends Obstacle {
 
     public float timeSinceAttackedThePlayer = 0; // to keep track of damage we have dealt
     public boolean damageDealt = false;
+    public boolean followingPlayer = false;
 
     // let the sprite be the first animation in the animationMap.
     // this means, we need to move from there to the right and/or downwards to get the remaining animations
@@ -63,6 +62,7 @@ public class Enemy extends Obstacle {
      */
     @Override
     public void draw(SpriteBatch spriteBatch, Player player) {
+
         Vector2 playerCenter = new Vector2();
         player.sprite.getBoundingRectangle().getCenter(playerCenter);
         Vector2 enemyCenter = new Vector2();
@@ -70,6 +70,7 @@ public class Enemy extends Obstacle {
 
         if (this.overlapsHitbox(player)) {
             playerAttack(player, playerCenter, enemyCenter);
+            this.followingPlayer=true;
         }
         if(this.overlapsAttackBox(player) && !damageDealt){
             player.heart.sustainsDamage();
