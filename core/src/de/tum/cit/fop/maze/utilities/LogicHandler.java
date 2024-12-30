@@ -7,6 +7,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.MazeRunnerGame;
+import de.tum.cit.fop.maze.objects.collectables.RandomKill;
+import de.tum.cit.fop.maze.objects.enemy.Enemy;
+
+import java.util.List;
 
 /**
  * Class which handles the user input with respect to the player character.
@@ -29,6 +33,14 @@ public class LogicHandler {
 
         // logic for initiating attack, lasts 10 (frames ?)
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            // remove randomly if superpower picked up
+            if(player.superPower != null && player.superPower.getClass() == RandomKill.class){
+                @SuppressWarnings("unchecked")
+                List<Enemy> enemyList = (List<Enemy>) (Object) level.gameObjects.get(4);
+                int random = (int) (Math.random() * enemyList.size());
+                enemyList.remove(random);
+                player.superPower = null;
+            }
             if (player.currentState.toLowerCase().contains("down")){
                 player.currentState = "down-attacking";
             } else if (player.currentState.toLowerCase().contains("up")){

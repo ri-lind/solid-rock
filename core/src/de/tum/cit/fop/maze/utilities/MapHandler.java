@@ -161,6 +161,7 @@ public class MapHandler {
         4     | Enemy (dynamic obstacle)
         5     | Key
         6     | Border Tile
+        7     | Super Power (Random Kill)
          */
 
 };

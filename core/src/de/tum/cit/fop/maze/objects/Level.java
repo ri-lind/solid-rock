@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.GameScreen;
 import de.tum.cit.fop.maze.objects.collectables.Key;
+import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.objects.hud.ExitArrow;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
@@ -175,6 +176,7 @@ public class Level {
         cleanUpBlownUpTraps();
         cleanUpKilledEnemies();
         cleanUpCollectedKeys();
+        cleanUpCollectedRandomKill();
     }
 
     public boolean collides(Player player){
@@ -243,4 +245,17 @@ public class Level {
 
     }
 
+    public void cleanUpCollectedRandomKill(){
+        List<Integer> indicesOfPowerUpsToBeCollected = new ArrayList<>();
+        for (int i = 0; i < this.gameObjects.get(7).size(); i++){
+            RandomKill randomKill = (RandomKill) this.gameObjects.get(7).get(i);
+
+            if (randomKill.shouldBeRemoved)
+                indicesOfPowerUpsToBeCollected.add(i);
+        }
+        for (int i : indicesOfPowerUpsToBeCollected){
+            this.player.superPower = (RandomKill) this.gameObjects.get(7).get(i);
+            this.gameObjects.get(7).remove(i);
+        }
+    }
 }

@@ -2,6 +2,7 @@ package de.tum.cit.fop.maze.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import de.tum.cit.fop.maze.objects.collectables.SuperPower;
 import de.tum.cit.fop.maze.objects.enemy.Breadcrumb;
 import de.tum.cit.fop.maze.objects.hud.ExitArrow;
 import de.tum.cit.fop.maze.objects.hud.Heart;
@@ -9,8 +10,10 @@ import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Represents a player, in the sense that it contains the animations, coordinates and has some manipulation
@@ -30,6 +33,7 @@ public class Player {
 
 
     public int keysInPosession;
+    public SuperPower superPower;
 
     /**
      * Used for normal visible player.
