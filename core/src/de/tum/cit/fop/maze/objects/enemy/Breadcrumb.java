@@ -25,14 +25,15 @@ public class Breadcrumb {
     public Instant creationTime;
 
     public Breadcrumb(Player player){
+        Vector2 playerCenter = new Vector2();
+        player.sprite.getBoundingRectangle().getCenter(playerCenter);
         // create breadcrumb at given location, but not to be drawn.
         Texture texture = new Texture(Gdx.files.internal("character_white.png"));
         TextureRegion textureRegion = new TextureRegion(texture, 3, 3);
         this.sprite = new Sprite(textureRegion);
         this.sprite.setSize(3, 3);
-        Vector2 playerCenter = new Vector2();
-        player.sprite.getBoundingRectangle().getCenter(playerCenter);
-        this.sprite.setPosition(playerCenter.x, playerCenter.y);
+
+        this.sprite.setPosition(player.sprite.getX(), player.sprite.getY());
         creationTime = Instant.now();
 
         allPlayerBreadCrumbs.add(this);

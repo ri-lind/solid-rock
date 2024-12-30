@@ -18,6 +18,9 @@ import java.util.Optional;
 
 public class Enemy extends Obstacle {
 
+
+    public float SPEED = 1f;
+
     static final int spriteSheetColumn = 9;
     static final int spriteSheetRow = 0;
     static final int objectWidth = 16;
@@ -76,34 +79,13 @@ public class Enemy extends Obstacle {
      */
     @Override
     public void draw(SpriteBatch spriteBatch, Player player) {
-        if(this.overlapsFollowBox(player) && !followingPlayer){
-            new Breadcrumb(player);
-            this.followingPlayer = true;
-        } if(this.followingPlayer && movementStarted == null){
-            followPlayerBreadcrumb();
-        }else if(movementStarted!= null && Duration.between(movementStarted, Instant.now()).toSeconds() > 2 ){
-            followPlayerBreadcrumb();
-        }
         Vector2 playerCenter = new Vector2();
         player.sprite.getBoundingRectangle().getCenter(playerCenter);
         Vector2 enemyCenter = new Vector2();
         this.sprite.getBoundingRectangle().getCenter(enemyCenter);
 
-        if (this.overlapsHitbox(player)) {
-            playerAttack(player, playerCenter, enemyCenter);
-        }
-        if(this.overlapsAttackBox(player) && !damageDealt){
-            player.heart.sustainsDamage();
-            this.damageDealt = true;
-            this.timeSinceAttackedThePlayer += System.currentTimeMillis();
-        }
+        damageDealingLogic(player, playerCenter, enemyCenter);
 
-        if(this.damageDealt){
-            if((System.currentTimeMillis()-this.timeSinceAttackedThePlayer) > 200){
-                this.timeSinceAttackedThePlayer = 0;
-                this.damageDealt = false;
-            }
-        }
 
         this.sprite.draw(spriteBatch);
     }
@@ -153,6 +135,24 @@ public class Enemy extends Obstacle {
         return this.followBox.contains(playerCenter);
     }
 
+    private void damageDealingLogic(Player player, Vector2 playerCenter, Vector2 enemyCenter){
+        if (this.overlapsHitbox(player)) {
+            playerAttack(player, playerCenter, enemyCenter);
+        }
+        if(this.overlapsAttackBox(player) && !damageDealt){
+            player.heart.sustainsDamage();
+            this.damageDealt = true;
+            this.timeSinceAttackedThePlayer += System.currentTimeMillis();
+        }
+
+        if(this.damageDealt){
+            if((System.currentTimeMillis()-this.timeSinceAttackedThePlayer) > 200){
+                this.timeSinceAttackedThePlayer = 0;
+                this.damageDealt = false;
+            }
+        }
+    }
+    // implement this logic later. For now, just make the enemy chase the player when in range.
     private void followPlayerBreadcrumb(){
         Optional<Breadcrumb> toFollow = Breadcrumb.calculateFarthestInRange(this);
         toFollow.ifPresent(breadcrumb -> this.goal = breadcrumb);
@@ -164,6 +164,24 @@ public class Enemy extends Obstacle {
 
         if(this.goal == null)
             return;
+
+        if(this.goal.sprite.getX() < this.sprite.getX()){
+            // rotate to left
+            // start moving left
+            this.sprite.translateX(-this.SPEED);
+        } else {
+            // rotate right
+            // move right
+            this.sprite.translateX(this.SPEED);
+        }
+        if(this.goal.sprite.getY() < this.sprite.getY()){
+            // rotate to downwards
+            // start moving downwards
+            this.sprite.translateY(-this.SPEED);
+        } else {
+            // rotate upwards
+            this.sprite.translateY(this.SPEED);
+        }
 
         float averageOfX = (this.sprite.getX() + this.goal.sprite.getX())/2;
         float averageOfY = (this.sprite.getY() + this.goal.sprite.getY())/2;

@@ -43,6 +43,7 @@ public class Player {
         this.sprite.setX(600);
         this.sprite.setY(400);
         this.sprite.setSize(32, 32);
+        this.sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 
         this.heart = new Heart(this);
         this.keysInPosession = 0;
