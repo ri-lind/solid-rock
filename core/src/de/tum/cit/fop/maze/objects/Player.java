@@ -73,7 +73,7 @@ public class Player {
             // leave invisible breadcrumb, add this to player and remove outdated ones.
             if(Breadcrumb.allPlayerBreadCrumbs.isEmpty()){
                 new Breadcrumb(this);
-            } else if(Duration.between(Breadcrumb.allPlayerBreadCrumbs.get(Breadcrumb.allPlayerBreadCrumbs.size()-1).creationTime, Instant.now()).toSeconds() > 2){
+            } else if(Duration.between(Breadcrumb.allPlayerBreadCrumbs.get(Breadcrumb.allPlayerBreadCrumbs.size()-1).creationTime, Instant.now()).toMillis() > 50){
                 new Breadcrumb(this);
             }
 

@@ -61,8 +61,8 @@ public class Breadcrumb {
 
     private boolean isExpired(){
         Instant currentTime = Instant.now();
-        long timeElapsed = Duration.between(this.creationTime, currentTime).toSeconds();
-        return timeElapsed >=2;
+        long timeElapsed = Duration.between(this.creationTime, currentTime).toMillis();
+        return timeElapsed >= 1000;
     }
 
     public static Optional<Breadcrumb> calculateFarthestInRange(Enemy enemy){

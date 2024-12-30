@@ -19,7 +19,7 @@ import java.util.Optional;
 public class Enemy extends Obstacle {
 
 
-    public float SPEED = 1f;
+    public float SPEED = 5f;
 
     static final int spriteSheetColumn = 9;
     static final int spriteSheetRow = 0;
@@ -37,9 +37,7 @@ public class Enemy extends Obstacle {
     public Circle followBox;
     public Instant movementStarted;
 
-
-    public Breadcrumb goal;
-
+    public Vector2 center;
 
     // let the sprite be the first animation in the animationMap.
     // this means, we need to move from there to the right and/or downwards to get the remaining animations
@@ -51,19 +49,23 @@ public class Enemy extends Obstacle {
         this.animationMap = new HashMap<>();
         LoaderHelper.loadEnemyDirectionAnimations(this);
 
+        Vector2 enemyCenter = new Vector2();
+        this.sprite.getBoundingRectangle().getCenter(enemyCenter);
+        this.center = enemyCenter;
+
         hitBox = new Circle();
-        hitBox.setPosition(coordinates.x + objectWidth, coordinates.y + objectHeight);
-        hitBox.setRadius(25f);
+        hitBox.setPosition(this.center);
+        hitBox.setRadius(30f);
 
         attackBox = new Circle();
-        attackBox.setPosition(coordinates.x + objectWidth, coordinates.y + objectHeight);
+        attackBox.setPosition(this.center);
         attackBox.setRadius(20f);
 
         toBeRemoved = false;
 
         followBox = new Circle();
-        followBox.setPosition(coordinates.x + objectWidth, coordinates.y + objectHeight);
-        followBox.setRadius(30f);
+        followBox.setPosition(this.center);
+        followBox.setRadius(40f);
 
     }
 
@@ -79,11 +81,32 @@ public class Enemy extends Obstacle {
      */
     @Override
     public void draw(SpriteBatch spriteBatch, Player player) {
+
+
+        //check if the breadcrumb was followed for 200 milliseconds
+        if(this.followingPlayer && Duration.between(this.movementStarted, Instant.now()).toMillis() > 200){
+            this.followingPlayer = false;
+            this.movementStarted = Instant.now();
+
+        }
+        if(!followingPlayer){
+            for (int i = 0; i < Breadcrumb.allPlayerBreadCrumbs.size(); i++){
+                Breadcrumb breadcrumb = Breadcrumb.allPlayerBreadCrumbs.get(i);
+                Vector2 breadCrumbCenter = new Vector2();
+                breadcrumb.sprite.getBoundingRectangle().getCenter(breadCrumbCenter);
+                if(this.followBox.contains(breadCrumbCenter) && !this.followingPlayer){
+                    this.movementStarted = Instant.now();
+                    this.followingPlayer = true;
+                    followPlayerBreadcrumb(breadcrumb);
+                    break;
+                }
+            }
+        }
         Vector2 playerCenter = new Vector2();
         player.sprite.getBoundingRectangle().getCenter(playerCenter);
         Vector2 enemyCenter = new Vector2();
         this.sprite.getBoundingRectangle().getCenter(enemyCenter);
-
+        // main logic for proximity action
         damageDealingLogic(player, playerCenter, enemyCenter);
 
 
@@ -121,6 +144,7 @@ public class Enemy extends Obstacle {
     private boolean overlapsHitbox(Player player) {
         Vector2 playerCenter = new Vector2();
         player.sprite.getBoundingRectangle().getCenter(playerCenter);
+        this.hitBox.setPosition(new Vector2(this.sprite.getX(), this.sprite.getY())); // update the hitbox
         return this.hitBox.contains(playerCenter);
     }
 
@@ -145,6 +169,7 @@ public class Enemy extends Obstacle {
             this.timeSinceAttackedThePlayer += System.currentTimeMillis();
         }
 
+        // does not work correctly
         if(this.damageDealt){
             if((System.currentTimeMillis()-this.timeSinceAttackedThePlayer) > 200){
                 this.timeSinceAttackedThePlayer = 0;
@@ -153,44 +178,31 @@ public class Enemy extends Obstacle {
         }
     }
     // implement this logic later. For now, just make the enemy chase the player when in range.
-    private void followPlayerBreadcrumb(){
-        Optional<Breadcrumb> toFollow = Breadcrumb.calculateFarthestInRange(this);
-        toFollow.ifPresent(breadcrumb -> this.goal = breadcrumb);
-        moveToBreadCrumb();
-        this.movementStarted = Instant.now();
-    }
+    private void followPlayerBreadcrumb(Breadcrumb breadCrumb){
+        // we have speed. this method is called 60 times per second more or less.
+        Vector2 breadcrumbCenter = new Vector2();
+        breadCrumb.sprite.getBoundingRectangle().getCenter(breadcrumbCenter);
 
-    private void moveToBreadCrumb(){
-
-        if(this.goal == null)
-            return;
-
-        if(this.goal.sprite.getX() < this.sprite.getX()){
-            // rotate to left
-            // start moving left
+        if(breadCrumb.sprite.getX() < this.sprite.getX()){
             this.sprite.translateX(-this.SPEED);
-        } else {
-            // rotate right
-            // move right
+            this.center.add(-this.SPEED, 0);
+        }
+        if(breadCrumb.sprite.getX() > this.sprite.getX()){
             this.sprite.translateX(this.SPEED);
+            this.center.add(this.SPEED, 0);
         }
-        if(this.goal.sprite.getY() < this.sprite.getY()){
-            // rotate to downwards
-            // start moving downwards
+        if(breadCrumb.sprite.getY() < this.sprite.getY()){
             this.sprite.translateY(-this.SPEED);
-        } else {
-            // rotate upwards
+            this.center.add(0, -this.SPEED);
+        }
+        if(breadCrumb.sprite.getY() > this.sprite.getY()){
             this.sprite.translateY(this.SPEED);
+            this.center.add(0, this.SPEED);
         }
 
-        float averageOfX = (this.sprite.getX() + this.goal.sprite.getX())/2;
-        float averageOfY = (this.sprite.getY() + this.goal.sprite.getY())/2;
-
-        float xMovement = averageOfX - this.sprite.getX();
-        float yMovement = averageOfY - this.sprite.getY();
-
-        this.sprite.translateX(xMovement);
-        this.sprite.translateY(yMovement);
+        this.attackBox.setPosition(this.center);
+        this.hitBox.setPosition(this.center);
+        this.followBox.setPosition(this.center);
     }
 
 }
