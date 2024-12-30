@@ -7,6 +7,8 @@ import de.tum.cit.fop.maze.objects.hud.ExitArrow;
 import de.tum.cit.fop.maze.objects.hud.Heart;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -68,7 +70,12 @@ public class Player {
         if(truePlayer){
             this.exitArrow.pointToNearest();
             // leave invisible breadcrumb, add this to player and remove outdated ones.
-            new Breadcrumb(this);
+            if(Breadcrumb.allPlayerBreadCrumbs.isEmpty()){
+                new Breadcrumb(this);
+            } else if(Duration.between(Breadcrumb.allPlayerBreadCrumbs.get(Breadcrumb.allPlayerBreadCrumbs.size()-1).creationTime, Instant.now()).toSeconds() > 2){
+                new Breadcrumb(this);
+            }
+
         }
         if (currentState.toLowerCase().contains("running")){
             SPEED = 2 * SPEED; // running is double the speed

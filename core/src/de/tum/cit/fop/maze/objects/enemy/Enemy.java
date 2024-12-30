@@ -10,8 +10,11 @@ import de.tum.cit.fop.maze.objects.Obstacle;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Enemy extends Obstacle {
 
@@ -28,6 +31,12 @@ public class Enemy extends Obstacle {
     public float timeSinceAttackedThePlayer = 0; // to keep track of damage we have dealt
     public boolean damageDealt = false;
     public boolean followingPlayer = false;
+    public Circle followBox;
+    public Instant movementStarted;
+
+
+    public Breadcrumb goal;
+
 
     // let the sprite be the first animation in the animationMap.
     // this means, we need to move from there to the right and/or downwards to get the remaining animations
@@ -48,6 +57,11 @@ public class Enemy extends Obstacle {
         attackBox.setRadius(20f);
 
         toBeRemoved = false;
+
+        followBox = new Circle();
+        followBox.setPosition(coordinates.x + objectWidth, coordinates.y + objectHeight);
+        followBox.setRadius(30f);
+
     }
 
     public Enemy(float x, float y) {
@@ -62,7 +76,14 @@ public class Enemy extends Obstacle {
      */
     @Override
     public void draw(SpriteBatch spriteBatch, Player player) {
-
+        if(this.overlapsFollowBox(player) && !followingPlayer){
+            new Breadcrumb(player);
+            this.followingPlayer = true;
+        } if(this.followingPlayer && movementStarted == null){
+            followPlayerBreadcrumb();
+        }else if(movementStarted!= null && Duration.between(movementStarted, Instant.now()).toSeconds() > 2 ){
+            followPlayerBreadcrumb();
+        }
         Vector2 playerCenter = new Vector2();
         player.sprite.getBoundingRectangle().getCenter(playerCenter);
         Vector2 enemyCenter = new Vector2();
@@ -70,13 +91,13 @@ public class Enemy extends Obstacle {
 
         if (this.overlapsHitbox(player)) {
             playerAttack(player, playerCenter, enemyCenter);
-            this.followingPlayer=true;
         }
         if(this.overlapsAttackBox(player) && !damageDealt){
             player.heart.sustainsDamage();
             this.damageDealt = true;
             this.timeSinceAttackedThePlayer += System.currentTimeMillis();
         }
+
         if(this.damageDealt){
             if((System.currentTimeMillis()-this.timeSinceAttackedThePlayer) > 200){
                 this.timeSinceAttackedThePlayer = 0;
@@ -125,6 +146,33 @@ public class Enemy extends Obstacle {
         Vector2 playerCenter = new Vector2();
         player.sprite.getBoundingRectangle().getCenter(playerCenter);
         return this.attackBox.contains(playerCenter);
+    }
+    private boolean overlapsFollowBox(Player player) {
+        Vector2 playerCenter = new Vector2();
+        player.sprite.getBoundingRectangle().getCenter(playerCenter);
+        return this.followBox.contains(playerCenter);
+    }
+
+    private void followPlayerBreadcrumb(){
+        Optional<Breadcrumb> toFollow = Breadcrumb.calculateFarthestInRange(this);
+        toFollow.ifPresent(breadcrumb -> this.goal = breadcrumb);
+        moveToBreadCrumb();
+        this.movementStarted = Instant.now();
+    }
+
+    private void moveToBreadCrumb(){
+
+        if(this.goal == null)
+            return;
+
+        float averageOfX = (this.sprite.getX() + this.goal.sprite.getX())/2;
+        float averageOfY = (this.sprite.getY() + this.goal.sprite.getY())/2;
+
+        float xMovement = averageOfX - this.sprite.getX();
+        float yMovement = averageOfY - this.sprite.getY();
+
+        this.sprite.translateX(xMovement);
+        this.sprite.translateY(yMovement);
     }
 
 }

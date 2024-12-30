@@ -100,6 +100,8 @@ public class GameScreen implements Screen {
 
         player.heart.sprite.draw(gameSpriteBatch);
         level.exitArrow.sprite.draw(gameSpriteBatch);
+
+        // draw player breadcrumbs
         Breadcrumb.allPlayerBreadCrumbs.forEach(breadcrumb ->
         {
             if(breadcrumb.sprite != null){
@@ -107,6 +109,7 @@ public class GameScreen implements Screen {
             }
             });
         Breadcrumb.removeOutDatedBreadcrumbs();
+
         BitmapFont font = skin.getFont("font");
 
         font.getData().setScale(0.4f);
