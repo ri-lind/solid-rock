@@ -76,7 +76,7 @@ public class Trap extends Obstacle{
                     explode(player);
                     this.damageDealt = true;
                 }
-                if(frameIndex == this.animations.getKeyFrames().length-2    ){
+                if(frameIndex == this.animations.getKeyFrames().length-2){
                     this.shouldBeRemoved = true;
                 }
             }

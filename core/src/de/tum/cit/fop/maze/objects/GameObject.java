@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import de.tum.cit.fop.maze.objects.collectables.Key;
+import de.tum.cit.fop.maze.objects.collectables.Life;
 import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.utilities.ScalingFactor;
@@ -79,13 +80,16 @@ public abstract class GameObject {
             object = new Enemy(x, y);
         } else if (objectType == 5){
             object = new Key(x, y);
+        } else if (objectType == 6){
+            object = new EntryPoint(x, y);
         } else if (objectType == 7){ // random kill super power
             object = new RandomKill(x, y);
+        } else if (objectType == 8){ // heart
+            object = new Life(x, y);
+        }else {
+            object =  new RandomKill(x, y);
         }
-        else{
-            // default to enemy spawning
-            object = new EntryPoint(x, y);
-        }
+
         return object;
     }
 

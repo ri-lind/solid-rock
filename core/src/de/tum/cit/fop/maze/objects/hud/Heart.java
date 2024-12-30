@@ -28,7 +28,26 @@ public class Heart {
     public void sustainsDamage(){
         remaining_life--;
         Texture texture = new Texture(Gdx.files.internal(filePath));
-        TextureRegion textureRegion = new TextureRegion(texture, 4*16, 0, 16, 16);
+        TextureRegion textureRegion;
+        if(remaining_life == 3){
+            textureRegion = new TextureRegion(texture, 5*16, 0, 16, 16);
+        } else if(remaining_life == 2){
+            textureRegion = new TextureRegion(texture, 6*16, 0, 16, 16);
+        } else if (remaining_life == 1){
+            textureRegion = new TextureRegion(texture, 7*16, 0, 16, 16);
+        } else {
+            textureRegion = new TextureRegion(texture, 8*16, 0, 16 ,16);
+        }
+        Sprite newHeart = new Sprite(textureRegion);
+        newHeart.setPosition(sprite.getX(), sprite.getY());
+        newHeart.setSize(sprite.getWidth(), sprite.getHeight());
+        this.sprite = newHeart;
+    }
+
+    public void restoreHealth(){
+        remaining_life++;
+        Texture texture = new Texture(Gdx.files.internal(filePath));
+        TextureRegion textureRegion;
         if(remaining_life == 3){
             textureRegion = new TextureRegion(texture, 5*16, 0, 16, 16);
         } else if(remaining_life == 2){

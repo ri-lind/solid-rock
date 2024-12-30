@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.GameScreen;
 import de.tum.cit.fop.maze.objects.collectables.Key;
+import de.tum.cit.fop.maze.objects.collectables.Life;
 import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.objects.hud.ExitArrow;
@@ -177,6 +178,7 @@ public class Level {
         cleanUpKilledEnemies();
         cleanUpCollectedKeys();
         cleanUpCollectedRandomKill();
+        cleanUpCollectedLives();
     }
 
     public boolean collides(Player player){
@@ -187,7 +189,7 @@ public class Level {
                     gameObjects.forEach(
                             gameObject -> {
                                 // shortening to a one-liner does not work.
-                                if (gameObject.collide(player)){ // this line sets the trap to triggered
+                                if (gameObject.collide(player)){ // this line calls object.collide
                                     collides.set(true);
                                 }
                             }
@@ -256,6 +258,20 @@ public class Level {
         for (int i : indicesOfPowerUpsToBeCollected){
             this.player.superPower = (RandomKill) this.gameObjects.get(7).get(i);
             this.gameObjects.get(7).remove(i);
+        }
+    }
+
+    public void cleanUpCollectedLives(){
+        List<Integer> indicesOfLivesToBeCollected = new ArrayList<>();
+        for (int i = 0; i < this.gameObjects.get(8).size(); i++){
+            Life life = (Life) this.gameObjects.get(8).get(i);
+
+            if (life.shouldBeRemoved)
+                indicesOfLivesToBeCollected.add(i);
+        }
+        for (int i : indicesOfLivesToBeCollected){
+            this.player.superPower = (RandomKill) this.gameObjects.get(7).get(i);
+            this.gameObjects.get(8).remove(i);
         }
     }
 }
