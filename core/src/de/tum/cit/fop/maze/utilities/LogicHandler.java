@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.MazeRunnerGame;
+import de.tum.cit.fop.maze.objects.collectables.Life;
 import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 
@@ -34,13 +35,15 @@ public class LogicHandler {
         // logic for initiating attack, lasts 10 (frames ?)
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             // remove randomly if superpower picked up
-            if(player.superPower != null && player.superPower.getClass() == RandomKill.class){
-                @SuppressWarnings("unchecked")
-                List<Enemy> enemyList = (List<Enemy>) (Object) level.gameObjects.get(4);
-                if( !enemyList.isEmpty()) {
-                    int random = (int) (Math.random() * enemyList.size());
-                    enemyList.remove(random);
-                    player.superPower = null;
+            if(player.superPower != null){
+                if(player.superPower.getClass() == RandomKill.class){
+                    @SuppressWarnings("unchecked")
+                    List<Enemy> enemyList = (List<Enemy>) (Object) level.gameObjects.get(4);
+                    if( !enemyList.isEmpty()) {
+                        int random = (int) (Math.random() * enemyList.size());
+                        enemyList.remove(random);
+                        player.superPower = null;
+                    }
                 }
             }
             if (player.currentState.toLowerCase().contains("down")){
@@ -100,6 +103,7 @@ public class LogicHandler {
         temporaryPlayer.calculateNextMove(false);
 
         if(!level.collides(temporaryPlayer)){
+            //if any of the lives on the ground are marked to be removed, it means the player has collected them
             player.calculateNextMove(true); // move the player along the current direction//
         }
 

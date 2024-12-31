@@ -48,7 +48,9 @@ public class Heart {
         remaining_life++;
         Texture texture = new Texture(Gdx.files.internal(filePath));
         TextureRegion textureRegion;
-        if(remaining_life == 3){
+        if (remaining_life == 4){
+            textureRegion = new TextureRegion(texture, 4*16, 0, 16, 16);
+        } else if(remaining_life == 3){
             textureRegion = new TextureRegion(texture, 5*16, 0, 16, 16);
         } else if(remaining_life == 2){
             textureRegion = new TextureRegion(texture, 6*16, 0, 16, 16);

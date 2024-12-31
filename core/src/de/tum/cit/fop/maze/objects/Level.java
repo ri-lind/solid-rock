@@ -266,8 +266,11 @@ public class Level {
         for (int i = 0; i < this.gameObjects.get(8).size(); i++){
             Life life = (Life) this.gameObjects.get(8).get(i);
 
-            if (life.shouldBeRemoved)
+            if (life.shouldBeRemoved){
                 indicesOfLivesToBeCollected.add(i);
+                player.heart.restoreHealth(); // increment the life here, maybe this will work
+            }
+
         }
         for (int i : indicesOfLivesToBeCollected){
             this.player.superPower = (RandomKill) this.gameObjects.get(7).get(i);
