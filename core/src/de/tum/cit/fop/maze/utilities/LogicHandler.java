@@ -3,6 +3,7 @@ package de.tum.cit.fop.maze.utilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
@@ -11,6 +12,8 @@ import de.tum.cit.fop.maze.objects.collectables.Life;
 import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -19,6 +22,8 @@ import java.util.List;
  * Logic is currently very fragile.
  */
 public class LogicHandler {
+
+    final static Sound playerWalkingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/player-movement.mp3"));
 
     public static void input(MazeRunnerGame game, Player player,
                              FitViewport fitViewport, Level level, float delta) {
@@ -34,7 +39,10 @@ public class LogicHandler {
 
         // logic for initiating attack, lasts 10 (frames ?)
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            level.soundHandler.swordSlash.play(1.0f);
+            if(level.soundHandler.canSlash()){
+                level.soundHandler.playSwordSlash();
+            }
+
             // remove randomly if superpower picked up
             if(player.superPower != null){
                 if(player.superPower.getClass() == RandomKill.class){
@@ -99,7 +107,9 @@ public class LogicHandler {
             }
         }
 
-
+        if (player.currentState.toLowerCase().contains("running")) {
+            playerWalkingSound.play(0.1f);
+        }
         Player temporaryPlayer = new Player(player);
         temporaryPlayer.calculateNextMove(false);
 
