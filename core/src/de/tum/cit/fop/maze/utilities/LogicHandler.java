@@ -108,7 +108,7 @@ public class LogicHandler {
         }
 
         if (player.currentState.toLowerCase().contains("running")) {
-            playerWalkingSound.play(0.1f);
+            //playerWalkingSound.play(0.1f);
         }
         Player temporaryPlayer = new Player(player);
         temporaryPlayer.calculateNextMove(false);
