@@ -13,6 +13,7 @@ import de.tum.cit.fop.maze.objects.hud.ExitArrow;
 import de.tum.cit.fop.maze.objects.obstacles.Trap;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.MapHandler;
+import de.tum.cit.fop.maze.utilities.SoundHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,8 @@ public class Level {
     public List<Key> keys;
     public GameScreen gameScreen;
 
+    public SoundHandler soundHandler;
+
     public Level(String fileName, OrthographicCamera camera, GameScreen gameScreen){
 
         this.gameScreen = gameScreen;
@@ -68,8 +71,10 @@ public class Level {
         List<Key> keys = (List<Key>) (Object) this.gameObjects.get(5);
         this.keys = keys;
 
-
         this.playerScore = 0;
+
+        this.soundHandler = new SoundHandler();
+
     }
 
     /**
@@ -222,6 +227,7 @@ public class Level {
         }
         for (int i : indicesOfEnemiesToBeRemoved){
             this.gameObjects.get(4).remove(i);
+            this.soundHandler.enemyDeath.play();
             playerScore += 100;
         }
 
@@ -257,6 +263,7 @@ public class Level {
                 indicesOfKeysToBeCollected.add(i);
         }
         for (int i : indicesOfKeysToBeCollected){
+            this.soundHandler.keyPickup.play();
             this.player.keysInPosession++;
             this.gameObjects.get(5).remove(i);
         }
@@ -295,6 +302,7 @@ public class Level {
 
         }
         for (int i : indicesOfLivesToBeCollected){
+            this.soundHandler.healthRestore.play();
             this.gameObjects.get(8).remove(i);
         }
     }

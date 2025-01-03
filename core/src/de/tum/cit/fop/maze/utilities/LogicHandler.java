@@ -34,6 +34,7 @@ public class LogicHandler {
 
         // logic for initiating attack, lasts 10 (frames ?)
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            level.soundHandler.swordSlash.play(1.0f);
             // remove randomly if superpower picked up
             if(player.superPower != null){
                 if(player.superPower.getClass() == RandomKill.class){

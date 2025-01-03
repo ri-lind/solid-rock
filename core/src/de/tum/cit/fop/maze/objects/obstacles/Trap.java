@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze.objects.obstacles;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +14,9 @@ import de.tum.cit.fop.maze.utilities.LoaderHelper;
  * Actually a bomb.
  */
 public class Trap extends Obstacle {
+
+    final static Sound explosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.mp3"));
+    final static Sound preExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/pre-explosion.mp3"));
 
     public Animation<Sprite> animations;
 
@@ -73,12 +77,15 @@ public class Trap extends Obstacle {
             // to check when to deal damage.
             if(!this.animations.isAnimationFinished(stateTime)){
                 int frameIndex = this.animations.getKeyFrameIndex(stateTime);
-                if (frameIndex == 9 && !this.damageDealt) {
+
+                if (frameIndex == 13 && !this.damageDealt){// explosion initiated
+                    preExplosion.stop();
                     explode(player);
                     this.damageDealt = true;
-                }
-                if(frameIndex == this.animations.getKeyFrames().length-2){
+                } else if(frameIndex == 17){ // bomb removal
                     this.shouldBeRemoved = true;
+                } else if(frameIndex == 0){
+                    preExplosion.play(0.5f);
                 }
             }
         }else{
@@ -90,6 +97,7 @@ public class Trap extends Obstacle {
     // this method is called at the height of the explosion. It should damage the player if the player is at a range of
     // damage range is triple the size of the normal sprite but around it. So center it at the sprite center.
     public void explode(Player player){
+        explosion.play();
         // set up explosion range.
         Rectangle explosionDamageRange = new Rectangle(this.sprite.getBoundingRectangle());
         explosionDamageRange.setSize(explosionDamageRange.width*3, explosionDamageRange.height*3);
