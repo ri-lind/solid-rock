@@ -27,10 +27,9 @@ public class ExitArrow {
         Sprite sprite = new Sprite(texture);
         sprite.setSize(10, 10);
         sprite.setX(player.sprite.getX());
-        sprite.translateX(sprite.getWidth());
+        sprite.translateX(player.sprite.getWidth());
         sprite.setY(player.sprite.getY());
         sprite.translateY(player.sprite.getHeight());
-        System.out.println(sprite.getWidth());
         sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
         sprite.setRotation(180);
         this.sprite = sprite;

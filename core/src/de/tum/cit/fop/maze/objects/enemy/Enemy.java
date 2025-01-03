@@ -1,12 +1,11 @@
 package de.tum.cit.fop.maze.objects.enemy;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import de.tum.cit.fop.maze.objects.Obstacle;
+import de.tum.cit.fop.maze.objects.obstacles.Obstacle;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
@@ -14,7 +13,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class Enemy extends Obstacle {
 
@@ -59,13 +57,13 @@ public class Enemy extends Obstacle {
 
         attackBox = new Circle();
         attackBox.setPosition(this.center);
-        attackBox.setRadius(20f);
+        attackBox.setRadius(10f);
 
         toBeRemoved = false;
 
         followBox = new Circle();
         followBox.setPosition(this.center);
-        followBox.setRadius(40f);
+        followBox.setRadius(60f);
 
     }
 

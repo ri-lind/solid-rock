@@ -38,17 +38,50 @@ public class MenuScreen implements Screen {
         stage.addActor(table); // Add the table to the stage
 
         // Add a label as a title
-        table.add(new Label("Hello World from the Menu!", game.getSkin(), "title")).padBottom(80).row();
+        table.add(new Label("Solid Rock", game.getSkin(), "title")).padBottom(80).row();
 
-        // Create and add a button to go to the game screen
-        TextButton goToGameButton = new TextButton("Go To Game", game.getSkin());
-        table.add(goToGameButton).width(300).row();
-        goToGameButton.addListener(new ChangeListener() {
+
+        TextButton level1Button = new TextButton("Level 1", game.getSkin());
+        table.add(level1Button).padBottom(50).width(300).row();
+        level1Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(); // Change to the game screen when button is pressed
+                game.goToGame(1);
             }
         });
+        TextButton level2Button = new TextButton("Level 2", game.getSkin());
+        table.add(level2Button).padBottom(50).width(300).row();
+        level2Button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToGame(2);
+            }
+        });
+        TextButton level3Button = new TextButton("Level 3", game.getSkin());
+        table.add(level3Button).padBottom(50).width(300).row();
+        level3Button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToGame(3);
+            }
+        });
+        TextButton level4Button = new TextButton("Level 4", game.getSkin());
+        table.add(level4Button).padBottom(50).width(300).row();
+        level4Button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToGame(4);
+            }
+        });
+        TextButton level5Button = new TextButton("Level 5", game.getSkin());
+        table.add(level5Button).padBottom(50).width(300).row();
+        level5Button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToGame(5);
+            }
+        });
+
     }
 
     @Override

@@ -4,17 +4,16 @@ package de.tum.cit.fop.maze.objects;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.GameScreen;
 import de.tum.cit.fop.maze.objects.collectables.Key;
 import de.tum.cit.fop.maze.objects.collectables.Life;
 import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.objects.hud.ExitArrow;
+import de.tum.cit.fop.maze.objects.obstacles.Trap;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.MapHandler;
 
-import javax.annotation.processing.SupportedSourceVersion;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +27,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Level {
 
+    public int numberOfKeys;
+    public int playerScore;
     public Map<Integer, List<GameObject>> gameObjects;
     private Player player;
 
@@ -39,14 +40,15 @@ public class Level {
     public ExitArrow exitArrow;
 
     public List<Key> keys;
-
+    public GameScreen gameScreen;
 
     public Level(String fileName, OrthographicCamera camera, GameScreen gameScreen){
 
+        this.gameScreen = gameScreen;
         // loads key, enemies, traps, exits, entrances into  the world.
         String mapContent = MapHandler.readMapFromFile(fileName);
         this.gameObjects = MapHandler.createGameObjects(mapContent, camera);
-
+        setNumberOfKeys(); // sets number of keys
         this.normalTileType = LoaderHelper.loadNormalBackgroundTile();
         this.rowBorderTileType = LoaderHelper.loadBackgroundBorderTile();
         this.columnBorderTileType = new Sprite(rowBorderTileType);
@@ -65,6 +67,9 @@ public class Level {
         @SuppressWarnings("unchecked")
         List<Key> keys = (List<Key>) (Object) this.gameObjects.get(5);
         this.keys = keys;
+
+
+        this.playerScore = 0;
     }
 
     /**
@@ -170,7 +175,8 @@ public class Level {
                             object -> {
                                 if(objectType != 6)
                                     object.draw(spriteBatch, player);
-                    }
+                            }
+
                     );
                 }
         );
@@ -181,6 +187,11 @@ public class Level {
         cleanUpCollectedLives();
     }
 
+    /**
+     * Collides with temporary player.
+     * @param player
+     * @return
+     */
     public boolean collides(Player player){
         AtomicBoolean collides = new AtomicBoolean(false);
 
@@ -191,6 +202,8 @@ public class Level {
                                 // shortening to a one-liner does not work.
                                 if (gameObject.collide(player)){ // this line calls object.collide
                                     collides.set(true);
+                                    if(objectType == 2 && this.player.keysInPosession == this.numberOfKeys)
+                                        this.gameScreen.game.goToVictory(this);
                                 }
                             }
                     );
@@ -209,6 +222,7 @@ public class Level {
         }
         for (int i : indicesOfEnemiesToBeRemoved){
             this.gameObjects.get(4).remove(i);
+            playerScore += 100;
         }
 
     }
@@ -216,7 +230,9 @@ public class Level {
     public void cleanUpBlownUpTraps(){
 
         List<Integer> indicesOfTrapsToBeRemoved = new ArrayList<>();
-
+        if(!this.gameObjects.containsKey(3)){
+            return;
+        }
         // get indices of to be removed traps
        for (int i = 0; i < this.gameObjects.get(3).size(); i++){
            Trap trap = (Trap) this.gameObjects.get(3).get(i);
@@ -249,6 +265,9 @@ public class Level {
 
     public void cleanUpCollectedRandomKill(){
         List<Integer> indicesOfPowerUpsToBeCollected = new ArrayList<>();
+        if(!this.gameObjects.containsKey(7)){
+            return;
+        }
         for (int i = 0; i < this.gameObjects.get(7).size(); i++){
             RandomKill randomKill = (RandomKill) this.gameObjects.get(7).get(i);
 
@@ -263,6 +282,9 @@ public class Level {
 
     public void cleanUpCollectedLives(){
         List<Integer> indicesOfLivesToBeCollected = new ArrayList<>();
+        if(!this.gameObjects.containsKey(8)){
+            return;
+        }
         for (int i = 0; i < this.gameObjects.get(8).size(); i++){
             Life life = (Life) this.gameObjects.get(8).get(i);
 
@@ -273,8 +295,12 @@ public class Level {
 
         }
         for (int i : indicesOfLivesToBeCollected){
-            this.player.superPower = (RandomKill) this.gameObjects.get(7).get(i);
             this.gameObjects.get(8).remove(i);
         }
+    }
+
+
+    private void setNumberOfKeys(){
+        this.numberOfKeys = this.gameObjects.get(5).size();
     }
 }

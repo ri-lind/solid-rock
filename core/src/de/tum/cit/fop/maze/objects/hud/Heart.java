@@ -47,8 +47,9 @@ public class Heart {
     public void restoreHealth(){
         remaining_life++;
         Texture texture = new Texture(Gdx.files.internal(filePath));
-        TextureRegion textureRegion;
-        if (remaining_life == 4){
+        TextureRegion textureRegion = new TextureRegion();
+        if (remaining_life >= 4){
+            remaining_life = 4;
             textureRegion = new TextureRegion(texture, 4*16, 0, 16, 16);
         } else if(remaining_life == 3){
             textureRegion = new TextureRegion(texture, 5*16, 0, 16, 16);
@@ -56,7 +57,8 @@ public class Heart {
             textureRegion = new TextureRegion(texture, 6*16, 0, 16, 16);
         } else if (remaining_life == 1){
             textureRegion = new TextureRegion(texture, 7*16, 0, 16, 16);
-        } else {
+        } else  if (remaining_life < 1){
+            remaining_life = 0;
             textureRegion = new TextureRegion(texture, 8*16, 0, 16 ,16);
         }
         Sprite newHeart = new Sprite(textureRegion);

@@ -1,4 +1,4 @@
-package de.tum.cit.fop.maze.objects;
+package de.tum.cit.fop.maze.objects.obstacles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
 /**
  * Actually a bomb.
  */
-public class Trap extends Obstacle{
+public class Trap extends Obstacle {
 
     public Animation<Sprite> animations;
 

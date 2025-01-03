@@ -7,9 +7,16 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import de.tum.cit.fop.maze.objects.EntryPoint;
+import de.tum.cit.fop.maze.objects.GameObject;
+import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.objects.Player;
-import de.tum.cit.fop.maze.objects.Trap;
+import de.tum.cit.fop.maze.objects.obstacles.Trap;
+
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 /**
  * Loads player animations and border and inner tiles.
@@ -181,5 +188,19 @@ public class LoaderHelper {
 
         trapFrameArray.forEach( (frame) -> {frame.setSize(trapWidth, trapHeight);});
         trap.animations = new Animation<>(0.1f, trapFrameArray);
+    }
+
+
+    public static PlayerSpawnCoordinates getPlayerSpawnCoordinates(String filename, OrthographicCamera camera){
+        String mapContent = MapHandler.readMapFromFile(filename);
+        Map<Integer, List<GameObject>> gameObjects = MapHandler.createGameObjects(mapContent, camera);
+
+        EntryPoint entryPoint = (EntryPoint) gameObjects.get(1).get(0);
+
+        float playerX = entryPoint.sprite.getX() + entryPoint.sprite.getWidth() + 5;
+        float playerY = entryPoint.sprite.getY() + entryPoint.sprite.getHeight();
+
+
+        return new PlayerSpawnCoordinates(playerX, playerY);
     }
 }

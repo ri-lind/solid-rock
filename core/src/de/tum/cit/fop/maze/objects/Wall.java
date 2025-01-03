@@ -1,9 +1,9 @@
 package de.tum.cit.fop.maze.objects;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.fop.maze.objects.obstacles.Obstacle;
 
-public class Wall extends Obstacle{
+public class Wall extends Obstacle {
 
 
     static final int spriteSheetColumn = 5;

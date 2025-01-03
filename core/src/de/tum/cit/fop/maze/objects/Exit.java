@@ -20,5 +20,4 @@ public class Exit extends GameObject {
     public Exit(float x, float y){
         this(new Vector2(x, y), Exit.spriteSheetColumn, Exit.spriteSheetRow, Exit.objectWidth, Exit.objectHeight, spriteSheetFilePath);
     }
-
 }

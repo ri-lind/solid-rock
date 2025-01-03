@@ -3,6 +3,7 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.*;
 import de.tum.cit.fop.maze.objects.collectables.Key;
 import de.tum.cit.fop.maze.objects.enemy.Breadcrumb;
+import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.LogicHandler;
 
 /**
@@ -19,7 +21,7 @@ import de.tum.cit.fop.maze.utilities.LogicHandler;
  */
 public class GameScreen implements Screen {
 
-    private final MazeRunnerGame game;
+    public final MazeRunnerGame game;
     private final SpriteBatch gameSpriteBatch;
     private final Skin skin;
 
@@ -40,7 +42,7 @@ public class GameScreen implements Screen {
      *
      * @param game The main game class, used to access global resources and methods.
      */
-    public GameScreen(MazeRunnerGame game) {
+    public GameScreen(MazeRunnerGame game, int level_number) {
         this.game = game;
         this.gameSpriteBatch = game.getSpriteBatch();
         this.skin = game.getSkin();
@@ -54,9 +56,12 @@ public class GameScreen implements Screen {
         // Get the font from the game's skin
         this.font = game.getSkin().getFont("font");
 
-        this.player = new Player();
+        String mapFileName = String.format("maps/level-%s.properties", level_number);
 
-        this.level = new Level("maps/level-1.properties", camera, this);
+        this.player = new Player(mapFileName, camera);
+        this.level = new Level(String.format("maps/level-%s.properties", level_number), camera, this);
+
+
     }
 
     // Screen interface methods with necessary functionality
@@ -112,9 +117,10 @@ public class GameScreen implements Screen {
 
         BitmapFont font = skin.getFont("font");
 
+
         font.getData().setScale(0.4f);
         font.draw(gameSpriteBatch, player.keysInPosession+ "", currentPlayerFrame.getX() + 5, currentPlayerFrame.getY()-8);
-
+        font.getData().setScale(1f);
         gameSpriteBatch.end();
 
 

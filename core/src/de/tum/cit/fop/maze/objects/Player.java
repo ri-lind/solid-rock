@@ -1,5 +1,6 @@
 package de.tum.cit.fop.maze.objects;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.tum.cit.fop.maze.objects.collectables.SuperPower;
@@ -38,15 +39,15 @@ public class Player {
     /**
      * Used for normal visible player.
      */
-    public Player(){
+    public Player(String mapFileName, OrthographicCamera camera){
 
         this.animations = new Hashtable<>();
         LoaderHelper.loadCharacterDirectionAnimation(this); // Load character movement and standing animation
         LoaderHelper.loadCharacterAttackAnimations(this); // load the attack animations of the character
         this.currentState = "RIGHT";
-        this.sprite.setX(600);
-        this.sprite.setY(400);
-        this.sprite.setSize(32, 32);
+        this.sprite.setX(LoaderHelper.getPlayerSpawnCoordinates(mapFileName, camera).x); // these coordinates are changed after level is created
+        this.sprite.setY(LoaderHelper.getPlayerSpawnCoordinates(mapFileName, camera).y);
+        this.sprite.setSize(16, 16);
         this.sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 
         this.heart = new Heart(this);

@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import de.tum.cit.fop.maze.objects.Level;
+import de.tum.cit.fop.maze.objects.Player;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
 /**
@@ -15,6 +17,7 @@ public class MazeRunnerGame extends Game {
     // Screens
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
+    private VictoryScreen victoryScreen;
 
     // Sprite Batch for rendering
     private SpriteBatch spriteBatch;
@@ -50,16 +53,27 @@ public class MazeRunnerGame extends Game {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
+        if (victoryScreen != null){
+            victoryScreen.dispose();
+            victoryScreen = null;
+        }
     }
 
     /**
      * Switches to the game screen.
      */
-    public void goToGame() {
-        this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
+    public void goToGame(int level_number) {
+        this.setScreen(new GameScreen(this, level_number)); // Set the current screen to GameScreen
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
+        }
+    }
+
+    public void goToVictory(Level level) {
+        this.setScreen(new VictoryScreen(this, level));
+        if(gameScreen != null){
+            gameScreen.dispose();
         }
     }
 
