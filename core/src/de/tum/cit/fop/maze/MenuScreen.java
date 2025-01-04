@@ -2,6 +2,8 @@ package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,12 +23,16 @@ public class MenuScreen implements Screen {
 
     private final Stage stage;
 
+    private Music menuMusic;
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
      * @param game The main game class, used to access global resources and methods.
      */
     public MenuScreen(MazeRunnerGame game) {
+
+        this.menuMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
+        this.menuMusic.play();
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 
@@ -46,7 +52,7 @@ public class MenuScreen implements Screen {
         level1Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(1);
+                game.goToGame(1, menuMusic);
             }
         });
         TextButton level2Button = new TextButton("Level 2", game.getSkin());
@@ -54,7 +60,7 @@ public class MenuScreen implements Screen {
         level2Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(2);
+                game.goToGame(2, menuMusic);
             }
         });
         TextButton level3Button = new TextButton("Level 3", game.getSkin());
@@ -62,7 +68,7 @@ public class MenuScreen implements Screen {
         level3Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(3);
+                game.goToGame(3, menuMusic);
             }
         });
         TextButton level4Button = new TextButton("Level 4", game.getSkin());
@@ -70,7 +76,7 @@ public class MenuScreen implements Screen {
         level4Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(4);
+                game.goToGame(4, menuMusic);
             }
         });
         TextButton level5Button = new TextButton("Level 5", game.getSkin());
@@ -78,7 +84,7 @@ public class MenuScreen implements Screen {
         level5Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(5);
+                game.goToGame(5, menuMusic);
             }
         });
 

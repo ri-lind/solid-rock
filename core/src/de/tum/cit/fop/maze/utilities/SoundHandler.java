@@ -17,6 +17,8 @@ public class SoundHandler {
     public Sound healthRestore;
     public Sound playerMovement;
 
+    int counter = 0;
+
     public SoundHandler(){
         this.swordSlash = Gdx.audio.newSound(Gdx.files.internal("sounds/sword-swing.mp3"));
         this.enemyDeath =  Gdx.audio.newSound(Gdx.files.internal("sounds/enemy-death.mp3"));
@@ -29,6 +31,8 @@ public class SoundHandler {
 
 
     public void playSwordSlash() {
+        counter++;
+        System.out.println(counter);
         this.swordSlash.play();
         startedPlaying = Instant.now();
         this.swordSlashSoundPlayed = true;

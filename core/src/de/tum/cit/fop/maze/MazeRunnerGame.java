@@ -2,11 +2,11 @@ package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.tum.cit.fop.maze.objects.Level;
-import de.tum.cit.fop.maze.objects.Player;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
 /**
@@ -24,6 +24,7 @@ public class MazeRunnerGame extends Game {
 
     // UI Skin
     private Skin skin;
+
 
     /**
      * Constructor for MazeRunnerGame.
@@ -62,7 +63,8 @@ public class MazeRunnerGame extends Game {
     /**
      * Switches to the game screen.
      */
-    public void goToGame(int level_number) {
+    public void goToGame(int level_number, Music menuMusic) {
+        menuMusic.stop();
         this.setScreen(new GameScreen(this, level_number)); // Set the current screen to GameScreen
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
@@ -97,5 +99,42 @@ public class MazeRunnerGame extends Game {
 
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;
+    }
+
+    public static class GameOverScreen implements Screen {
+        @Override
+        public void show() {
+
+        }
+
+        @Override
+        public void render(float delta) {
+
+        }
+
+        @Override
+        public void resize(int width, int height) {
+
+        }
+
+        @Override
+        public void pause() {
+
+        }
+
+        @Override
+        public void resume() {
+
+        }
+
+        @Override
+        public void hide() {
+
+        }
+
+        @Override
+        public void dispose() {
+
+        }
     }
 }

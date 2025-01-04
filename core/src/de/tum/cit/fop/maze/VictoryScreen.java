@@ -2,6 +2,7 @@ package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,6 +20,9 @@ public class VictoryScreen implements Screen {
     private final Stage stage;
 
     public VictoryScreen(MazeRunnerGame game, Level level) {
+
+        Sound winningSound = Gdx.audio.newSound(Gdx.files.internal("sounds/victory.mp3"));
+        winningSound.play();
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 
