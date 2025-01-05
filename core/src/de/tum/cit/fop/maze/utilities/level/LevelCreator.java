@@ -20,8 +20,8 @@ public class LevelCreator {
         StringBuilder level1 = new StringBuilder();
         // create walls at height 100, 200, 300, 400
 
-        for (int height = 100; height <= 400; height = height + 100){
-            for (int x = 0; x <= 800; x = x+ 16){
+        for (int height = 0; height <= 32; height +=8){
+            for (int x = 0; x <= 50; x++){
                 level1.append(x).append(",").append(height).append("=0").append("\n");
             }
         }

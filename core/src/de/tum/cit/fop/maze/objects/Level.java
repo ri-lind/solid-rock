@@ -4,6 +4,7 @@ package de.tum.cit.fop.maze.objects;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.GameScreen;
 import de.tum.cit.fop.maze.objects.collectables.Key;
 import de.tum.cit.fop.maze.objects.collectables.Life;
@@ -45,20 +46,20 @@ public class Level {
 
     public SoundHandler soundHandler;
 
-    public Level(String fileName, OrthographicCamera camera, GameScreen gameScreen){
+    public Level(String fileName, FitViewport fitViewport, GameScreen gameScreen){
 
         this.gameScreen = gameScreen;
         // loads key, enemies, traps, exits, entrances into  the world.
         String mapContent = LevelHandler.readMapFromFile(fileName);
-        this.gameObjects = LevelHandler.createGameObjects(mapContent, camera);
+        this.gameObjects = LevelHandler.createGameObjects(mapContent, fitViewport);
         setNumberOfKeys(); // sets number of keys
         this.normalTileType = LoaderHelper.loadNormalBackgroundTile();
         this.rowBorderTileType = LoaderHelper.loadBackgroundBorderTile();
         this.columnBorderTileType = new Sprite(rowBorderTileType);
         this.columnBorderTileType.rotate90(true);
         this.tiles = new ArrayList<>();
-        this.gameObjects.put(6, loadBorderTiles(camera));
-        loadInnerTiles(camera);
+        this.gameObjects.put(6, loadBorderTiles((OrthographicCamera) fitViewport.getCamera()));
+        loadInnerTiles((OrthographicCamera) fitViewport.getCamera());
 
         this.player = gameScreen.player;
 

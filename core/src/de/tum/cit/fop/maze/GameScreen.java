@@ -55,13 +55,15 @@ public class GameScreen implements Screen {
         fitViewPort.apply(true);
         camera.setToOrtho(false, fitViewPort.getWorldWidth(), fitViewPort.getWorldHeight());
 
+        System.out.println("Camera Viewport Height" + camera.viewportHeight);
+        System.out.println("World Height" + fitViewPort.getWorldHeight());
         // Get the font from the game's skin
         this.font = game.getSkin().getFont("font");
 
         String mapFileName = String.format("maps/level-%s.properties", level_number);
 
-        this.player = new Player(mapFileName, camera);
-        this.level = new Level(String.format("maps/level-%s.properties", level_number), camera, this);
+        this.player = new Player(mapFileName, this.fitViewPort);
+        this.level = new Level(String.format("maps/level-%s.properties", level_number), this.fitViewPort, this);
 
 
     }

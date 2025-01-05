@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.GameObject;
 import de.tum.cit.fop.maze.utilities.ScalingFactor;
 
@@ -31,9 +32,9 @@ public class LevelHandler {
     }
 
 
-    public static Map<Integer, List<GameObject>> createGameObjects(String mapContent, OrthographicCamera camera){
+    public static Map<Integer, List<GameObject>> createGameObjects(String mapContent, FitViewport fitViewport){
         Map<Integer, List<GameObject>> map = convertToMap(mapContent);
-        ScalingFactor scalingFactor = calculateScalingFactor(map, camera);
+        ScalingFactor scalingFactor = calculateScalingFactor(map, fitViewport);
 
         Map<Integer, List<GameObject>> newMap = new HashMap<>();
         map.forEach(
@@ -99,7 +100,7 @@ public class LevelHandler {
      * @return
      */
     public static ScalingFactor calculateScalingFactor(Map<Integer, List<GameObject>> map,
-                                                              OrthographicCamera camera){
+                                                              FitViewport fitViewport){
         //get the maximum x and y from the coordinates
         AtomicReference<Float> maxX = new AtomicReference<>((float) 0);
         AtomicReference<Float> maxY = new AtomicReference<>((float) 0);
@@ -120,8 +121,8 @@ public class LevelHandler {
         );
 
         // calculate the scaling factor
-        float width_scaling_factor = camera.viewportWidth/maxX.get();
-        float height_scaling_factor = camera.viewportHeight/maxY.get();
+        float width_scaling_factor = fitViewport.getWorldWidth()/maxX.get();
+        float height_scaling_factor = fitViewport.getWorldHeight()/maxY.get();
 
         return new ScalingFactor(width_scaling_factor, height_scaling_factor);
 

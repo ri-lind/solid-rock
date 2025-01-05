@@ -3,6 +3,7 @@ package de.tum.cit.fop.maze.objects;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.collectables.SuperPower;
 import de.tum.cit.fop.maze.objects.enemy.Breadcrumb;
 import de.tum.cit.fop.maze.objects.hud.ExitArrow;
@@ -39,14 +40,14 @@ public class Player {
     /**
      * Used for normal visible player.
      */
-    public Player(String mapFileName, OrthographicCamera camera){
+    public Player(String mapFileName, FitViewport fitviewport){
 
         this.animations = new Hashtable<>();
         LoaderHelper.loadCharacterDirectionAnimation(this); // Load character movement and standing animation
         LoaderHelper.loadCharacterAttackAnimations(this); // load the attack animations of the character
         this.currentState = "RIGHT";
-        this.sprite.setX(LoaderHelper.getPlayerSpawnCoordinates(mapFileName, camera).x); // these coordinates are changed after level is created
-        this.sprite.setY(LoaderHelper.getPlayerSpawnCoordinates(mapFileName, camera).y);
+        this.sprite.setX(LoaderHelper.getPlayerSpawnCoordinates(mapFileName, fitviewport).x); // these coordinates are changed after level is created
+        this.sprite.setY(LoaderHelper.getPlayerSpawnCoordinates(mapFileName, fitviewport).y);
         this.sprite.setSize(16, 16);
         this.sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 
