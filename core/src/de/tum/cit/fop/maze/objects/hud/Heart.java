@@ -57,7 +57,7 @@ public class Heart {
             textureRegion = new TextureRegion(texture, 6*16, 0, 16, 16);
         } else if (remaining_life == 1){
             textureRegion = new TextureRegion(texture, 7*16, 0, 16, 16);
-        } else  if (remaining_life < 1){
+        } else {
             remaining_life = 0;
             textureRegion = new TextureRegion(texture, 8*16, 0, 16 ,16);
         }

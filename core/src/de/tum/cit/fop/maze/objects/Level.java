@@ -12,7 +12,7 @@ import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.objects.hud.ExitArrow;
 import de.tum.cit.fop.maze.objects.obstacles.Trap;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
-import de.tum.cit.fop.maze.utilities.MapHandler;
+import de.tum.cit.fop.maze.utilities.level.LevelHandler;
 import de.tum.cit.fop.maze.utilities.SoundHandler;
 
 import java.util.ArrayList;
@@ -49,8 +49,8 @@ public class Level {
 
         this.gameScreen = gameScreen;
         // loads key, enemies, traps, exits, entrances into  the world.
-        String mapContent = MapHandler.readMapFromFile(fileName);
-        this.gameObjects = MapHandler.createGameObjects(mapContent, camera);
+        String mapContent = LevelHandler.readMapFromFile(fileName);
+        this.gameObjects = LevelHandler.createGameObjects(mapContent, camera);
         setNumberOfKeys(); // sets number of keys
         this.normalTileType = LoaderHelper.loadNormalBackgroundTile();
         this.rowBorderTileType = LoaderHelper.loadBackgroundBorderTile();

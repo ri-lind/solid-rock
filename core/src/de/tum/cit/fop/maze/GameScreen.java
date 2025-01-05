@@ -10,9 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.*;
-import de.tum.cit.fop.maze.objects.collectables.Key;
 import de.tum.cit.fop.maze.objects.enemy.Breadcrumb;
-import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.LogicHandler;
 
 /**
@@ -43,6 +41,10 @@ public class GameScreen implements Screen {
      * @param game The main game class, used to access global resources and methods.
      */
     public GameScreen(MazeRunnerGame game, int level_number) {
+
+        Music levelMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/level.mp3"));
+        levelMusic.setVolume(0.1f);
+        levelMusic.play();
         this.game = game;
         this.gameSpriteBatch = game.getSpriteBatch();
         this.skin = game.getSkin();
@@ -123,7 +125,9 @@ public class GameScreen implements Screen {
         font.getData().setScale(1f);
         gameSpriteBatch.end();
 
-
+        if (player.heart.remaining_life < 1){
+            game.goToGameOver(this.level);
+        }
     }
 
     @Override

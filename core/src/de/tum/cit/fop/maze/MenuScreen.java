@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import de.tum.cit.fop.maze.utilities.level.LevelCreator;
 
 /**
  * The MenuScreen class is responsible for displaying the main menu of the game.
@@ -88,6 +90,9 @@ public class MenuScreen implements Screen {
             }
         });
 
+        FileHandle fileHandle = Gdx.files.local("level-5.properties");
+
+        fileHandle.writeString(LevelCreator.createLevel(), false);
     }
 
     @Override

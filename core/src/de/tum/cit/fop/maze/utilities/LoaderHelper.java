@@ -9,13 +9,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.fop.maze.objects.EntryPoint;
 import de.tum.cit.fop.maze.objects.GameObject;
-import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.objects.obstacles.Trap;
+import de.tum.cit.fop.maze.utilities.level.LevelHandler;
 
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 /**
@@ -192,8 +191,8 @@ public class LoaderHelper {
 
 
     public static PlayerSpawnCoordinates getPlayerSpawnCoordinates(String filename, OrthographicCamera camera){
-        String mapContent = MapHandler.readMapFromFile(filename);
-        Map<Integer, List<GameObject>> gameObjects = MapHandler.createGameObjects(mapContent, camera);
+        String mapContent = LevelHandler.readMapFromFile(filename);
+        Map<Integer, List<GameObject>> gameObjects = LevelHandler.createGameObjects(mapContent, camera);
 
         EntryPoint entryPoint = (EntryPoint) gameObjects.get(1).get(0);
 
