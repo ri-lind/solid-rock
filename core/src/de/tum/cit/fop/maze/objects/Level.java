@@ -15,6 +15,7 @@ import de.tum.cit.fop.maze.objects.obstacles.Trap;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.level.LevelHandler;
 import de.tum.cit.fop.maze.utilities.SoundHandler;
+import de.tum.cit.fop.maze.utilities.level.MapCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +46,14 @@ public class Level {
     public GameScreen gameScreen;
 
     public SoundHandler soundHandler;
+    public FitViewport fitViewport;
+    public MapCreator mapCreator;
 
     public Level(String fileName, FitViewport fitViewport, GameScreen gameScreen){
 
         this.gameScreen = gameScreen;
+        this.fitViewport = fitViewport;
+        this.mapCreator = new MapCreator(this); // order is important
         // loads key, enemies, traps, exits, entrances into  the world.
         String mapContent = LevelHandler.readMapFromFile(fileName);
         this.gameObjects = LevelHandler.createGameObjects(mapContent, fitViewport);

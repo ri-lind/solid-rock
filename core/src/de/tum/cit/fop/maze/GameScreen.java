@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -34,6 +35,7 @@ public class GameScreen implements Screen {
     public Player player;
     Level level;
 
+    public Music levelMusic;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -42,9 +44,9 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game, int level_number) {
 
-        Music levelMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/level.mp3"));
-        levelMusic.setVolume(0.1f);
-        levelMusic.play();
+        this.levelMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/level.mp3"));
+        this.levelMusic.setVolume(0.1f);
+        this.levelMusic.play();
         this.game = game;
         this.gameSpriteBatch = game.getSpriteBatch();
         this.skin = game.getSkin();
@@ -74,6 +76,14 @@ public class GameScreen implements Screen {
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.goToMenu();
+        }
+
+        if (Gdx.input.isTouched()) {
+            Vector2 touchPos = new Vector2();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
+            level.fitViewport.unproject(touchPos); // Convert the units to the world units of the viewport
+
+            this.level.mapCreator.spawnAtGivenCoordinates(touchPos.x, touchPos.y);
         }
         // handling user input logic
         LogicHandler.input(game, player, fitViewPort, level, delta); // sets current direction to what the user presses
@@ -156,6 +166,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        this.levelMusic.stop();
         gameSpriteBatch.dispose();
     }
 

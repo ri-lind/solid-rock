@@ -121,8 +121,5 @@ public class LogicHandler {
         // move player into required direction here.
     }
 
-
-    //
-
     
 }

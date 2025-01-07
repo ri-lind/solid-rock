@@ -19,9 +19,10 @@ public class VictoryScreen implements Screen {
 
     private final Stage stage;
 
+    public Sound winningSound;
     public VictoryScreen(MazeRunnerGame game, Level level) {
 
-        Sound winningSound = Gdx.audio.newSound(Gdx.files.internal("sounds/victory.mp3"));
+        winningSound = Gdx.audio.newSound(Gdx.files.internal("sounds/victory.mp3"));
         winningSound.play();
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view

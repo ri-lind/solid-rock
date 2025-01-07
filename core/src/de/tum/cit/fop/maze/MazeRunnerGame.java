@@ -49,12 +49,16 @@ public class MazeRunnerGame extends Game {
      * Switches to the menu screen.
      */
     public void goToMenu() {
-        this.setScreen(new MenuScreen(this)); // Set the current screen to MenuScreen
+        MenuScreen menuScreen = new MenuScreen(this);
+        this.setScreen(menuScreen); // Set the current screen to MenuScreen
+        this.menuScreen = menuScreen;
         if (gameScreen != null) {
+            gameScreen.levelMusic.stop();
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
         if (victoryScreen != null){
+            victoryScreen.winningSound.stop();
             victoryScreen.dispose();
             victoryScreen = null;
         }
@@ -63,18 +67,23 @@ public class MazeRunnerGame extends Game {
     /**
      * Switches to the game screen.
      */
-    public void goToGame(int level_number, Music menuMusic) {
-        menuMusic.stop();
-        this.setScreen(new GameScreen(this, level_number)); // Set the current screen to GameScreen
+    public void goToGame(int level_number) {
+        GameScreen gameScreen = new GameScreen(this, level_number);
+        this.gameScreen = gameScreen;
+        this.setScreen(gameScreen); // Set the current screen to GameScreen
         if (menuScreen != null) {
+            menuScreen.menuMusic.stop();
             menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
         }
     }
 
     public void goToVictory(Level level) {
-        this.setScreen(new VictoryScreen(this, level));
+        VictoryScreen victoryScreen = new VictoryScreen(this, level);
+        this.victoryScreen = victoryScreen;
+        this.setScreen(victoryScreen);
         if(gameScreen != null){
+            gameScreen.levelMusic.stop();
             gameScreen.dispose();
         }
     }
@@ -82,6 +91,7 @@ public class MazeRunnerGame extends Game {
     public void goToGameOver(Level level) {
         this.setScreen(new GameOverScreen(this, level));
         if(gameScreen != null){
+            gameScreen.levelMusic.stop();
             gameScreen.dispose();
         }
     }

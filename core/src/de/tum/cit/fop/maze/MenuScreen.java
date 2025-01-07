@@ -25,7 +25,7 @@ public class MenuScreen implements Screen {
 
     private final Stage stage;
 
-    private Music menuMusic;
+    public Music menuMusic;
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
@@ -54,7 +54,7 @@ public class MenuScreen implements Screen {
         level1Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(1, menuMusic);
+                game.goToGame(1);
             }
         });
         TextButton level2Button = new TextButton("Level 2", game.getSkin());
@@ -62,7 +62,7 @@ public class MenuScreen implements Screen {
         level2Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(2, menuMusic);
+                game.goToGame(2);
             }
         });
         TextButton level3Button = new TextButton("Level 3", game.getSkin());
@@ -70,7 +70,7 @@ public class MenuScreen implements Screen {
         level3Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(3, menuMusic);
+                game.goToGame(3);
             }
         });
         TextButton level4Button = new TextButton("Level 4", game.getSkin());
@@ -78,7 +78,7 @@ public class MenuScreen implements Screen {
         level4Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(4, menuMusic);
+                game.goToGame(4);
             }
         });
         TextButton level5Button = new TextButton("Level 5", game.getSkin());
@@ -86,7 +86,7 @@ public class MenuScreen implements Screen {
         level5Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(5, menuMusic);
+                game.goToGame(5);
             }
         });
 
