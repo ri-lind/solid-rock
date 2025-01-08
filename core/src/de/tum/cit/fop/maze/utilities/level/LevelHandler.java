@@ -142,7 +142,7 @@ public class LevelHandler {
                             gameObject -> {
                                 String coordinates = "";
                                 coordinates += gameObject.sprite.getX() + "," + gameObject.sprite.getY();
-                                mapString[0] += key + "=" + coordinates + "\n";
+                                mapString[0] += coordinates + "=" + key + "\n";
                             }
                     );
                 }

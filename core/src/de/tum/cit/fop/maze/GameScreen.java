@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.*;
 import de.tum.cit.fop.maze.objects.enemy.Breadcrumb;
 import de.tum.cit.fop.maze.utilities.LogicHandler;
+import de.tum.cit.fop.maze.utilities.level.LevelHandler;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -78,13 +80,22 @@ public class GameScreen implements Screen {
             game.goToMenu();
         }
 
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.justTouched()) {
             Vector2 touchPos = new Vector2();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
             level.fitViewport.unproject(touchPos); // Convert the units to the world units of the viewport
 
             this.level.mapCreator.spawnAtGivenCoordinates(touchPos.x, touchPos.y);
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)){
+            // logic to take all current game objects and write the output to a properties file.
+            String propertiesFileString = LevelHandler.convertMapToString(this.level.gameObjects);
+            FileHandle fileHandle = Gdx.files.local("manually-created-level.properties");
+            fileHandle.writeString(propertiesFileString, false);
+        }
+
+
         // handling user input logic
         LogicHandler.input(game, player, fitViewPort, level, delta); // sets current direction to what the user presses
 

@@ -54,13 +54,13 @@ public class MazeRunnerGame extends Game {
         this.menuScreen = menuScreen;
         if (gameScreen != null) {
             gameScreen.levelMusic.stop();
-            gameScreen.dispose(); // Dispose the game screen if it exists
-            gameScreen = null;
+            //gameScreen.dispose(); // Dispose the game screen if it exists
+            //gameScreen = null;
         }
         if (victoryScreen != null){
             victoryScreen.winningSound.stop();
-            victoryScreen.dispose();
-            victoryScreen = null;
+            //victoryScreen.dispose();
+            //victoryScreen = null;
         }
     }
 

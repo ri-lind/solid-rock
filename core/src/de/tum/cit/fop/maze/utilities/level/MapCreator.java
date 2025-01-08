@@ -36,11 +36,13 @@ public class MapCreator {
 
         float xCoordinate = x;
         float yCoordinate = y;
-        if (closestWallOrEmptyWall.sprite.getX() == 0 && closestWallOrEmptyWall.sprite.getY() == 0) {
-            // no closest wall
+        if (closestWallOrEmptyWall.sprite.getX() != 0 && closestWallOrEmptyWall.sprite.getY() != 0) {
 
-        } else {
             Wall closestWall = closestWallOrEmptyWall;
+
+            xCoordinate = closestWall.sprite.getX();
+            yCoordinate = closestWall.sprite.getY();
+
             float xDifference = x - closestWall.sprite.getX();
             float yDifference = y - closestWall.sprite.getY();
 
@@ -57,10 +59,13 @@ public class MapCreator {
                     yCoordinate = closestWall.sprite.getY() + closestWall.sprite.getHeight();
                 }
             }
-            Wall wall = new Wall(xCoordinate, yCoordinate);
-            wallsToBeSpawned.add(wall);
-            this.level.gameObjects.get(0).add(wall); // adds it to the objects to be drawn
+             // adds it to the objects to be drawn
         }
+
+        // add wall with the given coordinates to the game objects.
+        Wall wall = new Wall(xCoordinate, yCoordinate);
+        wallsToBeSpawned.add(wall);
+        this.level.gameObjects.get(0).add(wall);
     }
 
 
