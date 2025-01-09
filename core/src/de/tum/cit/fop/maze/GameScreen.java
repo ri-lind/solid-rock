@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -15,6 +16,8 @@ import de.tum.cit.fop.maze.objects.*;
 import de.tum.cit.fop.maze.objects.enemy.Breadcrumb;
 import de.tum.cit.fop.maze.utilities.LogicHandler;
 import de.tum.cit.fop.maze.utilities.level.LevelHandler;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -39,6 +42,8 @@ public class GameScreen implements Screen {
 
     public Music levelMusic;
 
+
+    public ShapeRenderer shapeRenderer;
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -70,6 +75,7 @@ public class GameScreen implements Screen {
         this.level = new Level(String.format("maps/level-%s.properties", level_number), this.fitViewPort, this);
 
 
+        this.shapeRenderer = new ShapeRenderer();
     }
 
     // Screen interface methods with necessary functionality
@@ -86,6 +92,28 @@ public class GameScreen implements Screen {
             level.fitViewport.unproject(touchPos); // Convert the units to the world units of the viewport
 
             this.level.mapCreator.spawnAtGivenCoordinates(touchPos.x, touchPos.y);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.V)){
+            Vector2 touchPos = new Vector2();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY());
+            level.fitViewport.unproject(touchPos);
+            GameObject gameObject = this.level.mapCreator.getWallInTheVicinity(touchPos.x, touchPos.y);
+            AtomicReference<GameObject> objectToBeRemoved = new AtomicReference<>();
+            this.level.gameObjects.forEach(
+                    ((objectType, gameObjects) -> {
+                        gameObjects.forEach(go -> {
+                            if(go.sprite.getX() == gameObject.sprite.getX() && go.sprite.getY() == gameObject.sprite.getY()){
+                                objectToBeRemoved.set(go);
+
+                            }
+                        });
+                    })
+            );
+
+            this.level.gameObjects.get(0).remove(objectToBeRemoved.get());
+            this.level.gameObjects.get(6).remove(objectToBeRemoved.get());
+
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)){
@@ -111,6 +139,7 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         gameSpriteBatch.setProjectionMatrix(fitViewPort.getCamera().combined);
+        shapeRenderer.setProjectionMatrix(fitViewPort.getCamera().combined); // added for the circle drawing of the mouse click.
 
         // position player sprite
         Sprite currentPlayerFrame = player.getCurrentAnimation().getKeyFrame(stateTime, true);
@@ -148,6 +177,11 @@ public class GameScreen implements Screen {
         font.getData().setScale(1f);
         gameSpriteBatch.end();
 
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        Vector2 pointerPosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        level.fitViewport.unproject(pointerPosition);
+        shapeRenderer.circle(pointerPosition.x, pointerPosition.y, 30f);
+        shapeRenderer.end();
         if (player.heart.remaining_life < 1){
             game.goToGameOver(this.level);
         }
