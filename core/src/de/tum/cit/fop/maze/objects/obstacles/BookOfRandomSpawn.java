@@ -5,9 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.fop.maze.objects.Fire;
 import de.tum.cit.fop.maze.objects.Level;
 import de.tum.cit.fop.maze.objects.Player;
+import de.tum.cit.fop.maze.objects.collectables.Life;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
+
+import java.util.ArrayList;
 
 public class BookOfRandomSpawn extends Obstacle{
 
@@ -81,7 +85,13 @@ public class BookOfRandomSpawn extends Obstacle{
 
     public void spawnFire(Level level){
         // spawn a fire and add it to the objects of the level. Not in maze file originally, dynamic in runtime.
-
+        Fire fire = new Fire(this.sprite.getX(), this.sprite.getY());
+        level.gameObjects.computeIfAbsent(10, k -> new ArrayList<>());
+        level.gameObjects.get(10).add(fire);
     }
-    public void spawnLife(Level level){}
+    public void spawnLife(Level level) {
+        Life life = new Life(this.sprite.getX(), this.sprite.getY());
+
+        level.gameObjects.get(8).add(life);
+    }
 }

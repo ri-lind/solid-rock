@@ -198,6 +198,7 @@ public class Level {
         cleanUpCollectedRandomKill();
         cleanUpCollectedLives();
         cleanUpBooksOfRandomSpawn();
+        cleanUpHitFires();
     }
 
     /**
@@ -335,10 +336,28 @@ public class Level {
 
         }
         for (int i : indicesOfBooksToBeCollected){
-            // play sound for spawning creature
-            this.gameObjects.get(9).remove(i);
+            // if i is not out of bounds.
+            if(!(i == this.gameObjects.size()))
+                this.gameObjects.get(9).remove(i);
         }
+    }
 
+    public void cleanUpHitFires() {
+        List<Integer> indicesOfFiresToBeCollected = new ArrayList<>();
+        if(!this.gameObjects.containsKey(10)){
+            return;
+        }
+        for (int i = 0; i < this.gameObjects.get(10).size(); i++){
+            Fire fireToBeRemoved = (Fire) this.gameObjects.get(10).get(i);
+
+            if (fireToBeRemoved.shouldBeRemoved){
+                indicesOfFiresToBeCollected.add(i);
+            }
+
+        }
+        for (int i : indicesOfFiresToBeCollected){
+            this.gameObjects.get(10).remove(i);
+        }
     }
     private void setNumberOfKeys(){
         this.numberOfKeys = this.gameObjects.get(5).size();

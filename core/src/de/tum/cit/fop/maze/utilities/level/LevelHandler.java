@@ -163,6 +163,7 @@ public class LevelHandler {
         7     | Super Power (Random Kill)
         8     | Heart (Collectable Life)
         9     | Book of Spawn (third obstacle)
+        10    | Fire (spawns from book)
          */
 
 };
