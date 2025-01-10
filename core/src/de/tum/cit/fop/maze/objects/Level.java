@@ -213,8 +213,9 @@ public class Level {
                                 // shortening to a one-liner does not work.
                                 if (gameObject.collide(player)){ // this line calls object.collide
                                     collides.set(true);
-                                    if(objectType == 2 && this.player.keysInPosession == this.numberOfKeys)
+                                    if(objectType == 2 && this.player.keysInPosession == this.numberOfKeys){
                                         this.gameScreen.game.goToVictory(this);
+                                    }
                                 }
                             }
                     );

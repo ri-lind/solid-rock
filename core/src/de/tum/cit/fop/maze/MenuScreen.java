@@ -90,10 +90,7 @@ public class MenuScreen implements Screen {
             }
         });
 
-        /*
-                FileHandle fileHandle = Gdx.files.local("level-5.properties");
-        fileHandle.writeString(LevelCreator.createLevel(), false);
-         */
+
     }
 
     @Override

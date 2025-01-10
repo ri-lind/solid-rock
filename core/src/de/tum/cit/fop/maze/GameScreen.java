@@ -212,7 +212,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         this.levelMusic.stop();
-        gameSpriteBatch.dispose();
+        //gameSpriteBatch.dispose(); //does the game sprite batch need to be disposed?
     }
 
     // Additional methods and logic can be added as needed for the game screen

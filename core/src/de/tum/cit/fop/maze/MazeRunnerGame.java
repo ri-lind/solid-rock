@@ -18,6 +18,7 @@ public class MazeRunnerGame extends Game {
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
     private VictoryScreen victoryScreen;
+    private GameOverScreen gameOverScreen;
 
     // Sprite Batch for rendering
     private SpriteBatch spriteBatch;
@@ -84,15 +85,18 @@ public class MazeRunnerGame extends Game {
         this.setScreen(victoryScreen);
         if(gameScreen != null){
             gameScreen.levelMusic.stop();
-            gameScreen.dispose();
+            //gameScreen.dispose();
+            gameScreen = null;
         }
     }
 
     public void goToGameOver(Level level) {
-        this.setScreen(new GameOverScreen(this, level));
+        GameOverScreen gameOverScreen = new GameOverScreen(this, level);
+        this.setScreen(gameOverScreen);
         if(gameScreen != null){
             gameScreen.levelMusic.stop();
-            gameScreen.dispose();
+            //gameScreen.dispose();
+            gameScreen = null;
         }
     }
 
