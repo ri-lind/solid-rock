@@ -85,7 +85,7 @@ public class MazeRunnerGame extends Game {
         this.setScreen(victoryScreen);
         if(gameScreen != null){
             gameScreen.levelMusic.stop();
-            //gameScreen.dispose();
+            //gameScreen.dispose(); // thi
             gameScreen = null;
         }
     }
