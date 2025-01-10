@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.*;
@@ -19,13 +18,13 @@ import de.tum.cit.fop.maze.objects.collectables.Life;
 import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.enemy.Breadcrumb;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
+import de.tum.cit.fop.maze.objects.obstacles.BookOfRandomSpawn;
 import de.tum.cit.fop.maze.objects.obstacles.Trap;
 import de.tum.cit.fop.maze.utilities.LogicHandler;
 import de.tum.cit.fop.maze.utilities.level.LevelHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -184,6 +183,17 @@ public class GameScreen implements Screen {
             randomKillsAlreadyPresent.add(randomKill);
         }
 
+        // spawn book of random spawn on B press
+        if(Gdx.input.isKeyJustPressed(Input.Keys.B)){
+            Vector2 bookOfRandomSpawnCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            this.level.fitViewport.unproject(bookOfRandomSpawnCoordinates);
+
+            BookOfRandomSpawn bookOfRandomSpawn = new BookOfRandomSpawn(bookOfRandomSpawnCoordinates.x, bookOfRandomSpawnCoordinates.y);
+
+            List<GameObject> bookOfRandomSpawnAlreadyPresent = this.level.gameObjects.computeIfAbsent(9, k -> new ArrayList<>());
+
+            bookOfRandomSpawnAlreadyPresent.add(bookOfRandomSpawn);
+        }
 
         // save current level to a file.
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)){

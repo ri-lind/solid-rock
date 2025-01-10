@@ -11,6 +11,7 @@ import de.tum.cit.fop.maze.objects.collectables.Life;
 import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.objects.hud.ExitArrow;
+import de.tum.cit.fop.maze.objects.obstacles.BookOfRandomSpawn;
 import de.tum.cit.fop.maze.objects.obstacles.Trap;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import de.tum.cit.fop.maze.utilities.level.LevelHandler;
@@ -196,6 +197,7 @@ public class Level {
         cleanUpCollectedKeys();
         cleanUpCollectedRandomKill();
         cleanUpCollectedLives();
+        cleanUpBooksOfRandomSpawn();
     }
 
     /**
@@ -314,7 +316,30 @@ public class Level {
         }
     }
 
+    public void cleanUpBooksOfRandomSpawn(){
+        List<Integer> indicesOfBooksToBeCollected = new ArrayList<>();
+        if(!this.gameObjects.containsKey(9)){
+            return;
+        }
+        for (int i = 0; i < this.gameObjects.get(9).size(); i++){
+            BookOfRandomSpawn bookOfRandomSpawn = (BookOfRandomSpawn) this.gameObjects.get(9).get(i);
 
+            if (bookOfRandomSpawn.shouldBeRemoved){
+                if(bookOfRandomSpawn.spawnFire){
+                    bookOfRandomSpawn.spawnFire(this);
+                } else {
+                    bookOfRandomSpawn.spawnLife(this);
+                }
+                indicesOfBooksToBeCollected.add(i);
+            }
+
+        }
+        for (int i : indicesOfBooksToBeCollected){
+            // play sound for spawning creature
+            this.gameObjects.get(9).remove(i);
+        }
+
+    }
     private void setNumberOfKeys(){
         this.numberOfKeys = this.gameObjects.get(5).size();
     }

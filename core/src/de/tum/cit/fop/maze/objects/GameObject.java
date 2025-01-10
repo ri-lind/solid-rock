@@ -11,6 +11,7 @@ import de.tum.cit.fop.maze.objects.collectables.Key;
 import de.tum.cit.fop.maze.objects.collectables.Life;
 import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
+import de.tum.cit.fop.maze.objects.obstacles.BookOfRandomSpawn;
 import de.tum.cit.fop.maze.objects.obstacles.Trap;
 import de.tum.cit.fop.maze.utilities.ScalingFactor;
 
@@ -87,7 +88,10 @@ public abstract class GameObject {
             object = new RandomKill(x, y);
         } else if (objectType == 8){ // heart
             object = new Life(x, y);
-        }else {
+        }else if(objectType == 9){
+            object = new BookOfRandomSpawn(x,y);
+        }
+        else {
             object =  new RandomKill(x, y);
         }
 

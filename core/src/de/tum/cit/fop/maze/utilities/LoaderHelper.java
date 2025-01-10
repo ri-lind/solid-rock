@@ -12,6 +12,7 @@ import de.tum.cit.fop.maze.objects.EntryPoint;
 import de.tum.cit.fop.maze.objects.GameObject;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.objects.Player;
+import de.tum.cit.fop.maze.objects.obstacles.BookOfRandomSpawn;
 import de.tum.cit.fop.maze.objects.obstacles.Trap;
 import de.tum.cit.fop.maze.utilities.level.LevelHandler;
 
@@ -202,5 +203,30 @@ public class LoaderHelper {
 
 
         return new PlayerSpawnCoordinates(playerX, playerY);
+    }
+
+
+    public static void loadBookOfRandomSpawnAnimations(BookOfRandomSpawn book, int frameWidth, int frameHeight,
+                                                  String spriteSheetFilePath, float x, float y){
+    Array<Sprite> bookAnimation = new Array<>(Sprite.class);
+    Texture texture = new Texture(spriteSheetFilePath);
+
+
+
+    for (int i = 15; i <= 19; i++){
+        TextureRegion textureRegion = new TextureRegion(texture, i * frameWidth, 0, frameWidth, frameHeight);
+
+        Sprite sprite = new Sprite(textureRegion);
+        sprite.setPosition(x, y);
+        sprite.setSize(16, 16);
+
+        bookAnimation.add(sprite);
+    }
+
+    // now it is time to add the smoke, should be about three frames
+
+    // then we add the enemy, or random superpower
+
+    book.animations = new Animation<>(0.5f, bookAnimation);
     }
 }

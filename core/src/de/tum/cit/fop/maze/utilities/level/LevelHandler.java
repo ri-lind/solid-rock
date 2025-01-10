@@ -162,6 +162,7 @@ public class LevelHandler {
         6     | Border Tile
         7     | Super Power (Random Kill)
         8     | Heart (Collectable Life)
+        9     | Book of Spawn (third obstacle)
          */
 
 };
