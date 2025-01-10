@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.*;
@@ -22,6 +23,9 @@ import de.tum.cit.fop.maze.objects.obstacles.Trap;
 import de.tum.cit.fop.maze.utilities.LogicHandler;
 import de.tum.cit.fop.maze.utilities.level.LevelHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -57,7 +61,7 @@ public class GameScreen implements Screen {
     public GameScreen(MazeRunnerGame game, int level_number) {
 
         this.levelMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/level.mp3"));
-        this.levelMusic.setVolume(0.1f);
+        this.levelMusic.setVolume(0.05f);
         this.levelMusic.play();
         this.game = game;
         this.gameSpriteBatch = game.getSpriteBatch();
@@ -88,7 +92,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.goToMenu();
+            game.goToMenu(true);
         }
 
         if (Gdx.input.justTouched()) {
@@ -127,7 +131,9 @@ public class GameScreen implements Screen {
             this.level.fitViewport.unproject(enemyCoordinates);
 
             Enemy enemy = new Enemy(enemyCoordinates.x, enemyCoordinates.y);
-            this.level.gameObjects.get(4).add(enemy);
+
+            List<GameObject> enemies = this.level.gameObjects.computeIfAbsent(4, k-> new ArrayList<>());
+            enemies.add(enemy);
         }
 
         // spawn key on click
@@ -135,8 +141,13 @@ public class GameScreen implements Screen {
             Vector2 keyCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             this.level.fitViewport.unproject(keyCoordinates);
 
+            List<GameObject> keysAlreadyPresent = this.level.gameObjects.get(5) ;
+
             Key key = new Key(keyCoordinates.x, keyCoordinates.y);
-            this.level.gameObjects.get(5).add(key);
+            if(keysAlreadyPresent == null){
+                keysAlreadyPresent = new ArrayList<>();
+            }
+           keysAlreadyPresent.add(key);
             this.level.numberOfKeys++;
         }
 
@@ -155,7 +166,10 @@ public class GameScreen implements Screen {
             this.level.fitViewport.unproject(heartCoordinates);
 
             Life life = new Life(heartCoordinates.x, heartCoordinates.y);
-            this.level.gameObjects.get(8).add(life);
+
+            List<GameObject> livesAlreadyPresent = this.level.gameObjects.computeIfAbsent(8, k -> new ArrayList<>());
+
+            livesAlreadyPresent.add(life);
         }
 
         // spawn random kill on click
@@ -164,7 +178,10 @@ public class GameScreen implements Screen {
             this.level.fitViewport.unproject(randomKillCoordinates);
 
             RandomKill randomKill = new RandomKill(randomKillCoordinates.x, randomKillCoordinates.y);
-            this.level.gameObjects.get(7).add(randomKill);
+
+            List<GameObject> randomKillsAlreadyPresent = this.level.gameObjects.computeIfAbsent(7, k -> new ArrayList<>());
+
+            randomKillsAlreadyPresent.add(randomKill);
         }
 
 

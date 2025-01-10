@@ -43,14 +43,19 @@ public class MazeRunnerGame extends Game {
     public void create() {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin, what is this for?
-        goToMenu(); // Navigate to the menu screen
+        this.goToMenu(false); // Navigate to the menu screen
     }
 
     /**
      * Switches to the menu screen.
      */
-    public void goToMenu() {
-        MenuScreen menuScreen = new MenuScreen(this);
+
+    /**
+     * Switches to the menu screen.
+     */
+    public void goToMenu(boolean paused) {
+        MenuScreen menuScreen = new MenuScreen(this, paused);
+
         this.setScreen(menuScreen); // Set the current screen to MenuScreen
         this.menuScreen = menuScreen;
         if (gameScreen != null) {
@@ -72,6 +77,15 @@ public class MazeRunnerGame extends Game {
         GameScreen gameScreen = new GameScreen(this, level_number);
         this.gameScreen = gameScreen;
         this.setScreen(gameScreen); // Set the current screen to GameScreen
+        if (menuScreen != null) {
+            menuScreen.menuMusic.stop();
+            menuScreen.dispose(); // Dispose the menu screen if it exists
+            menuScreen = null;
+        }
+    }
+
+    public void goToGame() {
+        this.setScreen(this.gameScreen); // Set the current screen to GameScreen
         if (menuScreen != null) {
             menuScreen.menuMusic.stop();
             menuScreen.dispose(); // Dispose the menu screen if it exists

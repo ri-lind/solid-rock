@@ -69,7 +69,7 @@ public class LogicHandler {
 
         // movement animation
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            game.goToMenu();
+            game.goToMenu(true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             player.currentState = "up";
             if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){

@@ -43,7 +43,7 @@ public class GameOverScreen implements Screen {
         goToGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToMenu(); // Change to the game screen when button is pressed
+                game.goToMenu(false); // Change to the game screen when button is pressed
             }
         });
     }

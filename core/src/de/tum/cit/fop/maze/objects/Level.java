@@ -63,7 +63,11 @@ public class Level {
         this.columnBorderTileType.rotate90(true);
         this.tiles = new ArrayList<>();
         this.gameObjects.put(6, loadBorderTiles((OrthographicCamera) fitViewport.getCamera()));
+
         loadInnerTiles((OrthographicCamera) fitViewport.getCamera());
+
+        // for the case where the level loaded does not contain enemies, releant for the level editor.
+        this.gameObjects.computeIfAbsent(4, k -> new ArrayList<>());
 
         this.player = gameScreen.player;
 
