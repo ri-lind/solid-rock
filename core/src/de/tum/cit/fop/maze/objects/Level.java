@@ -42,7 +42,6 @@ public class Level {
     Sprite columnBorderTileType; // check size
     public ExitArrow exitArrow;
 
-    public List<Key> keys;
     public GameScreen gameScreen;
 
     public SoundHandler soundHandler;
@@ -73,9 +72,6 @@ public class Level {
         this.exitArrow = new ExitArrow(exits, this.player);
         player.exitArrow = this.exitArrow;
 
-        @SuppressWarnings("unchecked")
-        List<Key> keys = (List<Key>) (Object) this.gameObjects.get(5);
-        this.keys = keys;
 
         this.playerScore = 0;
 

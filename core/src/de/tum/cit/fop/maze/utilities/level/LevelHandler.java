@@ -161,6 +161,7 @@ public class LevelHandler {
         5     | Key
         6     | Border Tile
         7     | Super Power (Random Kill)
+        8     | Heart (Collectable Life)
          */
 
 };

@@ -28,7 +28,7 @@ public class Breadcrumb {
         Vector2 playerCenter = new Vector2();
         player.sprite.getBoundingRectangle().getCenter(playerCenter);
         // create breadcrumb at given location, but not to be drawn.
-        Texture texture = new Texture(Gdx.files.internal("character_white.png"));
+        Texture texture = new Texture(Gdx.files.internal("transparent_background/character.png"));
         TextureRegion textureRegion = new TextureRegion(texture, 3, 3);
         this.sprite = new Sprite(textureRegion);
         this.sprite.setSize(3, 3);

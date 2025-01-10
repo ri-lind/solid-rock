@@ -25,7 +25,7 @@ public class Trap extends Obstacle {
     static final int spriteSheetRow = 0;
     static final int objectWidth = 32;
     static final int objectHeight = 64;
-    static final String spriteSheetFilePath = "bomb_blue.png";
+    static final String spriteSheetFilePath = "transparent_background/BombExploding.png";
 
     private boolean damageDealt;
     public boolean triggered;

@@ -13,7 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.*;
+import de.tum.cit.fop.maze.objects.collectables.Key;
+import de.tum.cit.fop.maze.objects.collectables.Life;
+import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.enemy.Breadcrumb;
+import de.tum.cit.fop.maze.objects.enemy.Enemy;
+import de.tum.cit.fop.maze.objects.obstacles.Trap;
 import de.tum.cit.fop.maze.utilities.LogicHandler;
 import de.tum.cit.fop.maze.utilities.level.LevelHandler;
 
@@ -94,9 +99,9 @@ public class GameScreen implements Screen {
             this.level.mapCreator.spawnAtGivenCoordinates(touchPos.x, touchPos.y);
         }
 
+        // spawn wall at the current coordinates
         if(Gdx.input.isKeyJustPressed(Input.Keys.V)){
-            Vector2 touchPos = new Vector2();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY());
+            Vector2 touchPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             level.fitViewport.unproject(touchPos);
             GameObject gameObject = this.level.mapCreator.getWallInTheVicinity(touchPos.x, touchPos.y);
             AtomicReference<GameObject> objectToBeRemoved = new AtomicReference<>();
@@ -116,6 +121,54 @@ public class GameScreen implements Screen {
 
         }
 
+        // spawn enemy at current coordinates
+        if(Gdx.input.isKeyJustPressed(Input.Keys.E)){
+            Vector2 enemyCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            this.level.fitViewport.unproject(enemyCoordinates);
+
+            Enemy enemy = new Enemy(enemyCoordinates.x, enemyCoordinates.y);
+            this.level.gameObjects.get(4).add(enemy);
+        }
+
+        // spawn key on click
+        if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
+            Vector2 keyCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            this.level.fitViewport.unproject(keyCoordinates);
+
+            Key key = new Key(keyCoordinates.x, keyCoordinates.y);
+            this.level.gameObjects.get(5).add(key);
+            this.level.numberOfKeys++;
+        }
+
+        // spawn trap on click
+        if(Gdx.input.isKeyJustPressed(Input.Keys.T)){
+            Vector2 trapCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            this.level.fitViewport.unproject(trapCoordinates);
+
+            Trap trap = new Trap(trapCoordinates.x, trapCoordinates.y);
+            this.level.gameObjects.get(3).add(trap);
+        }
+
+        // spawn collectable heart on click
+        if(Gdx.input.isKeyJustPressed(Input.Keys.H)){
+            Vector2 heartCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            this.level.fitViewport.unproject(heartCoordinates);
+
+            Life life = new Life(heartCoordinates.x, heartCoordinates.y);
+            this.level.gameObjects.get(8).add(life);
+        }
+
+        // spawn random kill on click
+        if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
+            Vector2 randomKillCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            this.level.fitViewport.unproject(randomKillCoordinates);
+
+            RandomKill randomKill = new RandomKill(randomKillCoordinates.x, randomKillCoordinates.y);
+            this.level.gameObjects.get(7).add(randomKill);
+        }
+
+
+        // save current level to a file.
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)){
             // logic to take all current game objects and write the output to a properties file.
             String propertiesFileString = LevelHandler.convertMapToString(this.level.gameObjects);

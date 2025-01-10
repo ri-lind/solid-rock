@@ -1,5 +1,6 @@
 package de.tum.cit.fop.maze.objects.enemy;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,7 +24,7 @@ public class Enemy extends Obstacle {
     static final int spriteSheetRow = 0;
     static final int objectWidth = 16;
     static final int objectHeight = 16;
-    public static final String spriteSheetFilePath = "mobs_green.png";
+    public static final String spriteSheetFilePath = "transparent_background/mobs.png";
 
     public Circle hitBox;
     public Circle attackBox; // the enemy attacks
@@ -41,6 +42,9 @@ public class Enemy extends Obstacle {
     // this means, we need to move from there to the right and/or downwards to get the remaining animations
     // everything in a row is in a direction
     public Map<String, Animation<Sprite>> animationMap;
+
+
+    float stateTime = 0;
 
     public Enemy(Vector2 coordinates, int spriteSheetColumn, int spriteSheetRow, String spriteSheetFilePath, int objectWidth, int objectHeight) {
         super(coordinates, spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
@@ -79,12 +83,15 @@ public class Enemy extends Obstacle {
      */
     @Override
     public void draw(SpriteBatch spriteBatch, Player player) {
-
+        if(stateTime != 0){
+            stateTime += Gdx.graphics.getDeltaTime();
+        }
 
         //check if the breadcrumb was followed for 200 milliseconds
         if(this.followingPlayer && Duration.between(this.movementStarted, Instant.now()).toMillis() > 200){
             this.followingPlayer = false;
             this.movementStarted = Instant.now();
+            stateTime=0;
 
         }
         if(!followingPlayer){
@@ -95,6 +102,7 @@ public class Enemy extends Obstacle {
                 if(this.followBox.contains(breadCrumbCenter) && !this.followingPlayer){
                     this.movementStarted = Instant.now();
                     this.followingPlayer = true;
+                    stateTime += Gdx.graphics.getDeltaTime();
                     followPlayerBreadcrumb(breadcrumb);
                     break;
                 }
@@ -106,9 +114,35 @@ public class Enemy extends Obstacle {
         this.sprite.getBoundingRectangle().getCenter(enemyCenter);
         // main logic for proximity action
         damageDealingLogic(player, playerCenter, enemyCenter);
+        String animationMapQuery = "down";
+        if(followingPlayer){
+            if(Math.abs(enemyCenter.y-playerCenter.y) > Math.abs(enemyCenter.x - playerCenter.x)){
+                if(enemyCenter.y > playerCenter.y){
+                    animationMapQuery = "down";
+                }
+                else {
+                    animationMapQuery = "up";
+                }
+            }
+            else if(Math.abs(enemyCenter.y-playerCenter.y) < Math.abs(enemyCenter.x - playerCenter.x)){
+                if(enemyCenter.x > playerCenter.x){
+                    animationMapQuery = "left";
+                }
+                else {
+                    animationMapQuery = "right";
+                }
+            }
+
+            Sprite enemyMovementSprite = this.animationMap.get(animationMapQuery).getKeyFrame(stateTime, true);
+            enemyMovementSprite.setPosition(this.sprite.getX(), this.sprite.getY());
+            enemyMovementSprite.draw(spriteBatch);
+
+        }
+        else{
+            this.sprite.draw(spriteBatch);
+        }
 
 
-        this.sprite.draw(spriteBatch);
     }
 
     /**
@@ -181,19 +215,22 @@ public class Enemy extends Obstacle {
         Vector2 breadcrumbCenter = new Vector2();
         breadCrumb.sprite.getBoundingRectangle().getCenter(breadcrumbCenter);
 
-        if(breadCrumb.sprite.getX() < this.sprite.getX()){
+        float xDifference = breadCrumb.sprite.getX() - this.sprite.getX();
+        float yDifference = breadCrumb.sprite.getY() - this.sprite.getY();
+
+        if(xDifference < 0){
             this.sprite.translateX(-this.SPEED);
             this.center.add(-this.SPEED, 0);
         }
-        if(breadCrumb.sprite.getX() > this.sprite.getX()){
+        if(xDifference > 0){
             this.sprite.translateX(this.SPEED);
             this.center.add(this.SPEED, 0);
         }
-        if(breadCrumb.sprite.getY() < this.sprite.getY()){
+        if(yDifference < 0){
             this.sprite.translateY(-this.SPEED);
             this.center.add(0, -this.SPEED);
         }
-        if(breadCrumb.sprite.getY() > this.sprite.getY()){
+        if(yDifference > 0){
             this.sprite.translateY(this.SPEED);
             this.center.add(0, this.SPEED);
         }
