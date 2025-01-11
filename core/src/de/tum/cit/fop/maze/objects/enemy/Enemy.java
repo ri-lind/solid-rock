@@ -68,7 +68,7 @@ public class Enemy extends Obstacle {
 
         followBox = new Circle();
         followBox.setPosition(this.center);
-        followBox.setRadius(60f);
+        followBox.setRadius(30f);
 
     }
 
@@ -199,6 +199,7 @@ public class Enemy extends Obstacle {
     private void damageDealingLogic(Player player, Vector2 playerCenter, Vector2 enemyCenter){
         if (this.overlapsHitbox(player)) {
             playerAttack(player, playerCenter, enemyCenter);
+
         }
         if(this.overlapsAttackBox(player) && !damageDealt){
             player.heart.sustainsDamage();

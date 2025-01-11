@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.fop.maze.objects.Level;
+import de.tum.cit.fop.maze.objects.Player;
 
 public class VictoryScreen implements Screen {
 
@@ -22,7 +23,7 @@ public class VictoryScreen implements Screen {
 
     public Sound winningSound;
     public VictoryScreen(MazeRunnerGame game, Level level) {
-
+        Player.playerMovement.stop();
         winningSound = Gdx.audio.newSound(Gdx.files.internal("sounds/victory.mp3"));
         winningSound.play();
         var camera = new OrthographicCamera();

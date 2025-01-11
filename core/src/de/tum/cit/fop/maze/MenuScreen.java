@@ -36,6 +36,7 @@ public class MenuScreen implements Screen {
 
         this.menuMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
         this.menuMusic.play();
+        this.menuMusic.setVolume(0.2f);
         this.menuMusic.setLooping(true);
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view

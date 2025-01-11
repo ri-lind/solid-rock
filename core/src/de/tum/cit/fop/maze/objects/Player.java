@@ -23,7 +23,7 @@ import java.util.Hashtable;
  */
 public class Player {
 
-    static Sound playerMovement = Gdx.audio.newSound(Gdx.files.internal("sounds/player-movement.mp3"));
+    public static Sound playerMovement = Gdx.audio.newSound(Gdx.files.internal("sounds/player-movement.mp3"));
 
     public Dictionary<String, Animation<Sprite>> animations;
     // the animations dictionary and calculate next move methods depend on this field
@@ -136,7 +136,7 @@ public class Player {
     private void playMovementSound() {
 
         if (!this.playingMovementSound) {
-            long currentSoundId = playerMovement.loop(0.1f);
+            long currentSoundId = playerMovement.loop(0.3f);
             playerMovement.setPitch(currentSoundId, 2f);
 
             this.playingMovementSound = true;

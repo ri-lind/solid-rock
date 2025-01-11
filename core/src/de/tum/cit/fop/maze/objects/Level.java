@@ -34,7 +34,7 @@ public class Level {
     public int numberOfKeys;
     public int playerScore;
     public Map<Integer, List<GameObject>> gameObjects;
-    private Player player;
+    public Player player;
 
     public List<Sprite> tiles;
 
@@ -217,6 +217,7 @@ public class Level {
                                 if (gameObject.collide(player)){ // this line calls object.collide
                                     collides.set(true);
                                     if(objectType == 2 && this.player.keysInPosession == this.numberOfKeys){
+                                        Player.playerMovement.stop();
                                         this.gameScreen.game.goToVictory(this);
                                     }
                                 }

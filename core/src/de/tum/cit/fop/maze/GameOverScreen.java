@@ -14,13 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.fop.maze.objects.Level;
+import de.tum.cit.fop.maze.objects.Player;
 
 public class GameOverScreen implements Screen {
 
     private final Stage stage;
 
     public GameOverScreen(MazeRunnerGame game, Level level) {
-
+        Player.playerMovement.stop();
         Sound gameOver = Gdx.audio.newSound(Gdx.files.internal("sounds/game-over.mp3"));
         gameOver.play();
         var camera = new OrthographicCamera();
