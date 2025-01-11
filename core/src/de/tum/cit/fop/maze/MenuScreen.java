@@ -36,6 +36,7 @@ public class MenuScreen implements Screen {
 
         this.menuMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
         this.menuMusic.play();
+        this.menuMusic.setLooping(true);
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 
@@ -96,6 +97,7 @@ public class MenuScreen implements Screen {
 
     public MenuScreen(MazeRunnerGame game, boolean paused){
         this(game);
+        Music menuMusic = this.menuMusic;
         if (paused) {
             AtomicReference<Table> tableAtomicReference = new AtomicReference<>(new Table());
             stage.getActors().forEach((actor -> {
@@ -110,6 +112,7 @@ public class MenuScreen implements Screen {
             goBackToLevel.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    menuMusic.stop();
                     game.goToGame();
                 }
             });

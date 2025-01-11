@@ -15,6 +15,7 @@ import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class which handles the user input with respect to the player character.
@@ -46,6 +47,8 @@ public class LogicHandler {
             // remove randomly if superpower picked up
             if(player.superPower != null){
                 if(player.superPower.getClass() == RandomKill.class){
+                    RandomKill.randomKillAttackSound.play(01.f);
+
                     @SuppressWarnings("unchecked")
                     List<Enemy> enemyList = (List<Enemy>) (Object) level.gameObjects.get(4);
                     if( !enemyList.isEmpty()) {
@@ -107,9 +110,6 @@ public class LogicHandler {
             }
         }
 
-        if (player.currentState.toLowerCase().contains("running")) {
-            //playerWalkingSound.play(0.1f);
-        }
         Player temporaryPlayer = new Player(player);
         temporaryPlayer.calculateNextMove(false);
 

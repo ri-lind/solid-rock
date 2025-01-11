@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.objects.EntryPoint;
+import de.tum.cit.fop.maze.objects.Fire;
 import de.tum.cit.fop.maze.objects.GameObject;
 import de.tum.cit.fop.maze.objects.enemy.Enemy;
 import de.tum.cit.fop.maze.objects.Player;
@@ -228,5 +229,25 @@ public class LoaderHelper {
     // then we add the enemy, or random superpower
 
     book.animations = new Animation<>(0.5f, bookAnimation);
+    }
+
+
+    public static void loadFireAnimations(Fire fire, int frameWidth, int frameHeight,
+                                           String spriteFileSheetPath, float x, float y){
+        Array<Sprite> fireSpritesArray = new Array<>(Sprite.class);
+
+        Texture texture = new Texture(Gdx.files.internal(spriteFileSheetPath));
+
+        for(int i = 4; i < 11; i++){
+            TextureRegion textureRegion = new TextureRegion(texture, i * frameWidth, 3 * frameHeight, frameWidth, frameHeight);
+
+            Sprite sprite = new Sprite(textureRegion);
+            sprite.setPosition(x, y);
+            sprite.setSize(16, 16);
+
+            fireSpritesArray.add(sprite);
+        }
+
+        fire.animations = new Animation<>(0.3f, fireSpritesArray);
     }
 }

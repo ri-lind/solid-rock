@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.obstacles.Obstacle;
 import de.tum.cit.fop.maze.objects.Player;
 import de.tum.cit.fop.maze.utilities.LoaderHelper;
@@ -153,21 +154,25 @@ public class Enemy extends Obstacle {
      */
     public void playerAttack(Player player, Vector2 playerCenter, Vector2 enemyCenter) {
         if (player.currentState.contains("attacking")) {
-            if (player.currentState.contains("left") && playerCenter.x > enemyCenter.x) {
+            if (player.currentState.contains("left") && playerCenter.x >= enemyCenter.x) {
                 System.out.println("Attack succeeded!");
                 this.toBeRemoved = true;
+                RandomKill.randomKillAttackSound.play(01.f);
             }
             if (player.currentState.contains("right") && playerCenter.x < enemyCenter.x) {
                 System.out.println("Attack succeeded!");
                 this.toBeRemoved = true;
+                RandomKill.randomKillAttackSound.play(01.f);
             }
             if (player.currentState.contains("up") && playerCenter.y < enemyCenter.y) {
                 System.out.println("Attack succeeded!");
                 this.toBeRemoved = true;
+                RandomKill.randomKillAttackSound.play(01.f);
             }
-            if (player.currentState.contains("down") && playerCenter.y > enemyCenter.y) {
+            if (player.currentState.contains("down") && playerCenter.y >= enemyCenter.y) {
                 System.out.println("Attack succeeded!");
                 this.toBeRemoved = true;
+                RandomKill.randomKillAttackSound.play(01.f);
             }
 
         }

@@ -15,7 +15,6 @@ public class SoundHandler {
     public Sound enemyDeath;
     public Sound keyPickup;
     public Sound healthRestore;
-    public Sound playerMovement;
 
     int counter = 0;
 
@@ -24,8 +23,6 @@ public class SoundHandler {
         this.enemyDeath =  Gdx.audio.newSound(Gdx.files.internal("sounds/enemy-death.mp3"));
         this.keyPickup = Gdx.audio.newSound(Gdx.files.internal("sounds/item-pickup.mp3"));
         this.healthRestore = Gdx.audio.newSound(Gdx.files.internal("sounds/health-restore.mp3"));
-        this.playerMovement = Gdx.audio.newSound(Gdx.files.internal("sounds/player-movement.mp3"));
-
         this.swordSlashSoundPlayed = false;
     }
 

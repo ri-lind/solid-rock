@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze.objects;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -12,10 +13,8 @@ import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.List;
 
 /**
  * Represents a player, in the sense that it contains the animations, coordinates and has some manipulation
@@ -23,6 +22,9 @@ import java.util.List;
  * class and the method InputHandler.input().
  */
 public class Player {
+
+    static Sound playerMovement = Gdx.audio.newSound(Gdx.files.internal("sounds/player-movement.mp3"));
+
     public Dictionary<String, Animation<Sprite>> animations;
     // the animations dictionary and calculate next move methods depend on this field
     public String currentState = "";
@@ -37,6 +39,8 @@ public class Player {
     public int keysInPosession;
     public SuperPower superPower;
 
+
+    boolean playingMovementSound = false;
     /**
      * Used for normal visible player.
      */
@@ -90,6 +94,7 @@ public class Player {
         if ("down".contains(currentState.toLowerCase()) || currentState.toLowerCase().contains("down-running")){
             this.sprite.translateY(-SPEED);
             if(truePlayer){
+                this.playMovementSound();
                 this.heart.sprite.translateY(-SPEED);
                 this.exitArrow.sprite.translateY(-SPEED);
             }
@@ -97,6 +102,7 @@ public class Player {
                 currentState.toLowerCase().contains("right-running")) { // right
             this.sprite.translateX(SPEED);
             if (truePlayer){
+                this.playMovementSound();
                 this.heart.sprite.translateX(SPEED);
                 this.exitArrow.sprite.translateX(SPEED);
             }
@@ -104,6 +110,7 @@ public class Player {
                 currentState.toLowerCase().contains("up-running")) {// up
             this.sprite.translateY(SPEED);
             if ( truePlayer) {
+                this.playMovementSound();
                 this.heart.sprite.translateY(SPEED);
                 this.exitArrow.sprite.translateY(SPEED);
             }
@@ -111,15 +118,35 @@ public class Player {
                 currentState.toLowerCase().contains("left-running")) {// left
             this.sprite.translateX(-SPEED);
             if(truePlayer){
+                this.playMovementSound();
                 this.heart.sprite.translateX(-SPEED);
                 this.exitArrow.sprite.translateX(-SPEED);
 
             }
         }
          SPEED = 1f; // reset speed after movement
+        this.stopPlayingMovementSound();
     }
 
     public Animation<Sprite> getCurrentAnimation(){
         return this.animations.get(currentState.toLowerCase().replace("-running", ""));
+    }
+
+
+    private void playMovementSound() {
+
+        if (!this.playingMovementSound) {
+            long currentSoundId = playerMovement.loop(0.1f);
+            playerMovement.setPitch(currentSoundId, 2f);
+
+            this.playingMovementSound = true;
+        }
+    }
+
+    private void stopPlayingMovementSound(){
+        if(this.playingMovementSound && this.currentState.contains("standing")){
+            playerMovement.stop();
+            this.playingMovementSound = false;
+        }
     }
 }

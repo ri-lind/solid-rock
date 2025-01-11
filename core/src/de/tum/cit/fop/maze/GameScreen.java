@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -42,7 +43,7 @@ public class GameScreen implements Screen {
 
 
     private final BitmapFont font;
-    private final FitViewport fitViewPort;
+    private FitViewport fitViewPort;
     float stateTime;
 
     public Player player;
@@ -60,14 +61,15 @@ public class GameScreen implements Screen {
     public GameScreen(MazeRunnerGame game, int level_number) {
 
         this.levelMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/level.mp3"));
-        this.levelMusic.setVolume(0.05f);
-        this.levelMusic.play();
+
         this.game = game;
         this.gameSpriteBatch = game.getSpriteBatch();
         this.skin = game.getSkin();
 
         // setting up camera and viewport for game screen
         OrthographicCamera camera = new OrthographicCamera();
+
+        camera.zoom = 1;
         fitViewPort = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         fitViewPort.apply(true);
         camera.setToOrtho(false, fitViewPort.getWorldWidth(), fitViewPort.getWorldHeight());
@@ -82,8 +84,11 @@ public class GameScreen implements Screen {
         this.player = new Player(mapFileName, this.fitViewPort);
         this.level = new Level(String.format("maps/level-%s.properties", level_number), this.fitViewPort, this);
 
-
         this.shapeRenderer = new ShapeRenderer();
+
+        this.levelMusic.setVolume(0.05f);
+        this.levelMusic.play();
+        this.levelMusic.setLooping(true);
     }
 
     // Screen interface methods with necessary functionality
@@ -94,6 +99,9 @@ public class GameScreen implements Screen {
             game.goToMenu(true);
         }
 
+        /*
+        Transform the current wall spawn method, into a zoom method.
+
         if (Gdx.input.justTouched()) {
             Vector2 touchPos = new Vector2();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
@@ -101,8 +109,31 @@ public class GameScreen implements Screen {
 
             this.level.mapCreator.spawnAtGivenCoordinates(touchPos.x, touchPos.y);
         }
+        */
 
-        // spawn wall at the current coordinates
+        if (Gdx.input.justTouched()) {
+            Vector2 touchPos = new Vector2();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
+            level.fitViewport.unproject(touchPos); // Convert the units to the world units of the viewport
+
+            OrthographicCamera camera = (OrthographicCamera) fitViewPort.getCamera();
+            Vector2 cameraPosition = new Vector2(camera.position.x, camera.position.y);
+            Vector2 movement = touchPos.sub(cameraPosition);
+
+            camera.translate(movement);
+            camera.zoom = 0.5f;
+            camera.update();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            OrthographicCamera camera = (OrthographicCamera) fitViewPort.getCamera();
+            camera.zoom = 1f;
+            this.fitViewPort.apply(true);
+            camera.setToOrtho(false, fitViewPort.getWorldWidth(), fitViewPort.getWorldHeight());
+        }
+
+
+        // delete wall at the current coordinates
         if(Gdx.input.isKeyJustPressed(Input.Keys.V)){
             Vector2 touchPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             level.fitViewport.unproject(touchPos);
@@ -218,6 +249,8 @@ public class GameScreen implements Screen {
         // setting up the drawing
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+
+
         gameSpriteBatch.setProjectionMatrix(fitViewPort.getCamera().combined);
         shapeRenderer.setProjectionMatrix(fitViewPort.getCamera().combined); // added for the circle drawing of the mouse click.
 

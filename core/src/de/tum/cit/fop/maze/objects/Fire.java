@@ -1,10 +1,12 @@
 package de.tum.cit.fop.maze.objects;
 
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.fop.maze.utilities.LoaderHelper;
 
 public class Fire extends GameObject{
 
@@ -16,9 +18,16 @@ public class Fire extends GameObject{
 
     public boolean shouldBeRemoved = false;
 
+    public Animation<Sprite> animations;
+
+    float stateTime;
+
     public Fire(Vector2 coordinates, int spriteSheetColumn, int spriteSheetRow,
                String spriteSheetFilePath, int objectWidth, int objectHeight) {
         super(coordinates, spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
+
+        // load animations into the class
+        LoaderHelper.loadFireAnimations(this, objectWidth, objectHeight, spriteSheetFilePath, coordinates.x, coordinates.y);
         this.sprite.setSize(16, 16);
     }
 
@@ -43,11 +52,13 @@ public class Fire extends GameObject{
 
     @Override
     public void draw(SpriteBatch spriteBatch, Player player) {
+        stateTime+= Gdx.graphics.getDeltaTime();
         if(this.sprite.getBoundingRectangle().overlaps(player.sprite.getBoundingRectangle())){
             player.heart.sustainsDamage(); // deal damage
             this.shouldBeRemoved = true;
         } else {
-            this.sprite.draw(spriteBatch);
+            Sprite sprite = this.animations.getKeyFrame(stateTime, true);
+            sprite.draw(spriteBatch);
         }
     }
 

@@ -236,9 +236,12 @@ public class Level {
                 indicesOfEnemiesToBeRemoved.add(i);
         }
         for (int i : indicesOfEnemiesToBeRemoved){
-            this.gameObjects.get(4).remove(i);
-            this.soundHandler.enemyDeath.play();
-            playerScore += 100;
+            if(i != indicesOfEnemiesToBeRemoved.size()){
+                this.gameObjects.get(4).remove(i);
+                this.soundHandler.enemyDeath.play();
+                playerScore += 100;
+            }
+
         }
 
     }
