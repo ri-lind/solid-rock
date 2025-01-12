@@ -241,6 +241,9 @@ public class Level {
                 this.gameObjects.get(4).remove(i);
                 this.soundHandler.enemyDeath.play();
                 playerScore += 100;
+            } else {
+                this.gameObjects.get(4).remove(i-1);
+                playerScore+=100;
             }
 
         }

@@ -3,14 +3,18 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.fop.maze.objects.Level;
@@ -43,17 +47,23 @@ public class MenuScreen implements Screen {
 
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
         stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
+        VerticalGroup verticalGroup = new VerticalGroup();
+        verticalGroup.setFillParent(true);
+        stage.addActor(verticalGroup);
 
-        Table table = new Table(); // Create a table for layout
-        table.setFillParent(true); // Make the table fill the stage
-        stage.addActor(table); // Add the table to the stage
+        verticalGroup.addActor(new Label("Solid Rock", game.getSkin(), "title"));
+        verticalGroup.addActor(new Label(" ", game.getSkin(), "title"));
+
 
         // Add a label as a title
-        table.add(new Label("Solid Rock", game.getSkin(), "title")).padBottom(80).row();
-
+        Actor placeholder1 = new Label("", game.getSkin());
+        Actor placeholder2 = new Label("", game.getSkin());
+        Actor placeholder3 = new Label("", game.getSkin());
+        Actor placeholder4 = new Label("", game.getSkin());
 
         TextButton level1Button = new TextButton("Level 1", game.getSkin());
-        table.add(level1Button).padBottom(50).width(300).row();
+        verticalGroup.addActor(level1Button);//.padBottom(50).width(300).row();
+        verticalGroup.addActor(placeholder1);
         level1Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -61,7 +71,8 @@ public class MenuScreen implements Screen {
             }
         });
         TextButton level2Button = new TextButton("Level 2", game.getSkin());
-        table.add(level2Button).padBottom(50).width(300).row();
+        verticalGroup.addActor(level2Button);
+        verticalGroup.addActor(placeholder2);
         level2Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -69,7 +80,8 @@ public class MenuScreen implements Screen {
             }
         });
         TextButton level3Button = new TextButton("Level 3", game.getSkin());
-        table.add(level3Button).padBottom(50).width(300).row();
+        verticalGroup.addActor(level3Button);
+        verticalGroup.addActor(placeholder3);
         level3Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -77,7 +89,8 @@ public class MenuScreen implements Screen {
             }
         });
         TextButton level4Button = new TextButton("Level 4", game.getSkin());
-        table.add(level4Button).padBottom(50).width(300).row();
+        verticalGroup.addActor(level4Button);
+        verticalGroup.addActor(placeholder4);
         level4Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -85,7 +98,7 @@ public class MenuScreen implements Screen {
             }
         });
         TextButton level5Button = new TextButton("Level 5", game.getSkin());
-        table.add(level5Button).padBottom(50).width(300).row();
+        verticalGroup.addActor(level5Button);
         level5Button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -100,16 +113,17 @@ public class MenuScreen implements Screen {
         this(game);
         Music menuMusic = this.menuMusic;
         if (paused) {
-            AtomicReference<Table> tableAtomicReference = new AtomicReference<>(new Table());
+            AtomicReference<VerticalGroup> verticalGroupAtomicReference = new AtomicReference<>(new VerticalGroup());
             stage.getActors().forEach((actor -> {
-                if (actor.getClass() == Table.class){
-                    tableAtomicReference.set((Table) (Object) actor);
+                if (actor.getClass() == VerticalGroup.class){
+                    verticalGroupAtomicReference.set((VerticalGroup) actor);
                 }
             }));
-            Table table = tableAtomicReference.get();
-
-            TextButton goBackToLevel = new TextButton("Go Back To Level", game.getSkin());
-            table.add(goBackToLevel).padBottom(50).width(300).row();
+            VerticalGroup verticalGroup = verticalGroupAtomicReference.get();
+            TextButton goBackToLevel = new TextButton("Resume", game.getSkin());
+            Actor placeholder = new Label("", game.getSkin());
+            verticalGroup.addActorAt(2, goBackToLevel);
+            verticalGroup.addActorAt(3, placeholder);
             goBackToLevel.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
