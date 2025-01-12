@@ -237,14 +237,11 @@ public class Level {
                 indicesOfEnemiesToBeRemoved.add(i);
         }
         for (int i : indicesOfEnemiesToBeRemoved){
-            if(i != indicesOfEnemiesToBeRemoved.size()){
-                this.gameObjects.get(4).remove(i);
-                this.soundHandler.enemyDeath.play();
-                playerScore += 100;
-            } else {
-                this.gameObjects.get(4).remove(i-1);
-                playerScore+=100;
-            }
+            this.gameObjects.get(4).remove(i);
+            this.soundHandler.enemyDeath.play();
+            playerScore += 100;
+
+
 
         }
 

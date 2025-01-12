@@ -68,7 +68,7 @@ public class Enemy extends Obstacle {
 
         followBox = new Circle();
         followBox.setPosition(this.center);
-        followBox.setRadius(30f);
+        followBox.setRadius(60f);
 
     }
 
@@ -93,8 +93,8 @@ public class Enemy extends Obstacle {
             this.followingPlayer = false;
             this.movementStarted = Instant.now();
             stateTime=0;
-
         }
+
         if(!followingPlayer){
             for (int i = 0; i < Breadcrumb.allPlayerBreadCrumbs.size(); i++){
                 Breadcrumb breadcrumb = Breadcrumb.allPlayerBreadCrumbs.get(i);
@@ -113,9 +113,11 @@ public class Enemy extends Obstacle {
         player.sprite.getBoundingRectangle().getCenter(playerCenter);
         Vector2 enemyCenter = new Vector2();
         this.sprite.getBoundingRectangle().getCenter(enemyCenter);
-        // main logic for proximity action
+        // deals damage to player just once.
         damageDealingLogic(player, playerCenter, enemyCenter);
+        // standing still position is down-facing
         String animationMapQuery = "down";
+        // animate enemy direction movement correctly
         if(followingPlayer){
             if(Math.abs(enemyCenter.y-playerCenter.y) > Math.abs(enemyCenter.x - playerCenter.x)){
                 if(enemyCenter.y > playerCenter.y){
@@ -133,7 +135,8 @@ public class Enemy extends Obstacle {
                     animationMapQuery = "right";
                 }
             }
-
+            // get frame from animation and draw at the correct coordinates,
+            // since the sprites of the animation do not contain the correct coordinates.
             Sprite enemyMovementSprite = this.animationMap.get(animationMapQuery).getKeyFrame(stateTime, true);
             enemyMovementSprite.setPosition(this.sprite.getX(), this.sprite.getY());
             enemyMovementSprite.draw(spriteBatch);
@@ -157,22 +160,18 @@ public class Enemy extends Obstacle {
             if (player.currentState.contains("left") && playerCenter.x >= enemyCenter.x) {
                 System.out.println("Attack succeeded!");
                 this.toBeRemoved = true;
-                RandomKill.randomKillAttackSound.play(01.f);
             }
             if (player.currentState.contains("right") && playerCenter.x < enemyCenter.x) {
                 System.out.println("Attack succeeded!");
                 this.toBeRemoved = true;
-                RandomKill.randomKillAttackSound.play(01.f);
             }
             if (player.currentState.contains("up") && playerCenter.y < enemyCenter.y) {
                 System.out.println("Attack succeeded!");
                 this.toBeRemoved = true;
-                RandomKill.randomKillAttackSound.play(01.f);
             }
             if (player.currentState.contains("down") && playerCenter.y >= enemyCenter.y) {
                 System.out.println("Attack succeeded!");
                 this.toBeRemoved = true;
-                RandomKill.randomKillAttackSound.play(01.f);
             }
 
         }
@@ -189,11 +188,6 @@ public class Enemy extends Obstacle {
         Vector2 playerCenter = new Vector2();
         player.sprite.getBoundingRectangle().getCenter(playerCenter);
         return this.attackBox.contains(playerCenter);
-    }
-    private boolean overlapsFollowBox(Player player) {
-        Vector2 playerCenter = new Vector2();
-        player.sprite.getBoundingRectangle().getCenter(playerCenter);
-        return this.followBox.contains(playerCenter);
     }
 
     private void damageDealingLogic(Player player, Vector2 playerCenter, Vector2 enemyCenter){

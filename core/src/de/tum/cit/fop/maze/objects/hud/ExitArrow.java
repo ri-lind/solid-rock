@@ -78,21 +78,24 @@ public class ExitArrow {
     private void pointTo(Exit exit){
         // will need to rotate the sprite based on the exit.
         // sprite position horizontal
-        Vector2 vectorToExit = calculateDirectionToExit(exit);
+        RightDirection rightDirection = calculateDirectionToExit(exit);
+        Vector2 vectorToExit = rightDirection.rightDirectionVector() ;
+
         float angle = MathUtilities.angleBetween(this.currentDirection, vectorToExit);
+        angle+= 180 * rightDirection.isExitAbove;
 
         this.sprite.setRotation(angle);
 
     }
 
-    private Vector2 calculateDirectionToExit(Exit exit){
+    private RightDirection calculateDirectionToExit(Exit exit){
         Vector2 playerCenter = new Vector2();
         this.player.sprite.getBoundingRectangle().getCenter(playerCenter);
 
         Vector2 exitCenter = new Vector2();
         exit.sprite.getBoundingRectangle().getCenter(exitCenter);
 
-        return playerCenter.sub(exitCenter);
+        return new RightDirection(playerCenter, exitCenter);
     }
 
 }

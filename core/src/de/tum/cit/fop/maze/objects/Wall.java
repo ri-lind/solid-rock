@@ -20,7 +20,4 @@ public class Wall extends Obstacle {
         this(new Vector2(x, y), Wall.spriteSheetColumn, Wall.spriteSheetRow, Wall.objectWidth, Wall.objectHeight, spriteSheetFilePath);
     }
 
-
-    // for trap specifically
-
 }
