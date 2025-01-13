@@ -36,7 +36,6 @@ public class GameOverScreen implements Screen {
 
         // Add a label as a title
         table.add(new Label("YOU DIED", game.getSkin(), "title")).padBottom(80).row();
-        table.add(new Label("Score: " + level.playerScore, game.getSkin(), "bold")).padBottom(80).row();
 
         // Create and add a button to go to the game screen
         TextButton goToGameButton = new TextButton("Go To Main Menu", game.getSkin());

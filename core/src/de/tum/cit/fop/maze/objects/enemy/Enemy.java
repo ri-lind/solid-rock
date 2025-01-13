@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import de.tum.cit.fop.maze.objects.GameObject;
 import de.tum.cit.fop.maze.objects.collectables.RandomKill;
 import de.tum.cit.fop.maze.objects.obstacles.Obstacle;
 import de.tum.cit.fop.maze.objects.Player;
@@ -14,12 +16,14 @@ import de.tum.cit.fop.maze.utilities.LoaderHelper;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class Enemy extends Obstacle {
 
 
-    public float SPEED = 5f;
+    public float SPEED = 1f;
 
     static final int spriteSheetColumn = 9;
     static final int spriteSheetRow = 0;
@@ -46,6 +50,8 @@ public class Enemy extends Obstacle {
 
 
     float stateTime = 0;
+
+    public List<GameObject> walls;
 
     public Enemy(Vector2 coordinates, int spriteSheetColumn, int spriteSheetRow, String spriteSheetFilePath, int objectWidth, int objectHeight) {
         super(coordinates, spriteSheetColumn, spriteSheetRow, spriteSheetFilePath, objectWidth, objectHeight);
@@ -89,10 +95,9 @@ public class Enemy extends Obstacle {
         }
 
         //check if the breadcrumb was followed for 200 milliseconds
-        if(this.followingPlayer && Duration.between(this.movementStarted, Instant.now()).toMillis() > 200){
+        if(this.followingPlayer && Duration.between(this.movementStarted, Instant.now()).toMillis() > 40){
             this.followingPlayer = false;
             this.movementStarted = Instant.now();
-            stateTime=0;
         }
 
         if(!followingPlayer){
@@ -104,6 +109,7 @@ public class Enemy extends Obstacle {
                     this.movementStarted = Instant.now();
                     this.followingPlayer = true;
                     stateTime += Gdx.graphics.getDeltaTime();
+
                     followPlayerBreadcrumb(breadcrumb);
                     break;
                 }
@@ -145,7 +151,6 @@ public class Enemy extends Obstacle {
         else{
             this.sprite.draw(spriteBatch);
         }
-
 
     }
 
@@ -211,9 +216,32 @@ public class Enemy extends Obstacle {
     }
     // implement this logic later. For now, just make the enemy chase the player when in range.
     private void followPlayerBreadcrumb(Breadcrumb breadCrumb){
-        // we have speed. this method is called 60 times per second more or less.
-        Vector2 breadcrumbCenter = new Vector2();
-        breadCrumb.sprite.getBoundingRectangle().getCenter(breadcrumbCenter);
+
+        // do not follow breadcrumb if there are walls between enemy and breadcrumb
+        Array<Vector2> pointsBetween = new Array<>(Vector2.class);
+
+        Vector2 enemyPosition = new Vector2(this.sprite.getX(), this.sprite.getY());
+        Vector2 breadCrumbPosition = new Vector2(breadCrumb.sprite.getX(), breadCrumb.sprite.getY());
+        Vector2 sum = new Vector2(enemyPosition.x + breadCrumbPosition.x, enemyPosition.y+ breadCrumbPosition.y);
+        Vector2 middle = new Vector2(sum.x/2, sum.y/2);
+        Vector2 pointBetweenEnemyAndMiddle = new Vector2((enemyPosition.x+middle.x)/2,
+                (enemyPosition.y + middle.y)/2);
+        Vector2 pointBetweenMiddleAndBreadCrumb = new Vector2((breadCrumbPosition.x+middle.x)/2,
+                (breadCrumbPosition.y + middle.y)/2);
+
+        //pointsBetween.add(enemyPosition);
+        pointsBetween.add(pointBetweenEnemyAndMiddle);
+        pointsBetween.add(middle);
+        pointsBetween.add(pointBetweenMiddleAndBreadCrumb);
+        pointsBetween.add(breadCrumbPosition);
+
+        for (Vector2 pointBetween : pointsBetween){
+            for (GameObject gameObject : this.walls){
+                if (gameObject.sprite.getBoundingRectangle().contains(pointBetween)){
+                    return;
+                }
+            }
+        }
 
         float xDifference = breadCrumb.sprite.getX() - this.sprite.getX();
         float yDifference = breadCrumb.sprite.getY() - this.sprite.getY();

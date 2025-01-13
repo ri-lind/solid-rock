@@ -82,6 +82,11 @@ public class Level {
 
         this.soundHandler = new SoundHandler();
 
+        List<Enemy> enemies = (List<Enemy>) (Object) this.gameObjects.get(4);
+
+        for (Enemy enemy : enemies) {
+            enemy.walls = this.gameObjects.get(0);
+        }
     }
 
     /**
@@ -233,16 +238,16 @@ public class Level {
         for (int i = 0; i < this.gameObjects.get(4).size(); i++){
             Enemy enemy = (Enemy) this.gameObjects.get(4).get(i);
 
-            if (enemy.toBeRemoved)
+            if (enemy.toBeRemoved){
                 indicesOfEnemiesToBeRemoved.add(i);
+                break;
+            }
         }
         for (int i : indicesOfEnemiesToBeRemoved){
             this.gameObjects.get(4).remove(i);
             this.soundHandler.enemyDeath.play();
             playerScore += 100;
-
-
-
+            break;
         }
 
     }

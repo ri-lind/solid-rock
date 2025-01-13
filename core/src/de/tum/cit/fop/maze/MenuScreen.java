@@ -112,13 +112,13 @@ public class MenuScreen implements Screen {
     public MenuScreen(MazeRunnerGame game, boolean paused){
         this(game);
         Music menuMusic = this.menuMusic;
+        AtomicReference<VerticalGroup> verticalGroupAtomicReference = new AtomicReference<>(new VerticalGroup());
+        stage.getActors().forEach((actor -> {
+            if (actor.getClass() == VerticalGroup.class){
+                verticalGroupAtomicReference.set((VerticalGroup) actor);
+            }
+        }));
         if (paused) {
-            AtomicReference<VerticalGroup> verticalGroupAtomicReference = new AtomicReference<>(new VerticalGroup());
-            stage.getActors().forEach((actor -> {
-                if (actor.getClass() == VerticalGroup.class){
-                    verticalGroupAtomicReference.set((VerticalGroup) actor);
-                }
-            }));
             VerticalGroup verticalGroup = verticalGroupAtomicReference.get();
             TextButton goBackToLevel = new TextButton("Resume", game.getSkin());
             Actor placeholder = new Label("", game.getSkin());
@@ -133,6 +133,18 @@ public class MenuScreen implements Screen {
             });
         }
 
+        VerticalGroup verticalGroup = verticalGroupAtomicReference.get();
+        verticalGroup.addActor(new Label("", game.getSkin()));
+
+        TextButton exitGameButton = new TextButton("Exit Game", game.getSkin());
+        exitGameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+            }
+        });
+
+        verticalGroup.addActor(exitGameButton);
     }
     @Override
     public void render(float delta) {
