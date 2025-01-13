@@ -110,13 +110,27 @@ public class GameScreen implements Screen {
             this.level.mapCreator.spawnAtGivenCoordinates(touchPos.x, touchPos.y);
         }
         */
+        OrthographicCamera camera = (OrthographicCamera) fitViewPort.getCamera();
+        if (camera.zoom == 0.5f) {
+            // add logic to readjust camera if player out of bounds
+            System.out.println("Zoomed width" + camera.viewportWidth + " and height" + camera.viewportHeight);
+
+            Vector2 cameraPosition =new Vector2( camera.position.x, camera.position.y);
+
+            if (Math.abs(player.sprite.getX() - cameraPosition.x) > fitViewPort.getWorldWidth()/4){
+                    camera.translate((player.sprite.getX() - cameraPosition.x) * 2, 0);
+                    camera.update();
+
+            } else if (Math.abs(player.sprite.getY() - cameraPosition.y) > fitViewPort.getWorldHeight()/4){
+                camera.translate(0, (player.sprite.getY()-cameraPosition.y) * 2);
+                camera.update();
+            }
+        }
 
         if (Gdx.input.justTouched()) {
-            Vector2 touchPos = new Vector2();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
-            level.fitViewport.unproject(touchPos); // Convert the units to the world units of the viewport
+            Vector2 touchPos = new Vector2(player.sprite.getX(), player.sprite.getY());
 
-            OrthographicCamera camera = (OrthographicCamera) fitViewPort.getCamera();
+
             Vector2 cameraPosition = new Vector2(camera.position.x, camera.position.y);
             Vector2 movement = touchPos.sub(cameraPosition);
 
@@ -126,7 +140,6 @@ public class GameScreen implements Screen {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            OrthographicCamera camera = (OrthographicCamera) fitViewPort.getCamera();
             camera.zoom = 1f;
             this.fitViewPort.apply(true);
             camera.setToOrtho(false, fitViewPort.getWorldWidth(), fitViewPort.getWorldHeight());
@@ -233,7 +246,6 @@ public class GameScreen implements Screen {
             FileHandle fileHandle = Gdx.files.local("manually-created-level.properties");
             fileHandle.writeString(propertiesFileString, false);
         }
-
 
         // handling user input logic
         LogicHandler.input(game, player, fitViewPort, level, delta); // sets current direction to what the user presses
