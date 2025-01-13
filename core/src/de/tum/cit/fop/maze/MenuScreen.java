@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -31,6 +32,8 @@ public class MenuScreen implements Screen {
 
     public Music menuMusic;
 
+    private final Sprite background;
+
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
@@ -47,6 +50,10 @@ public class MenuScreen implements Screen {
 
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
         stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
+        Texture texture = new Texture(Gdx.files.internal("menu_background.jpg"));
+        this.background = new Sprite(texture);
+        this.background.setSize(this.stage.getWidth(), this.stage.getHeight());
+
         VerticalGroup verticalGroup = new VerticalGroup();
         verticalGroup.setFillParent(true);
         stage.addActor(verticalGroup);
@@ -149,8 +156,12 @@ public class MenuScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f)); // Update the stage
 
+        stage.getBatch().begin();
+        background.draw(stage.getBatch());
+        stage.getBatch().end();
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f)); // Update the stage
 
         stage.draw(); // Draw the stage
     }
